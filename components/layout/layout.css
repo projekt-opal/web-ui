@@ -1,0 +1,27 @@
+.app {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.app-header {
+    flex: 0 0 40px;
+    display: flex;
+    flex-flow: row nowrap;
+}
+
+.app-footer {
+    flex: 0 0 50px;
+    width: 100%;
+    padding: 0 1em;
+    background: #f0f5f5;
+    border-top: 1px solid #c6c7c8;
+    z-index: 1020;
+}
+
+.app-body {
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+    overflow-x: hidden;
+}

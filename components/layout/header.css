@@ -1,0 +1,10 @@
+.logo {
+    width: 36px;
+    height: 40px;
+    padding: 0em;
+    margin-right: 0;
+    margin-left: 0;
+    background: transparent url(/static/img/logo.png) no-repeat 80%;
+    background-size: 36px auto;
+    box-size: border-box;
+}
