@@ -17,7 +17,7 @@ class Header extends React.Component {
     render() {
         return (
             // fixed-top
-            <Navbar class="navbar navbar-expand-md navbar-dark bg-dark container-fluid">
+            <Navbar className="navbar navbar-expand-md navbar-dark bg-dark container-fluid">
                 <NavbarBrand href="/">
                     <div className={CSS.logo}/>
                 </NavbarBrand>
