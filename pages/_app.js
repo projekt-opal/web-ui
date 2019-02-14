@@ -5,12 +5,6 @@ import Head from 'next/head'
 import withRedux from 'next-redux-wrapper'
 import {initStore} from '../store/store'
 
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faStroopwafel } from '@fortawesome/free-solid-svg-icons'
-
-library.add(faStroopwafel);
-
 export default withRedux(initStore)(class MyApp extends App {
     static async getInitialProps({Component, ctx}) {
         return {

@@ -1,7 +1,6 @@
 import React from 'react';
 import {Button, Form, Collapse, Input, InputGroup, InputGroupAddon, Row, Col, Badge} from 'reactstrap';
-import {faCheck, faWindowClose, faCaretRight} from '@fortawesome/free-solid-svg-icons';
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {FaAngleRight} from 'react-icons/fa';
 
 class SearchBar extends React.Component {
     state = {
@@ -73,7 +72,7 @@ class SearchBar extends React.Component {
                 <InputGroup style={{marginTop: '5px'}}>
                     <Button color="link" size="sm" onClick={this.toggleMoreOptions}>
                         <span>Search in : </span>
-                        <FontAwesomeIcon icon={faCaretRight}/>
+                        <FaAngleRight />
                     </Button>
                     <Collapse isOpen={!this.state.collapse}>
                         {searchFilterButtons}

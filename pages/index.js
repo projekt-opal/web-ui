@@ -2,6 +2,7 @@ import React from 'react'
 import Layout from "../components/layout/layout";
 import SearchBar from '../components/search/SearchBar'
 import {Row} from "reactstrap";
+import TableView from "../components/report/datasets/table/TableView";
 
 const Home = () => (
     <Layout>
@@ -10,8 +11,9 @@ const Home = () => (
             <Row>
                 <SearchBar/>
             </Row>
+            <br />
             <Row>
-                test
+                <TableView />
             </Row>
         </main>
     </Layout>
