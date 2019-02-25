@@ -1,6 +1,9 @@
 import React from 'react';
-import {Table, Col, Button, ButtonDropdown, DropdownItem, DropdownToggle, DropdownMenu} from "reactstrap";
+import {Button, ButtonDropdown, Col, DropdownItem, DropdownMenu, DropdownToggle, Row, Table} from "reactstrap";
 import {FaThLarge, FaThList} from "react-icons/fa";
+import ShortView from "../dataset/ShortView";
+import LongView from "../dataset/LongView";
+
 
 class TableView extends React.Component {
 
@@ -9,7 +12,7 @@ class TableView extends React.Component {
         listOrderByValues: ['title', 'issue date', 'theme'],
         selectedOrder: 0,
 
-        largeView: true
+        isLongView: true
 
     };
 
@@ -27,59 +30,74 @@ class TableView extends React.Component {
 
     largeViewChanged = () => {
         let newState = {...this.state};
-        newState.largeView = !newState.largeView;
+        newState.isLongView = !newState.isLongView;
         this.setState(newState);
-    }
+    };
 
     render() {
+
+        const view = this.state.isLongView ? <LongView/> : <ShortView/>;
+
         return (
-
             <Col md={{size: 12}}>
-                <Table hover bordered responsive striped>
-                    <thead>
-                    <tr>
-                        <th>
-                            <div style={{display: 'flex', flexFlow: 'row wrap'}}>
-                                <span> 12345 dataSets </span>
-                                <div style={{flexGrow: 1}}/>
-                                <Button style={{marginLeft:'2px'}}> Export</Button>
-                                <Button style={{marginLeft:'2px'}} onClick={this.largeViewChanged}>
-                                    { this.state.largeView ? <FaThLarge/> : <FaThList/> }
-                                </Button>
-                                <ButtonDropdown style={{marginLeft:'2px'}} isOpen={this.state.dropdownOpen} toggle={this.toggle}>
-                                    <DropdownToggle caret>
-                                        {this.state.listOrderByValues[this.state.selectedOrder]}
-                                    </DropdownToggle>
-                                    <DropdownMenu>
-                                        {
-                                            this.state.listOrderByValues.map( (orderBy, idx) => {
-                                                return <DropdownItem onClick={() => this.orderByChanged(idx)} active={idx === this.state.selectedOrder}>{orderBy}</DropdownItem>
-                                            } )
-                                        }
-                                    </DropdownMenu>
-                                </ButtonDropdown>
-                            </div>
+                <Row>
+                    <Col md={{size: 12}}>
+                        <Table hover bordered responsive striped>
+                            <thead>
+                            <tr>
+                                <th>
+                                    <div style={{display: 'flex', flexFlow: 'row wrap'}}>
+                                        <span> 12345 dataSets </span>
+                                        <div style={{flexGrow: 1}}/>
+                                        <Button style={{marginLeft: '2px'}}> Export</Button>
+                                        <Button style={{marginLeft: '2px'}} onClick={this.largeViewChanged}>
+                                            {this.state.isLongView ? <FaThLarge/> : <FaThList/>}
+                                        </Button>
+                                        <ButtonDropdown style={{marginLeft: '2px'}} isOpen={this.state.dropdownOpen}
+                                                        toggle={this.toggle}>
+                                            <DropdownToggle caret>
+                                                {this.state.listOrderByValues[this.state.selectedOrder]}
+                                            </DropdownToggle>
+                                            <DropdownMenu>
+                                                {
+                                                    this.state.listOrderByValues.map((orderBy, idx) => {
+                                                        return <DropdownItem onClick={() => this.orderByChanged(idx)}
+                                                                             active={idx === this.state.selectedOrder}
+                                                                             key={idx}>{orderBy}</DropdownItem>
+                                                    })
+                                                }
+                                            </DropdownMenu>
+                                        </ButtonDropdown>
+                                    </div>
 
-                        </th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <th scope="row">1</th>
-                    </tr>
-                    <tr>
-                        <th scope="row">2</th>
-                    </tr>
-                    <tr>
-                        <th scope="row">3</th>
-                    </tr>
-                    </tbody>
-                </Table>
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>
+                                    <Col md={{size: 12}}>
+                                        {view}
+                                    </Col>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <Col md={{size: 12}}>
+                                        {view}
+                                    </Col>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </Table>
+                    </Col>
+                </Row>
+                <Row>
+                    <Button className="mx-auto"> Load 10 more </Button>
+                </Row>
             </Col>
-        );
+        )
     }
-
 }
-
 
 export default TableView;

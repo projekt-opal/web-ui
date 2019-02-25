@@ -1,21 +1,21 @@
 import React from 'react'
 import Layout from "../components/layout/layout";
 import SearchBar from '../components/search/SearchBar'
-import {Row} from "reactstrap";
+import {Row, Container} from "reactstrap";
 import TableView from "../components/report/datasets/table/TableView";
 
 const Home = () => (
     <Layout>
-        <main className="container-fluid">
+        <Container fluid >
             <br />
             <Row>
                 <SearchBar/>
             </Row>
-            <br />
+            <br/>
             <Row>
-                <TableView />
+                <TableView/>
             </Row>
-        </main>
+        </Container>
     </Layout>
 );
 
