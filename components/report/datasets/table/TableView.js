@@ -3,6 +3,7 @@ import {Button, ButtonDropdown, Col, DropdownItem, DropdownMenu, DropdownToggle,
 import {FaThLarge, FaThList} from "react-icons/fa";
 import ShortView from "../dataset/ShortView";
 import LongView from "../dataset/LongView";
+import FiltersView from '../filter/FiltersView';
 
 import Axios from '../../../../webservice/axios-dataSets';
 
@@ -16,7 +17,8 @@ class TableView extends React.Component {
         isLongView: true,
 
         data: null,
-        numberOfDataSets: null
+        numberOfDataSets: null,
+        filters: null
 
     };
 
@@ -31,6 +33,10 @@ class TableView extends React.Component {
                 const num = response.data;
                 this.setState({numberOfDataSets : num})
             });
+        Axios.get("/filters/list")
+            .then(response => {
+                this.setState({filters : response.data});
+            })
     }
 
     toggle = () => {
@@ -66,10 +72,13 @@ class TableView extends React.Component {
                 </Col>)
             );
 
+        let filterView = this.state.filters ? <FiltersView filters={this.state.filters}/> : <Spinner color="primary"/>;
+
+
         return (
             <Col md={{size: 12}}>
                 <Row>
-                    <Col md={{size: 12}}>
+                    <Col md={{size: 10}}>
                         <Table hover bordered responsive striped>
                             <thead>
                             <tr>
@@ -109,6 +118,9 @@ class TableView extends React.Component {
                             </tr>
                             </tbody>
                         </Table>
+                    </Col>
+                    <Col md={{size: 2}}>
+                        {filterView}
                     </Col>
                 </Row>
                 <Row>
