@@ -28,22 +28,18 @@ class LongView extends React.Component {
 
     render() {
 
-        let description = 'A really long description, a really long description,a really long description,a really long description' +
-            ',a really long description,a really long description,a really long description,a really long description,' +
-            ',a really long description,a really long description,a really long description,a really long description,' +
-            ',a really long description,a really long description,a really long description,a really long description,' +
-            'a really long description';
+        let description = this.props.dataSet.description;
         if (this.state.isOneLineDescription)
-            description = 'A one line description of the given dataset goes here';
+            description = description.substr(0, 100);
 
-        let title = 'The given Title';
+        let title = this.props.dataSet.title;
 
-        let keywords = ['key1', 'key2', 'key3'];
-        let theme = 'Energy';
-        let catalog = 'Govdata';
-        let harvestingDate = '20.02.2019';
-        let dataSetFileType = 'PDF';
-        let overallRating = 3; // of 5
+        let keywords = this.props.dataSet.keywords;
+        let theme = this.props.dataSet.theme;
+        let catalog = this.props.dataSet.catalog;
+        let harvestingDate = this.props.dataSet.issueDate;
+        let dataSetFileType = this.props.dataSet.fileType;
+        let overallRating = this.props.dataSet.overallRating;
 
         return (
             <Card color="LightCard" style={{flexGrow: '1'}}>
@@ -60,9 +56,12 @@ class LongView extends React.Component {
                 </CardHeader>
                 <CardBody>
                     <CardSubtitle> {description}
-                        <Button color="link" onClick={this.oneLineDescriptionClicked}>
-                            {this.state.isOneLineDescription ? 'more' : 'less'}
-                        </Button>
+                        {
+                            this.props.dataSet.description.length > 100 &&
+                            <Button color="link" onClick={this.oneLineDescriptionClicked}>
+                                {this.state.isOneLineDescription ? 'more' : 'less'}
+                            </Button>
+                        }
                     </CardSubtitle>
                     <CardText>
                         <span> harvesting Date: </span>

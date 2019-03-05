@@ -26,18 +26,12 @@ class ShortView extends React.Component {
 
     render() {
 
-        let description = 'A really long description, a really long description,a really long description,a really long description' +
-            ',a really long description,a really long description,a really long description,a really long description,' +
-            ',a really long description,a really long description,a really long description,a really long description,' +
-            ',a really long description,a really long description,a really long description,a really long description,' +
-            'a really long description';
-        if(this.state.isOneLineDescription)
-            description = 'A one line description of the given dataset goes here';
-
-        let title = 'The given Title';
-
-        let dataSetFileType = 'PDF';
-        let overallRating = 3; // of 5
+        let description = this.props.dataSet.description;
+        if (this.state.isOneLineDescription)
+            description = description.substr(0, 100);
+        let title = this.props.dataSet.title;
+        let dataSetFileType = this.props.dataSet.fileType;
+        let overallRating = this.props.dataSet.overallRating;
 
         return (
             <Card color="LightCard" style={{flexGrow: '1'}}>
@@ -54,9 +48,12 @@ class ShortView extends React.Component {
                 </CardHeader>
                 <CardBody>
                     <CardSubtitle> {description}
-                        <Button color="link" onClick={this.oneLineDescriptionClicked}>
-                            {this.state.isOneLineDescription ? 'more' : 'less'}
-                        </Button>
+                        {
+                            this.props.dataSet.description.length > 100 &&
+                            <Button color="link" onClick={this.oneLineDescriptionClicked}>
+                                {this.state.isOneLineDescription ? 'more' : 'less'}
+                            </Button>
+                        }
                     </CardSubtitle>
                     <Badge>{dataSetFileType}</Badge>
                 </CardBody>

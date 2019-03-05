@@ -1,9 +1,10 @@
 import React from 'react';
-import {Button, ButtonDropdown, Col, DropdownItem, DropdownMenu, DropdownToggle, Row, Table} from "reactstrap";
+import {Button, ButtonDropdown, Col, DropdownItem, DropdownMenu, DropdownToggle, Row, Spinner, Table} from "reactstrap";
 import {FaThLarge, FaThList} from "react-icons/fa";
 import ShortView from "../dataset/ShortView";
 import LongView from "../dataset/LongView";
 
+import Axios from '../../../../webservice/axios-dataSets';
 
 class TableView extends React.Component {
 
@@ -12,9 +13,25 @@ class TableView extends React.Component {
         listOrderByValues: ['title', 'issue date', 'theme'],
         selectedOrder: 0,
 
-        isLongView: true
+        isLongView: true,
+
+        data: null,
+        numberOfDataSets: null
 
     };
+
+    componentDidMount() {
+        Axios.get("/dataSets/getSubList?searchQuery=Pa")
+            .then(response => {
+                const data = response.data;
+                this.setState({data: data})
+            });
+        Axios.get("/dataSets/getNumberOfDataSets?searchQuery=Pa")
+            .then(response => {
+                const num = response.data;
+                this.setState({numberOfDataSets : num})
+            });
+    }
 
     toggle = () => {
         this.setState({
@@ -32,11 +49,22 @@ class TableView extends React.Component {
         let newState = {...this.state};
         newState.isLongView = !newState.isLongView;
         this.setState(newState);
+        null
     };
 
     render() {
 
-        const view = this.state.isLongView ? <LongView/> : <ShortView/>;
+        let numberOfResult = <Spinner color="primary"/>;
+        if(this.state.numberOfDataSets)
+            numberOfResult = this.state.numberOfDataSets;
+
+        let dataSets = <Spinner type="grow" color="primary"/>;
+        if (this.state.data)
+            dataSets = this.state.data.map(
+                dataSet => (<Col md={{size: 12}} key={dataSet.uri}>
+                    {this.state.isLongView ? <LongView dataSet = {dataSet} /> : <ShortView dataSet = {dataSet} />}
+                </Col>)
+            );
 
         return (
             <Col md={{size: 12}}>
@@ -47,7 +75,7 @@ class TableView extends React.Component {
                             <tr>
                                 <th>
                                     <div style={{display: 'flex', flexFlow: 'row wrap'}}>
-                                        <span> 12345 dataSets </span>
+                                        <span> {numberOfResult} </span>
                                         <div style={{flexGrow: 1}}/>
                                         <Button style={{marginLeft: '2px'}}> Export</Button>
                                         <Button style={{marginLeft: '2px'}} onClick={this.largeViewChanged}>
@@ -76,16 +104,7 @@ class TableView extends React.Component {
                             <tbody>
                             <tr>
                                 <td>
-                                    <Col md={{size: 12}}>
-                                        {view}
-                                    </Col>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <Col md={{size: 12}}>
-                                        {view}
-                                    </Col>
+                                    {dataSets}
                                 </td>
                             </tr>
                             </tbody>
