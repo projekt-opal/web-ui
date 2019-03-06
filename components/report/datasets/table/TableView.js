@@ -16,19 +16,19 @@ class TableView extends React.Component {
 
         isLongView: true,
 
-        data: null,
+        dataSets: null,
         numberOfDataSets: null,
         filters: null
 
     };
 
     componentDidMount() {
-        Axios.get("/dataSets/getSubList?searchQuery=Pa")
+        Axios.get("/dataSets/getSubList")
             .then(response => {
-                const data = response.data;
-                this.setState({data: data})
+                const dataSets = response.data;
+                this.setState({dataSets: dataSets})
             });
-        Axios.get("/dataSets/getNumberOfDataSets?searchQuery=Pa")
+        Axios.get("/dataSets/getNumberOfDataSets")
             .then(response => {
                 const num = response.data;
                 this.setState({numberOfDataSets : num})
@@ -55,7 +55,17 @@ class TableView extends React.Component {
         let newState = {...this.state};
         newState.isLongView = !newState.isLongView;
         this.setState(newState);
-        null
+    };
+
+    load10More = () => {
+        let s = "/dataSets/getSubList?low="+ this.state.dataSets.length;
+        Axios.get(s)
+            .then(response => {
+                let dataSets = response.data;
+                dataSets = [...this.state.dataSets].concat(dataSets);
+                console.log(dataSets);
+                this.setState({dataSets: dataSets})
+            });
     };
 
     render() {
@@ -65,8 +75,8 @@ class TableView extends React.Component {
             numberOfResult = this.state.numberOfDataSets;
 
         let dataSets = <Spinner type="grow" color="primary"/>;
-        if (this.state.data)
-            dataSets = this.state.data.map(
+        if (this.state.dataSets)
+            dataSets = this.state.dataSets.map(
                 dataSet => (<Col md={{size: 12}} key={dataSet.uri}>
                     {this.state.isLongView ? <LongView dataSet = {dataSet} /> : <ShortView dataSet = {dataSet} />}
                 </Col>)
@@ -124,7 +134,7 @@ class TableView extends React.Component {
                     </Col>
                 </Row>
                 <Row>
-                    <Button className="mx-auto"> Load 10 more </Button>
+                    <Button className="mx-auto" onClick={this.load10More}> Load 10 more </Button>
                 </Row>
             </Col>
         )

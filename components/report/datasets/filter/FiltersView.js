@@ -6,7 +6,7 @@ import FilterView from './fileterView';
 const filtersView = (props) => {
     return (
         <Container fluid >
-            {props.filters.map( filter => <Row><Col md={{size: 12}}><FilterView filter={filter}/></Col></Row>)}
+            {props.filters.map( (filter, idx) => <Row key={idx}><Col md={{size: 12}}><FilterView filter={filter}/></Col></Row>)}
         </Container>
     );
 };
