@@ -23,9 +23,11 @@ class FilterView extends React.Component {
                     {
                         this.props.filter.values.map(
                             ({value, count}, idx) => {
-                                return (<ListGroupItem key={idx}>
-                                    <input type="checkbox"  /> {value} <Badge pill>{count}</Badge>
-                                </ListGroupItem>);
+                                return (
+                                    <ListGroupItem key={idx}>
+                                        <input type="checkbox" value={value} onChange={(event) => this.props.checked(event)}/> {value} <Badge
+                                        pill>{count}</Badge>
+                                    </ListGroupItem>);
                             })
                     }
                 </ListGroup>);

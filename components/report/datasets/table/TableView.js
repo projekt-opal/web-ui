@@ -23,12 +23,12 @@ class TableView extends React.Component {
     };
 
     componentDidMount() {
-        Axios.get("/dataSets/getSubList")
+        Axios.post("/dataSets/getSubList")
             .then(response => {
                 const dataSets = response.data;
                 this.setState({dataSets: dataSets})
             });
-        Axios.get("/dataSets/getNumberOfDataSets")
+        Axios.post("/dataSets/getNumberOfDataSets")
             .then(response => {
                 const num = response.data;
                 this.setState({numberOfDataSets : num})
@@ -58,8 +58,7 @@ class TableView extends React.Component {
     };
 
     load10More = () => {
-        let s = "/dataSets/getSubList?low="+ this.state.dataSets.length;
-        Axios.get(s)
+        Axios.post("/dataSets/getSubList?low=" + this.state.dataSets.length)
             .then(response => {
                 let dataSets = response.data;
                 dataSets = [...this.state.dataSets].concat(dataSets);
@@ -128,14 +127,15 @@ class TableView extends React.Component {
                             </tr>
                             </tbody>
                         </Table>
+                        <Row>
+                            <Button className="mx-auto" style={{marginBottom: '1rem'}} onClick={this.load10More}> Load 10 more </Button>
+                        </Row>
                     </Col>
                     <Col md={{size: 2}}>
                         {filterView}
                     </Col>
                 </Row>
-                <Row>
-                    <Button className="mx-auto" onClick={this.load10More}> Load 10 more </Button>
-                </Row>
+
             </Col>
         )
     }
