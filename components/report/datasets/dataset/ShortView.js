@@ -11,6 +11,7 @@ import {
     Badge,
     CardFooter
 } from "reactstrap";
+import {FaRegStar, FaStar, FaStarHalfAlt} from "react-icons/fa";
 
 class ShortView extends React.Component {
 
@@ -32,7 +33,16 @@ class ShortView extends React.Component {
         let title = this.props.dataSet.title;
         let dataSetFileType = this.props.dataSet.fileType;
         let overallRating = this.props.dataSet.overallRating;
-
+        const rating = [0, 0, 0, 0, 0];
+        for (let i = 1; i <= overallRating; i++)
+            rating[i - 1] = 2;
+        if (overallRating - Math.floor(overallRating) >= 0.5)
+            rating[Math.floor(overallRating)] = 1;
+        let overallRatingStarts = (<span>
+            {
+                rating.map((r, idx) => r === 0 ? <FaRegStar key={idx}/> : r === 1 ? <FaStarHalfAlt key={idx}/> : <FaStar key={idx}/>)
+            }
+        </span>);
         return (
             <Card color="LightCard" style={{flexGrow: '1'}}>
                 <CardHeader>
@@ -43,7 +53,7 @@ class ShortView extends React.Component {
                             <CardTitle style={{display: 'inline', marginLeft: '0.5em'}}>{title}</CardTitle>
                         </label>
                         <div style={{flexGrow: '1'}}/>
-                        <span>overall rating: {overallRating}</span>
+                        {overallRatingStarts}
                     </div>
                 </CardHeader>
                 <CardBody>
