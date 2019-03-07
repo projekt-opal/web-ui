@@ -9,10 +9,6 @@ class FiltersView extends React.Component {
         selectedFilters: []
     };
 
-    applyFilters = () => {
-        console.log(this.state.selectedFilters)
-    };
-
     addFilter = (event, idx) => {
         let selectedFilters = [...this.state.selectedFilters];
         let item = {
@@ -22,25 +18,27 @@ class FiltersView extends React.Component {
         const i = selectedFilters.findIndex((x) => {
             return x.property === item.property
         });
-        console.log(i);
-        if(i >= 0) {//if it is already there must add/remove it to values
+        if (i >= 0) {//if it is already there must add/remove it to values
             const filterIndex = i;
-            console.log("filterIndex: " + filterIndex);
-            console.log(selectedFilters[filterIndex]);
             const j = selectedFilters[filterIndex].values.findIndex((x) => {
                 return (x === item.value)
             });
-            console.log("j: " + j);
-            if(j >= 0)//remove
-                selectedFilters[filterIndex].values.splice(j);
-            else//add
+            if (j >= 0) {//remove
+                selectedFilters[filterIndex].values.splice(j, 1);
+            } else//add
                 selectedFilters[filterIndex].values.push(item.value);
-        }
-        else {
-            console.log("sth");
+        } else {
             selectedFilters.push({property: item.property, values: [item.value]});
         }
         this.setState({selectedFilters: selectedFilters});
+    };
+
+    applyFilters = () => {
+        console.log(this.state.selectedFilters)
+    };
+
+    clearSelection = () => {
+        this.setState({selectedFilters: []});
     };
 
     render() {
@@ -48,16 +46,24 @@ class FiltersView extends React.Component {
             <Container fluid>
                 <Row>
                     <Button color="primary" onClick={this.applyFilters}> Apply </Button>
-                    <Button color="link"> clear </Button>
+                    <Button color="link" onClick={this.clearSelection}> clear </Button>
                 </Row>
                 {
                     this.props.filters.map(
-                        (filter, idx) =>
-                            <Row key={idx}>
-                                <Col md={{size: 12}}>
-                                    <FilterView checked={(event) => this.addFilter(event, idx)} filter={filter}/>
-                                </Col>
-                            </Row>
+                        (filter, idx) => {
+                            const selectedFilterValues = this.state.selectedFilters.filter(x => x.property === filter.uri);
+                            return (
+                                <Row key={idx}>
+                                    <Col md={{size: 12}}>
+                                        <FilterView
+                                            selectedValues={selectedFilterValues.length > 0 ? selectedFilterValues[0].values : []}
+                                            checked={(event) => this.addFilter(event, idx)}
+                                            filter={filter}
+                                        />
+                                    </Col>
+                                </Row>
+                            )
+                        }
                     )
                 }
             </Container>

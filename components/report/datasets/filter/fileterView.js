@@ -1,7 +1,7 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {Badge, Button, ListGroup, ListGroupItem} from "reactstrap";
 
-import {FaAngleRight, FaAngleDown} from 'react-icons/fa'
+import {FaAngleDown, FaAngleRight} from 'react-icons/fa'
 
 class FilterView extends React.Component {
 
@@ -15,7 +15,6 @@ class FilterView extends React.Component {
     };
 
     render() {
-
         let values = null;
         if (this.state.isExpanded)
             values = (
@@ -23,10 +22,14 @@ class FilterView extends React.Component {
                     {
                         this.props.filter.values.map(
                             ({value, count}, idx) => {
+                                console.log(this.props.selectedValues.find(x => x === value));
                                 return (
                                     <ListGroupItem key={idx}>
-                                        <input type="checkbox" value={value} onChange={(event) => this.props.checked(event)}/> {value} <Badge
-                                        pill>{count}</Badge>
+                                        <input type="checkbox" value={value}
+                                               checked={!!this.props.selectedValues.find(x => x === value)}
+                                               onChange={(event) => this.props.checked(event)}/>
+                                        {value}
+                                        <Badge pill>{count}</Badge>
                                     </ListGroupItem>);
                             })
                     }
