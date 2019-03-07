@@ -25,6 +25,8 @@ class FiltersView extends React.Component {
             });
             if (j >= 0) {//remove
                 selectedFilters[filterIndex].values.splice(j, 1);
+                if (selectedFilters[filterIndex].values.length === 0)
+                    selectedFilters.splice(filterIndex, 1);
             } else//add
                 selectedFilters[filterIndex].values.push(item.value);
         } else {
@@ -34,7 +36,8 @@ class FiltersView extends React.Component {
     };
 
     applyFilters = () => {
-        console.log(this.state.selectedFilters)
+        // console.log(this.state.selectedFilters);
+        this.props.applyFilters(this.state.selectedFilters);
     };
 
     clearSelection = () => {
@@ -45,8 +48,13 @@ class FiltersView extends React.Component {
         return (
             <Container fluid>
                 <Row>
-                    <Button color="primary" onClick={this.applyFilters}> Apply </Button>
-                    <Button color="link" onClick={this.clearSelection}> clear </Button>
+                    <Col md={{size: 12}}>
+                        <div style={{display: 'flex', flexFlow: 'row'}}>
+                            <Button color="primary" onClick={this.applyFilters}
+                                    style={{flexGrow: 1, textAlign: 'left'}}> Apply </Button>
+                            <Button color="link" onClick={this.clearSelection}> clear </Button>
+                        </div>
+                    </Col>
                 </Row>
                 {
                     this.props.filters.map(

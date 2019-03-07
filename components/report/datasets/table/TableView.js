@@ -31,11 +31,11 @@ class TableView extends React.Component {
         Axios.post("/dataSets/getNumberOfDataSets")
             .then(response => {
                 const num = response.data;
-                this.setState({numberOfDataSets : num})
+                this.setState({numberOfDataSets: num})
             });
         Axios.get("/filters/list")
             .then(response => {
-                this.setState({filters : response.data});
+                this.setState({filters: response.data});
             })
     }
 
@@ -67,21 +67,35 @@ class TableView extends React.Component {
             });
     };
 
+    applyFilters = (selectedFilters) => {
+        console.log(selectedFilters);
+        Axios.post("/dataSets/getSubList?", selectedFilters)
+            .then( (response) => {
+                console.log(response);
+                const dataSets = response.data;
+                this.setState({dataSets: dataSets});
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    };
+
     render() {
 
         let numberOfResult = <Spinner color="primary"/>;
-        if(this.state.numberOfDataSets)
+        if (this.state.numberOfDataSets)
             numberOfResult = this.state.numberOfDataSets;
 
         let dataSets = <Spinner type="grow" color="primary"/>;
         if (this.state.dataSets)
             dataSets = this.state.dataSets.map(
                 dataSet => (<Col md={{size: 12}} key={dataSet.uri}>
-                    {this.state.isLongView ? <LongView dataSet = {dataSet} /> : <ShortView dataSet = {dataSet} />}
+                    {this.state.isLongView ? <LongView dataSet={dataSet}/> : <ShortView dataSet={dataSet}/>}
                 </Col>)
             );
 
-        let filterView = this.state.filters ? <FiltersView filters={this.state.filters}/> : <Spinner color="primary"/>;
+        let filterView = this.state.filters ?
+            <FiltersView filters={this.state.filters} applyFilters={this.applyFilters}/> : <Spinner color="primary"/>;
 
 
         return (
@@ -128,7 +142,8 @@ class TableView extends React.Component {
                             </tbody>
                         </Table>
                         <Row>
-                            <Button className="mx-auto" style={{marginBottom: '1rem'}} onClick={this.load10More}> Load 10 more </Button>
+                            <Button className="mx-auto" style={{marginBottom: '1rem'}} onClick={this.load10More}> Load
+                                10 more </Button>
                         </Row>
                     </Col>
                     <Col md={{size: 2}}>

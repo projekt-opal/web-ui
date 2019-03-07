@@ -22,14 +22,14 @@ class FilterView extends React.Component {
                     {
                         this.props.filter.values.map(
                             ({value, count}, idx) => {
-                                console.log(this.props.selectedValues.find(x => x === value));
                                 return (
                                     <ListGroupItem key={idx}>
-                                        <input type="checkbox" value={value}
-                                               checked={!!this.props.selectedValues.find(x => x === value)}
-                                               onChange={(event) => this.props.checked(event)}/>
-                                        {value}
-                                        <Badge pill>{count}</Badge>
+                                        <label><input type="checkbox" value={value}
+                                                      checked={!!this.props.selectedValues.find(x => x === value)}
+                                                      onChange={(event) => this.props.checked(event)}/>
+                                            {value}
+                                            <Badge style={{marginLeft: '2px'}} pill>{count}</Badge>
+                                        </label>
                                     </ListGroupItem>);
                             })
                     }
