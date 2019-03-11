@@ -20,23 +20,13 @@ class TableView extends React.Component {
 
         isLongView: true,
 
-        numberOfDataSets: null,
         filters: null
 
     };
 
     componentDidMount() {
-        // Axios.post("/dataSets/getSubList")
-        //     .then(response => {
-        //         const dataSets = response.data;
-        //         this.setState({dataSets: dataSets})
-        //     });
         this.props.onFetchingDataSets();
-        Axios.post("/dataSets/getNumberOfDataSets")
-            .then(response => {
-                const num = response.data;
-                this.setState({numberOfDataSets: num})
-            });
+        this.props.onGettingNumberOfDataSets();
         Axios.get("/filters/list")
             .then(response => {
                 this.setState({filters: response.data});
@@ -87,8 +77,8 @@ class TableView extends React.Component {
     render() {
 
         let numberOfResult = <Spinner color="primary"/>;
-        if (this.state.numberOfDataSets)
-            numberOfResult = this.state.numberOfDataSets;
+        if (this.props.numberOfDataSets)
+            numberOfResult = this.props.numberOfDataSets;
 
         let dataSets = <Spinner type="grow" color="primary"/>;
         if (this.props.dataSets)
@@ -164,13 +154,19 @@ const mapStateToProps = state => {
     return {
         dataSets: state.ds.dataSets,
         loadingDataSets: state.ds.loadingDataSets ,
-        loadingError: state.ds.loadingError
+        loadingDataSetsError : state.ds.loadingDataSetsError,
+
+        numberOfDataSets: state.ds.numberOfDataSets,
+        loadingNumberOfDataSets: state.ds.loadingNumberOfDataSets ,
+        loadingNumberOfDataSetsError : state.ds.loadingNumberOfDataSetsError,
+
     }
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        onFetchingDataSets: () => dispatch(actionCreators.fetchDataSets())
+        onFetchingDataSets: () => dispatch(actionCreators.fetchDataSets()),
+        onGettingNumberOfDataSets: () => dispatch(actionCreators.getNumberOfDataSets())
     }
 };
 

@@ -1,1 +1,1 @@
-export {fetchDataSets} from './dataSets';
+export {fetchDataSets, getNumberOfDataSets} from './datasets/dataSets';
