@@ -19,18 +19,12 @@ class TableView extends React.Component {
         selectedOrder: 0,
 
         isLongView: true,
-
-        filters: null
-
     };
 
     componentDidMount() {
         this.props.onFetchingDataSets();
         this.props.onGettingNumberOfDataSets();
-        Axios.get("/filters/list")
-            .then(response => {
-                this.setState({filters: response.data});
-            })
+        this.props.onFetchFilters();
     }
 
     toggle = () => {
@@ -82,8 +76,8 @@ class TableView extends React.Component {
                 </Col>)
             );
 
-        let filterView = this.state.filters ?
-            <FiltersView filters={this.state.filters} applyFilters={this.applyFilters}/> : <Spinner color="primary"/>;
+        let filterView = this.props.filters ?
+            <FiltersView filters={this.props.filters} applyFilters={this.applyFilters}/> : <Spinner color="primary"/>;
 
 
         return (
@@ -154,6 +148,7 @@ const mapStateToProps = state => {
         loadingNumberOfDataSets: state.ds.loadingNumberOfDataSets ,
         loadingNumberOfDataSetsError : state.ds.loadingNumberOfDataSetsError,
 
+        filters: state.filters.filters
     }
 };
 
@@ -161,7 +156,8 @@ const mapDispatchToProps = dispatch => {
     return {
         onFetchingDataSets: () => dispatch(actionCreators.fetchDataSets()),
         onGettingNumberOfDataSets: () => dispatch(actionCreators.getNumberOfDataSets()),
-        onLoad10More: (low) => dispatch(actionCreators.load10More(low))
+        onLoad10More: (low) => dispatch(actionCreators.load10More(low)),
+        onFetchFilters: () => dispatch(actionCreators.fetchFilters())
     }
 };
 

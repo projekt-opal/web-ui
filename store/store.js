@@ -3,9 +3,11 @@ import { composeWithDevTools } from 'redux-devtools-extension'
 import thunkMiddleware from 'redux-thunk'
 
 import dataSetsReducer from './reducers/dataSets';
+import filtersReducer from './reducers/filters';
 
 const rootReducer = combineReducers({
     ds: dataSetsReducer,
+    filters: filtersReducer
 });
 
 
