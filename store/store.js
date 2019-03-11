@@ -1,32 +1,14 @@
-import { createStore, applyMiddleware } from 'redux'
+import { createStore, combineReducers, applyMiddleware } from 'redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import thunkMiddleware from 'redux-thunk'
 
-const initialState = {
-    showFilter : true
-};
+import dataSetsReducer from './reducers/dataSets';
 
-export const actionTypes = {
-    SHOW_FILTER: 'SHOW_FILTER'
-};
+const rootReducer = combineReducers({
+    ds: dataSetsReducer,
+});
 
-export const reducer = (state = initialState, action) => {
-    switch (action.type) {
-        case actionTypes.SHOW_FILTER:
-            let newState = {...state};
-            newState.showFilter = !newState.showFilter;
-            return newState;
-            // return Object.assign({}, state, {
-            //     count: state.count + 1
-            // });
-        default: return state
-    }
-};
 
-export const showFilter = () => dispatch => {
-    return dispatch({ type: actionTypes.SHOW_FILTER })
-};
-
-export const initStore = (initialState = initialState) => {
-    return createStore(reducer, initialState, composeWithDevTools(applyMiddleware(thunkMiddleware)))
+export const initStore = (initialState) => {
+    return createStore(rootReducer, initialState, composeWithDevTools(applyMiddleware(thunkMiddleware)))
 };

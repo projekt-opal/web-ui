@@ -5,7 +5,11 @@ import ShortView from "../dataset/ShortView";
 import LongView from "../dataset/LongView";
 import FiltersView from '../filter/FiltersView';
 
+import {connect} from 'react-redux';
+
 import Axios from '../../../../webservice/axios-dataSets';
+import * as actionCreators from '../../../../store/actions/index';
+
 
 class TableView extends React.Component {
 
@@ -16,18 +20,18 @@ class TableView extends React.Component {
 
         isLongView: true,
 
-        dataSets: null,
         numberOfDataSets: null,
         filters: null
 
     };
 
     componentDidMount() {
-        Axios.post("/dataSets/getSubList")
-            .then(response => {
-                const dataSets = response.data;
-                this.setState({dataSets: dataSets})
-            });
+        // Axios.post("/dataSets/getSubList")
+        //     .then(response => {
+        //         const dataSets = response.data;
+        //         this.setState({dataSets: dataSets})
+        //     });
+        this.props.onFetchingDataSets();
         Axios.post("/dataSets/getNumberOfDataSets")
             .then(response => {
                 const num = response.data;
@@ -87,8 +91,8 @@ class TableView extends React.Component {
             numberOfResult = this.state.numberOfDataSets;
 
         let dataSets = <Spinner type="grow" color="primary"/>;
-        if (this.state.dataSets)
-            dataSets = this.state.dataSets.map(
+        if (this.props.dataSets)
+            dataSets = this.props.dataSets.map(
                 dataSet => (<Col md={{size: 12}} key={dataSet.uri}>
                     {this.state.isLongView ? <LongView dataSet={dataSet}/> : <ShortView dataSet={dataSet}/>}
                 </Col>)
@@ -156,4 +160,18 @@ class TableView extends React.Component {
     }
 }
 
-export default TableView;
+const mapStateToProps = state => {
+    return {
+        dataSets: state.ds.dataSets,
+        loadingDataSets: state.ds.loadingDataSets ,
+        loadingError: state.ds.loadingError
+    }
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onFetchingDataSets: () => dispatch(actionCreators.fetchDataSets())
+    }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(TableView);
