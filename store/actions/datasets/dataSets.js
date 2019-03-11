@@ -67,3 +67,21 @@ export const getNumberOfDataSets = () => {
             } );
     };
 };
+
+
+export const load10MoreSuccess = (dataSets) => {
+    return {
+        type: actionTypes.LOAD_10_MORE,
+        additionalDataSets: dataSets
+    };
+};
+
+export const load10More = (low) => {
+    return dispatch => {
+        axios.post("/dataSets/getSubList?low=" + low)
+            .then(response => {
+                let dataSets = response.data;
+                dispatch(load10MoreSuccess(dataSets));
+            });
+    };
+};

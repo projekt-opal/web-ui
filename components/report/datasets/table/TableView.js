@@ -52,13 +52,7 @@ class TableView extends React.Component {
     };
 
     load10More = () => {
-        Axios.post("/dataSets/getSubList?low=" + this.state.dataSets.length)
-            .then(response => {
-                let dataSets = response.data;
-                dataSets = [...this.state.dataSets].concat(dataSets);
-                console.log(dataSets);
-                this.setState({dataSets: dataSets})
-            });
+        this.props.onLoad10More(this.props.dataSets.length);
     };
 
     applyFilters = (selectedFilters) => {
@@ -166,7 +160,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         onFetchingDataSets: () => dispatch(actionCreators.fetchDataSets()),
-        onGettingNumberOfDataSets: () => dispatch(actionCreators.getNumberOfDataSets())
+        onGettingNumberOfDataSets: () => dispatch(actionCreators.getNumberOfDataSets()),
+        onLoad10More: (low) => dispatch(actionCreators.load10More(low))
     }
 };
 

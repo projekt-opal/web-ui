@@ -27,6 +27,9 @@ const reducer = ( state = initialState, action ) => {
             return updateObject(state, {loadingNumberOfDataSets: false, loadingNumberOfDataSetsError: false, numberOfDataSets: action.numberOfDataSets});
         case actionTypes.GET_NUMBER_DATASETS_FAIL:
             return updateObject(state, {loadingNumberOfDataSets: false, loadingNumberOfDataSetsError: true});
+
+        case actionTypes.LOAD_10_MORE:
+            return updateObject(state, { dataSets: state.dataSets.concat(action.additionalDataSets)})
     }
     return state;
 };
