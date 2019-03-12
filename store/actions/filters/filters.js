@@ -34,3 +34,18 @@ export const fetchFilters = () => {
             } );
     };
 };
+
+export const func = (selectedFilterPropertyURI, selectedFilterURI) => {
+    return {
+        type: actionTypes.APPEND_FILTER,
+        property: selectedFilterPropertyURI,
+        uri: selectedFilterURI
+    };
+};
+
+
+export const appendSelectedFilter = (selectedFilterPropertyURI, selectedFilterURI) => {
+    return dispatch => {
+        dispatch(func(selectedFilterPropertyURI, selectedFilterURI));
+    };
+};

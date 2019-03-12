@@ -22,8 +22,8 @@ class TableView extends React.Component {
     };
 
     componentDidMount() {
-        this.props.onFetchingDataSets();
-        this.props.onGettingNumberOfDataSets();
+        this.props.onFetchingDataSets(this.props.selectedFilters);
+        this.props.onGettingNumberOfDataSets(this.props.selectedFilters);
         this.props.onFetchFilters();
     }
 
@@ -46,20 +46,12 @@ class TableView extends React.Component {
     };
 
     load10More = () => {
-        this.props.onLoad10More(this.props.dataSets.length);
+        this.props.onLoad10More(this.props.dataSets.length, this.props.selectedFilters);
     };
 
-    applyFilters = (selectedFilters) => {
-        console.log(selectedFilters);
-        Axios.post("/dataSets/getSubList?", selectedFilters)
-            .then( (response) => {
-                console.log(response);
-                const dataSets = response.data;
-                this.setState({dataSets: dataSets});
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+    applyFilters = () => {
+        this.props.onFetchingDataSets(this.props.selectedFilters);
+        this.props.onGettingNumberOfDataSets(this.props.selectedFilters);
     };
 
     render() {
@@ -148,15 +140,16 @@ const mapStateToProps = state => {
         loadingNumberOfDataSets: state.ds.loadingNumberOfDataSets ,
         loadingNumberOfDataSetsError : state.ds.loadingNumberOfDataSetsError,
 
-        filters: state.filters.filters
+        filters: state.filters.filters,
+        selectedFilters: state.filters.selectedFilters
     }
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        onFetchingDataSets: () => dispatch(actionCreators.fetchDataSets()),
-        onGettingNumberOfDataSets: () => dispatch(actionCreators.getNumberOfDataSets()),
-        onLoad10More: (low) => dispatch(actionCreators.load10More(low)),
+        onFetchingDataSets: (selectedFilters) => dispatch(actionCreators.fetchDataSets(selectedFilters)),
+        onGettingNumberOfDataSets: (selectedFilters) => dispatch(actionCreators.getNumberOfDataSets(selectedFilters)),
+        onLoad10More: (low, selectedFilters) => dispatch(actionCreators.load10More(low, selectedFilters)),
         onFetchFilters: () => dispatch(actionCreators.fetchFilters())
     }
 };

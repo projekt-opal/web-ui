@@ -21,11 +21,11 @@ class FilterView extends React.Component {
                 <ListGroup>
                     {
                         this.props.filter.values.map(
-                            ({value, count}, idx) => {
+                            ({uri, value, count}, idx) => {
                                 return (
                                     <ListGroupItem key={idx}>
-                                        <label><input type="checkbox" value={value}
-                                                      checked={!!this.props.selectedValues.find(x => x === value)}
+                                        <label><input type="checkbox" value={uri}
+                                                      checked={!!this.props.selectedValues.find(x => x === uri)}
                                                       onChange={(event) => this.props.checked(event)}/>
                                             {value}
                                             <Badge style={{marginLeft: '2px'}} pill>{count}</Badge>

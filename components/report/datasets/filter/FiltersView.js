@@ -1,43 +1,23 @@
 import React from 'react';
 import {Button, Col, Container, Row} from "reactstrap";
+import {connect} from 'react-redux';
 
 import FilterView from './fileterView';
 
+import * as actionCreators from '../../../../store/actions/index';
+
+
+
 class FiltersView extends React.Component {
 
-    state = {
-        selectedFilters: []
-    };
-
     addFilter = (event, idx) => {
-        let selectedFilters = [...this.state.selectedFilters];
-        let item = {
-            property: this.props.filters[idx].uri,
-            value: event.target.value
-        };
-        const i = selectedFilters.findIndex((x) => {
-            return x.property === item.property
-        });
-        if (i >= 0) {//if it is already there must add/remove it to values
-            const filterIndex = i;
-            const j = selectedFilters[filterIndex].values.findIndex((x) => {
-                return (x === item.value)
-            });
-            if (j >= 0) {//remove
-                selectedFilters[filterIndex].values.splice(j, 1);
-                if (selectedFilters[filterIndex].values.length === 0)
-                    selectedFilters.splice(filterIndex, 1);
-            } else//add
-                selectedFilters[filterIndex].values.push(item.value);
-        } else {
-            selectedFilters.push({property: item.property, values: [item.value]});
-        }
-        this.setState({selectedFilters: selectedFilters});
+        const property = this.props.filters[idx].uri;
+        const uri = event.target.value;
+        this.props.onAppendFilter(property, uri);
     };
 
     applyFilters = () => {
-        // console.log(this.state.selectedFilters);
-        this.props.applyFilters(this.state.selectedFilters);
+        this.props.applyFilters();
     };
 
     clearSelection = () => {
@@ -59,7 +39,7 @@ class FiltersView extends React.Component {
                 {
                     this.props.filters.map(
                         (filter, idx) => {
-                            const selectedFilterValues = this.state.selectedFilters.filter(x => x.property === filter.uri);
+                            const selectedFilterValues = this.props.selectedFilters.filter(x => x.property === filter.uri);
                             return (
                                 <Row key={idx}>
                                     <Col md={{size: 12}}>
@@ -79,4 +59,17 @@ class FiltersView extends React.Component {
     }
 };
 
-export default FiltersView;
+const mapStateToProps = state => {
+    return {
+        selectedFilters: state.filters.selectedFilters
+    }
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onAppendFilter: (property, uri) => dispatch(actionCreators.appendSelectedFilter(property, uri)),
+        // onApplyFilter:
+    }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(FiltersView);
