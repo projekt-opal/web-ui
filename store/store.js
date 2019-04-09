@@ -4,10 +4,12 @@ import thunkMiddleware from 'redux-thunk'
 
 import dataSetsReducer from './reducers/dataSets';
 import filtersReducer from './reducers/filters';
+import searchKeyReducer from './reducers/searchKey';
 
 const rootReducer = combineReducers({
     ds: dataSetsReducer,
-    filters: filtersReducer
+    filters: filtersReducer,
+    searchKey: searchKeyReducer
 });
 
 
