@@ -1,13 +1,22 @@
 import React from 'react';
-import {Button, ButtonDropdown, Col, DropdownItem, DropdownMenu, DropdownToggle, Row, Spinner, Table} from "reactstrap";
-import {FaThLarge, FaThList} from "react-icons/fa";
+import {
+    Button,
+    ButtonDropdown,
+    Col,
+    DropdownItem,
+    DropdownMenu,
+    DropdownToggle,
+    Row,
+    Spinner,
+    Table,
+    Tooltip
+} from "reactstrap";
+import {FaRedo, FaThLarge, FaThList} from "react-icons/fa";
 import ShortView from "../dataset/ShortView";
 import LongView from "../dataset/LongView";
 import FiltersView from '../filter/FiltersView';
 
 import {connect} from 'react-redux';
-
-import Axios from '../../../../webservice/axios-dataSets';
 import * as actionCreators from '../../../../store/actions/index';
 
 
@@ -19,6 +28,9 @@ class TableView extends React.Component {
         selectedOrder: 0,
 
         isLongView: true,
+
+        isTooltipNumberOfDataSetsOpen: false,
+        isTooltipDataSetsOpen: false
     };
 
     componentDidMount() {
@@ -54,18 +66,74 @@ class TableView extends React.Component {
         this.props.onGettingNumberOfDataSets(this.props.selectedFilters);
     };
 
+    reloadNumberOfDataSets = () => {
+        this.toggleToolTipNumberOfDataSets();
+        this.props.onGettingNumberOfDataSets(this.props.selectedFilters);
+    };
+
+    reloadDataSets = () => {
+        this.toggleToolTipDataSets();
+        this.props.onFetchingDataSets(this.props.selectedFilters);
+    };
+
+    toggleToolTipNumberOfDataSets = () => {
+        this.setState({
+            isTooltipNumberOfDataSetsOpen: !this.state.isTooltipNumberOfDataSetsOpen
+        });
+    };
+
+    toggleToolTipDataSets = () => {
+        this.setState({
+            isTooltipDataSetsOpen: !this.state.isTooltipDataSetsOpen
+        });
+    };
+
+
     render() {
+        let numberOfResult = null;
+        if (this.props.loadingNumberOfDataSetsError)
+            numberOfResult =
+                <div>
+                    <FaRedo id="TooltipNumberOfDataSets" onClick={this.reloadNumberOfDataSets}/>
+                    <Tooltip placement="right" isOpen={this.state.isTooltipNumberOfDataSetsOpen}
+                             target="TooltipNumberOfDataSets" toggle={this.toggleToolTipNumberOfDataSets}>
+                        Error in Fetching number of datasets from the server
+                    </Tooltip>
+                </div>;
+        else if (this.props.loadingNumberOfDataSets)
+            numberOfResult = <Spinner color="primary"/>;
+        else if (this.props.numberOfDataSets !== null)
+            if (this.props.numberOfDataSets === -1)
+                numberOfResult =
+                    <div>
+                        <FaRedo id="TooltipNumberOfDataSets" onClick={this.reloadNumberOfDataSets}/>
+                        <Tooltip placement="right" isOpen={this.state.isTooltipNumberOfDataSetsOpen}
+                                 target="TooltipNumberOfDataSets" toggle={this.toggleToolTipNumberOfDataSets}>
+                            Internal Server Error
+                        </Tooltip>
+                    </div>;
+            else
+                numberOfResult = this.props.numberOfDataSets;
 
-        let numberOfResult = <Spinner color="primary"/>;
-        if (this.props.numberOfDataSets)
-            numberOfResult = this.props.numberOfDataSets;
-
-        let dataSets = <Spinner type="grow" color="primary"/>;
-        if (this.props.dataSets)
+        let dataSets = null;
+        if (this.props.loadingDataSetsError)
+            dataSets =
+                <div>
+                    <FaRedo id="ToolTipDataSets" onClick={this.reloadDataSets}/>
+                    <Tooltip placement="right" isOpen={this.state.isTooltipDataSetsOpen}
+                             target="ToolTipDataSets" toggle={this.toggleToolTipDataSets}>
+                        Error in Fetching datasets from the server
+                    </Tooltip>
+                </div>;
+        else if (this.props.loadingDataSets)
+            dataSets = <Spinner type="grow" color="primary"/>;
+        else if (this.props.dataSets !== null)
             dataSets = this.props.dataSets.map(
-                dataSet => (<Col md={{size: 12}} key={dataSet.uri}>
-                    {this.state.isLongView ? <LongView dataSet={dataSet}/> : <ShortView dataSet={dataSet}/>}
-                </Col>)
+                dataSet => (
+                    <Col md={{size: 12}} key={dataSet.uri}>
+                        {this.state.isLongView ? <LongView dataSet={dataSet}/> : <ShortView dataSet={dataSet}/>}
+                    </Col>
+                )
             );
 
         let filterView = this.props.filters ?
@@ -133,12 +201,12 @@ class TableView extends React.Component {
 const mapStateToProps = state => {
     return {
         dataSets: state.ds.dataSets,
-        loadingDataSets: state.ds.loadingDataSets ,
-        loadingDataSetsError : state.ds.loadingDataSetsError,
+        loadingDataSets: state.ds.loadingDataSets,
+        loadingDataSetsError: state.ds.loadingDataSetsError,
 
         numberOfDataSets: state.ds.numberOfDataSets,
-        loadingNumberOfDataSets: state.ds.loadingNumberOfDataSets ,
-        loadingNumberOfDataSetsError : state.ds.loadingNumberOfDataSetsError,
+        loadingNumberOfDataSets: state.ds.loadingNumberOfDataSets,
+        loadingNumberOfDataSetsError: state.ds.loadingNumberOfDataSetsError,
 
         filters: state.filters.filters,
         selectedFilters: state.filters.selectedFilters
