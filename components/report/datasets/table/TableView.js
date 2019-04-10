@@ -24,6 +24,7 @@ class TableView extends React.Component {
 
     state = {
         dropdownOpen: false,
+
         listOrderByValues: ['title', 'issue date', 'theme'],
         selectedOrder: 0,
 
@@ -67,13 +68,17 @@ class TableView extends React.Component {
     };
 
     reloadNumberOfDataSets = () => {
-        this.toggleToolTipNumberOfDataSets();
+        this.setState({
+            isTooltipNumberOfDataSetsOpen: false
+        });
         this.props.onGettingNumberOfDataSets(this.props.searchKey, this.props.selectedSearchIn, this.props.selectedFilters);
 
     };
 
     reloadDataSets = () => {
-        this.toggleToolTipDataSets();
+        this.setState({
+            isTooltipDataSetsOpen: false
+        });
         this.props.onFetchingDataSets(this.props.searchKey, this.props.selectedSearchIn, this.props.selectedFilters);
     };
 
@@ -95,11 +100,8 @@ class TableView extends React.Component {
         if (this.props.loadingNumberOfDataSetsError)
             numberOfResult =
                 <div>
-                    <FaRedo id="TooltipNumberOfDataSetsFetchError" onClick={this.reloadNumberOfDataSets}/>
-                    <Tooltip placement="right" isOpen={this.state.isTooltipNumberOfDataSetsOpen}
-                             target="TooltipNumberOfDataSetsFetchError" toggle={this.toggleToolTipNumberOfDataSets}>
-                    Error in Fetching number of datasets from the server
-                    </Tooltip>
+                    <Button onClick={this.reloadNumberOfDataSets}><FaRedo id="TooltipNumberOfDataSetsFetchError"/></Button>
+                    <span style={{marginLeft:'3px', fontSize:'8px', fontWeight:'500'}}>Error in Fetching number of datasets from the server</span>
                 </div>;
         else if (this.props.loadingNumberOfDataSets)
             numberOfResult = <Spinner color="primary"/>;
@@ -107,11 +109,8 @@ class TableView extends React.Component {
             if (this.props.numberOfDataSets === -1)
                 numberOfResult =
                     <div>
-                        <FaRedo id="TooltipNumberOfDataSetsInternalServerError" onClick={this.reloadNumberOfDataSets}/>
-                        <Tooltip placement="right" isOpen={this.state.isTooltipNumberOfDataSetsOpen}
-                                 target="TooltipNumberOfDataSetsInternalServerError" toggle={this.toggleToolTipNumberOfDataSets}>
-                            Internal Server Error
-                        </Tooltip>
+                        <Button onClick={this.reloadNumberOfDataSets}><FaRedo id="TooltipNumberOfDataSetsInternalServerError" /></Button>
+                        <span style={{marginLeft:'3px', fontSize:'8px', fontWeight:'500'}}>Internal Server Error</span>
                     </div>;
             else
                 numberOfResult = this.props.numberOfDataSets;
@@ -120,11 +119,8 @@ class TableView extends React.Component {
         if (this.props.loadingDataSetsError)
             dataSets =
                 <div>
-                    <FaRedo id="ToolTipDataSets" onClick={this.reloadDataSets}/>
-                    <Tooltip placement="right" isOpen={this.state.isTooltipDataSetsOpen}
-                             target="ToolTipDataSets" toggle={this.toggleToolTipDataSets}>
-                        Error in Fetching dataSets from the server
-                    </Tooltip>
+                    <Button onClick={this.reloadDataSets}><FaRedo id="ToolTipDataSets" /></Button>
+                    <span style={{marginLeft:'3px', fontSize:'8px', fontWeight:'500'}}>Error in Fetching dataSets from the server</span>
                 </div>;
         else if (this.props.loadingDataSets)
             dataSets = <Spinner type="grow" color="primary"/>;
