@@ -18,17 +18,17 @@ class SearchBar extends React.Component {
         this.setState(newState);
     };
 
-    checkFilter = (idx) => {
-        this.props.onSearchInChanged(idx);
+    checkFilter = (domain) => {
+        this.props.onSearchInChanged(domain);
     };
 
-    removeFilter = (idx) => {
-        this.props.onSearchInRemoved(idx);
+    removeFilter = (domain) => {
+        this.props.onSearchInRemoved(domain);
     };
 
     searchClicked = () => {
-        this.props.onFetchingDataSets(this.props.selectedFilters);
-        this.props.onGettingNumberOfDataSets(this.props.selectedFilters);
+        this.props.onFetchingDataSets(this.props.searchKey, this.props.selectedSearchIn, this.props.selectedFilters);
+        this.props.onGettingNumberOfDataSets(this.props.searchKey, this.props.selectedSearchIn, this.props.selectedFilters);
     };
 
     searchKeyChanged = (event) => {
@@ -38,13 +38,13 @@ class SearchBar extends React.Component {
 
     render() {
 
-        let searchFilterButtons = (
+        let searchDomainButtons = (
             <>
                 {
-                    this.props.searchIn.map((filter, idx) => (
-                        <Button color="primary" size="sm" key={idx} style={{marginLeft: '5px'}}
-                                onClick={() => this.checkFilter(idx)}>
-                            {filter} {this.props.selectedSearchIn[idx]  && <Badge> selected </Badge>}
+                    this.props.searchIn.map((domain) => (
+                        <Button color="primary" size="sm" key={domain} style={{marginLeft: '5px'}}
+                                onClick={() => this.checkFilter(domain)}>
+                            {domain} {this.props.selectedSearchIn.includes(domain)  && <Badge> selected </Badge>}
                         </Button>
                     ))
                 }
@@ -52,18 +52,18 @@ class SearchBar extends React.Component {
             </>
         );
 
-        let searchHint = <span style={{marginLeft: '5px', color: 'gray'}}>  Anywhere </span>;
-        if (this.props.selectedSearchIn.indexOf(true) >= 0)
-            searchHint = (<span style={{marginLeft: '5px', color: 'gray'}}>
-                {this.props.selectedSearchIn.map(
-                    (selectedFilter, idx) =>
-                        (selectedFilter ?
-                            (
-                                <span style={{marginLeft: '5px'}} key={idx}>
-                                    <Badge onClick={() => this.removeFilter(idx)}> X </Badge>
-                                    <span style={{marginLeft: '2px'}}>{this.props.searchIn[idx]}</span>
+        let searchDomains = <span style={{marginLeft: '5px', color: 'gray'}}>  Anywhere </span>;
+        if (this.props.selectedSearchIn.length > 0)
+            searchDomains = (<span style={{marginLeft: '5px', color: 'gray'}}>
+                {
+                    this.props.selectedSearchIn.map( (domain) => (
+                                <span style={{marginLeft: '5px'}} key={domain}>
+                                    <Badge onClick={() => this.removeFilter(domain)}> X </Badge>
+                                    <span style={{marginLeft: '2px'}}>{domain}</span>
                                 </span>
-                            ) : null))}
+                            )
+                    )
+                }
             </span>);
 
         return (
@@ -84,9 +84,9 @@ class SearchBar extends React.Component {
                             <FaAngleRight/>
                         </Button>
                         <Collapse isOpen={!this.state.collapse}>
-                            {searchFilterButtons}
+                            {searchDomainButtons}
                         </Collapse>
-                        {searchHint}
+                        {searchDomains}
                     </InputGroup>
                 </Form>
             </Col>
@@ -107,8 +107,10 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onFetchingDataSets: (selectedFilters) => dispatch(actionCreators.fetchDataSets(selectedFilters)),
-        onGettingNumberOfDataSets: (selectedFilters) => dispatch(actionCreators.getNumberOfDataSets(selectedFilters)),
+        onFetchingDataSets: (searchKey, searchIn, selectedFilters) =>
+            dispatch(actionCreators.fetchDataSets(searchKey, searchIn, selectedFilters)),
+        onGettingNumberOfDataSets: (searchKey, searchIn, selectedFilters) =>
+            dispatch(actionCreators.getNumberOfDataSets(searchKey, searchIn, selectedFilters)),
         onSearchKeyChanged: (key) => dispatch(actionCreators.searchKeyChanged(key)),
         onSearchInChanged: (idx) => dispatch(actionCreators.searchInChanged(idx)),
         onSearchInRemoved: (idx) => dispatch(actionCreators.searchInRemoved(idx))

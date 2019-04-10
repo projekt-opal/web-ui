@@ -34,8 +34,8 @@ class TableView extends React.Component {
     };
 
     componentDidMount() {
-        this.props.onFetchingDataSets(this.props.selectedFilters);
-        this.props.onGettingNumberOfDataSets(this.props.selectedFilters);
+        this.props.onFetchingDataSets(this.props.searchKey, this.props.selectedSearchIn, this.props.selectedFilters);
+        this.props.onGettingNumberOfDataSets(this.props.searchKey, this.props.selectedSearchIn, this.props.selectedFilters);
         this.props.onFetchFilters();
     }
 
@@ -58,22 +58,23 @@ class TableView extends React.Component {
     };
 
     load10More = () => {
-        this.props.onLoad10More(this.props.dataSets.length, this.props.selectedFilters);
+        this.props.onLoad10More(this.props.searchKey, this.props.selectedSearchIn, this.props.dataSets.length, this.props.selectedFilters);
     };
 
     applyFilters = () => {
-        this.props.onFetchingDataSets(this.props.selectedFilters);
-        this.props.onGettingNumberOfDataSets(this.props.selectedFilters);
+        this.props.onFetchingDataSets(this.props.searchKey, this.props.selectedSearchIn, this.props.selectedFilters);
+        this.props.onGettingNumberOfDataSets(this.props.searchKey, this.props.selectedSearchIn, this.props.selectedFilters);
     };
 
     reloadNumberOfDataSets = () => {
         this.toggleToolTipNumberOfDataSets();
-        this.props.onGettingNumberOfDataSets(this.props.selectedFilters);
+        this.props.onGettingNumberOfDataSets(this.props.searchKey, this.props.selectedSearchIn, this.props.selectedFilters);
+
     };
 
     reloadDataSets = () => {
         this.toggleToolTipDataSets();
-        this.props.onFetchingDataSets(this.props.selectedFilters);
+        this.props.onFetchingDataSets(this.props.searchKey, this.props.selectedSearchIn, this.props.selectedFilters);
     };
 
     toggleToolTipNumberOfDataSets = () => {
@@ -94,10 +95,10 @@ class TableView extends React.Component {
         if (this.props.loadingNumberOfDataSetsError)
             numberOfResult =
                 <div>
-                    <FaRedo id="TooltipNumberOfDataSets" onClick={this.reloadNumberOfDataSets}/>
+                    <FaRedo id="TooltipNumberOfDataSetsFetchError" onClick={this.reloadNumberOfDataSets}/>
                     <Tooltip placement="right" isOpen={this.state.isTooltipNumberOfDataSetsOpen}
-                             target="TooltipNumberOfDataSets" toggle={this.toggleToolTipNumberOfDataSets}>
-                        Error in Fetching number of datasets from the server
+                             target="TooltipNumberOfDataSetsFetchError" toggle={this.toggleToolTipNumberOfDataSets}>
+                    Error in Fetching number of datasets from the server
                     </Tooltip>
                 </div>;
         else if (this.props.loadingNumberOfDataSets)
@@ -106,9 +107,9 @@ class TableView extends React.Component {
             if (this.props.numberOfDataSets === -1)
                 numberOfResult =
                     <div>
-                        <FaRedo id="TooltipNumberOfDataSets" onClick={this.reloadNumberOfDataSets}/>
+                        <FaRedo id="TooltipNumberOfDataSetsInternalServerError" onClick={this.reloadNumberOfDataSets}/>
                         <Tooltip placement="right" isOpen={this.state.isTooltipNumberOfDataSetsOpen}
-                                 target="TooltipNumberOfDataSets" toggle={this.toggleToolTipNumberOfDataSets}>
+                                 target="TooltipNumberOfDataSetsInternalServerError" toggle={this.toggleToolTipNumberOfDataSets}>
                             Internal Server Error
                         </Tooltip>
                     </div>;
@@ -122,7 +123,7 @@ class TableView extends React.Component {
                     <FaRedo id="ToolTipDataSets" onClick={this.reloadDataSets}/>
                     <Tooltip placement="right" isOpen={this.state.isTooltipDataSetsOpen}
                              target="ToolTipDataSets" toggle={this.toggleToolTipDataSets}>
-                        Error in Fetching datasets from the server
+                        Error in Fetching dataSets from the server
                     </Tooltip>
                 </div>;
         else if (this.props.loadingDataSets)
@@ -209,15 +210,22 @@ const mapStateToProps = state => {
         loadingNumberOfDataSetsError: state.ds.loadingNumberOfDataSetsError,
 
         filters: state.filters.filters,
-        selectedFilters: state.filters.selectedFilters
+        selectedFilters: state.filters.selectedFilters,
+
+        searchKey: state.searchKey.key,
+        searchIn: state.searchKey.searchIn,
+        selectedSearchIn: state.searchKey.selectedSearchIn
     }
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        onFetchingDataSets: (selectedFilters) => dispatch(actionCreators.fetchDataSets(selectedFilters)),
-        onGettingNumberOfDataSets: (selectedFilters) => dispatch(actionCreators.getNumberOfDataSets(selectedFilters)),
-        onLoad10More: (low, selectedFilters) => dispatch(actionCreators.load10More(low, selectedFilters)),
+        onFetchingDataSets: (searchKey, searchIn, selectedFilters) =>
+            dispatch(actionCreators.fetchDataSets(searchKey, searchIn, selectedFilters)),
+        onGettingNumberOfDataSets: (searchKey, searchIn, selectedFilters) =>
+            dispatch(actionCreators.getNumberOfDataSets(searchKey, searchIn, selectedFilters)),
+        onLoad10More: (searchKey, searchIn, low, selectedFilters) =>
+            dispatch(actionCreators.load10More(searchKey, searchIn, low, selectedFilters)),
         onFetchFilters: () => dispatch(actionCreators.fetchFilters())
     }
 };

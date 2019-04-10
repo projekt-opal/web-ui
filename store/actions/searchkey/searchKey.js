@@ -9,19 +9,19 @@ export const searchKeyChanged = (key) => {
     }
 };
 
-export const searchInChanged = (idx) => {
+export const searchInChanged = (searchDomain) => {
     return dispatch => {
         dispatch({
             type: actionTypes.SEARCH_IN_CHANGED,
-            idx: idx
+            searchDomain: searchDomain
         });
     }
 };
-export const searchInRemoved = (idx) => {
+export const searchInRemoved = (searchDomain) => {
     return dispatch => {
         dispatch({
             type: actionTypes.SEARCH_IN_REMOVED,
-            idx: idx
+            searchDomain: searchDomain
         });
     }
 };

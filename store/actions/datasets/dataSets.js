@@ -21,10 +21,10 @@ export const fetchDataSetsFail = (error ) => {
     };
 };
 
-export const fetchDataSets = (selectedFilters) => {
+export const fetchDataSets = (searchKey, searchIn, /*todo orderBy, */selectedFilters) => {
     return dispatch => {
         dispatch(fetchDataSetsStart());
-        axios.post('/dataSets/getSubList', selectedFilters)
+        axios.post(`/dataSets/getSubList?searchQuery=${searchKey}&searchIn=${searchIn}`, selectedFilters)
             .then( response => {
                 const dataSets = response.data;
                 dispatch(fetchDataSetsSuccess(dataSets));
@@ -54,11 +54,10 @@ export const getNumberOfDataSetsFail = (error) => {
     }
 };
 
-export const getNumberOfDataSets = (selectedFilters) => {
-    console.log(selectedFilters);
+export const getNumberOfDataSets = (searchKey, searchIn, /*todo orderBy, */selectedFilters) => {
     return dispatch => {
         dispatch(getNumberOfDataSetsStart());
-        axios.post("/dataSets/getNumberOfDataSets", selectedFilters)
+        axios.post(`/dataSets/getNumberOfDataSets?searchQuery=${searchKey}&searchIn=${searchIn}`, selectedFilters)
             .then( response => {
                 const numberOfDataSets = response.data;
                 dispatch(getNumberOfDataSetsSuccess(numberOfDataSets));
@@ -77,9 +76,9 @@ export const load10MoreSuccess = (dataSets) => {
     };
 };
 
-export const load10More = (low, selectedFilters) => {
+export const load10More = (searchKey, searchIn, /*todo orderBy, */low, selectedFilters) => {
     return dispatch => {
-        axios.post("/dataSets/getSubList?low=" + low, selectedFilters)
+        axios.post(`/dataSets/getSubList?searchQuery=${searchKey}&searchIn=${searchIn}&low=${low}`, selectedFilters)
             .then(response => {
                 let dataSets = response.data;
                 dispatch(load10MoreSuccess(dataSets));

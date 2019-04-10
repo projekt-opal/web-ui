@@ -4,19 +4,22 @@ import {updateObject} from "../utility";
 const initialState = {
     key : '',
     searchIn: ['title', 'description', 'keyword'],
-    selectedSearchIn: [false, false, false]
+    selectedSearchIn: []
 };
 
 
-const getUpdatedSearchInChanged = (state, idx) => {
+const getUpdatedSearchInChanged = (state, searchDomain) => {
     let newSelectedSearchIn = [...state.selectedSearchIn];
-    newSelectedSearchIn[idx] = !newSelectedSearchIn[idx];
+    if(newSelectedSearchIn.includes(searchDomain))
+        newSelectedSearchIn = newSelectedSearchIn.filter(x => x !== searchDomain);
+    else
+        newSelectedSearchIn = newSelectedSearchIn.concat(searchDomain);
     return {selectedSearchIn: newSelectedSearchIn};
 };
 
-const getUpdatedSearchInRemoved = (state, idx) => {
+const getUpdatedSearchInRemoved = (state, searchDomain) => {
     let newSelectedSearchIn = [...state.selectedSearchIn];
-    newSelectedSearchIn[idx] = false;
+    newSelectedSearchIn = newSelectedSearchIn.filter(x => x !== searchDomain);
     return {selectedSearchIn: newSelectedSearchIn};
 };
 
@@ -26,9 +29,9 @@ const reducer = ( state = initialState, action ) => {
         case actionTypes.SEARCH_KEY_CHANGED:
             return updateObject(state, {key: action.key});
         case actionTypes.SEARCH_IN_CHANGED:
-            return updateObject(state, getUpdatedSearchInChanged(state, action.idx));
+            return updateObject(state, getUpdatedSearchInChanged(state, action.searchDomain));
         case actionTypes.SEARCH_IN_REMOVED:
-            return updateObject(state, getUpdatedSearchInRemoved(state, action.idx));
+            return updateObject(state, getUpdatedSearchInRemoved(state, action.searchDomain));
     }
     return state;
 };
