@@ -1,16 +1,5 @@
 import React from 'react';
-import {
-    Button,
-    ButtonDropdown,
-    Col,
-    DropdownItem,
-    DropdownMenu,
-    DropdownToggle,
-    Row,
-    Spinner,
-    Table,
-    Tooltip
-} from "reactstrap";
+import {Button, ButtonDropdown, Col, DropdownItem, DropdownMenu, DropdownToggle, Row, Spinner, Table} from "reactstrap";
 import {FaRedo, FaThLarge, FaThList} from "react-icons/fa";
 import ShortView from "../dataset/ShortView";
 import LongView from "../dataset/LongView";
@@ -59,7 +48,8 @@ class TableView extends React.Component {
     };
 
     load10More = () => {
-        this.props.onLoad10More(this.props.searchKey, this.props.selectedSearchIn, this.props.dataSets.length, this.props.selectedFilters);
+        if(this.props.dataSets !== null && this.props.dataSets.length > 0)
+            this.props.onLoad10More(this.props.searchKey, this.props.selectedSearchIn, this.props.dataSets.length, this.props.selectedFilters);
     };
 
     applyFilters = () => {
@@ -100,8 +90,9 @@ class TableView extends React.Component {
         if (this.props.loadingNumberOfDataSetsError)
             numberOfResult =
                 <div>
-                    <Button onClick={this.reloadNumberOfDataSets}><FaRedo id="TooltipNumberOfDataSetsFetchError"/></Button>
-                    <span style={{marginLeft:'3px', fontSize:'8px', fontWeight:'500'}}>Error in Fetching number of datasets from the server</span>
+                    <Button onClick={this.reloadNumberOfDataSets}><FaRedo
+                        id="TooltipNumberOfDataSetsFetchError"/></Button>
+                    <span style={{marginLeft: '3px', fontSize: '8px', fontWeight: '500'}}>Error in Fetching number of datasets from the server</span>
                 </div>;
         else if (this.props.loadingNumberOfDataSets)
             numberOfResult = <Spinner color="primary"/>;
@@ -109,8 +100,10 @@ class TableView extends React.Component {
             if (this.props.numberOfDataSets === -1)
                 numberOfResult =
                     <div>
-                        <Button onClick={this.reloadNumberOfDataSets}><FaRedo id="TooltipNumberOfDataSetsInternalServerError" /></Button>
-                        <span style={{marginLeft:'3px', fontSize:'8px', fontWeight:'500'}}>Internal Server Error</span>
+                        <Button onClick={this.reloadNumberOfDataSets}><FaRedo
+                            id="TooltipNumberOfDataSetsInternalServerError"/></Button>
+                        <span
+                            style={{marginLeft: '3px', fontSize: '8px', fontWeight: '500'}}>Internal Server Error</span>
                     </div>;
             else
                 numberOfResult = this.props.numberOfDataSets;
@@ -119,8 +112,8 @@ class TableView extends React.Component {
         if (this.props.loadingDataSetsError)
             dataSets =
                 <div>
-                    <Button onClick={this.reloadDataSets}><FaRedo id="ToolTipDataSets" /></Button>
-                    <span style={{marginLeft:'3px', fontSize:'8px', fontWeight:'500'}}>Error in Fetching dataSets from the server</span>
+                    <Button onClick={this.reloadDataSets}><FaRedo id="ToolTipDataSets"/></Button>
+                    <span style={{marginLeft: '3px', fontSize: '8px', fontWeight: '500'}}>Error in Fetching dataSets from the server</span>
                 </div>;
         else if (this.props.loadingDataSets)
             dataSets = <Spinner type="grow" color="primary"/>;
@@ -181,7 +174,7 @@ class TableView extends React.Component {
                             </tbody>
                         </Table>
                         <Row>
-                            <Button className="mx-auto" style={{marginBottom: '1rem'}} onClick={this.load10More}> Load
+                            <Button className="mx-auto" style={{marginBottom: '1rem'}} onClick={this.load10More} disabled={this.props.dataSets === null} > Load
                                 10 more </Button>
                         </Row>
                     </Col>
