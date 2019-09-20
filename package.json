@@ -11,6 +11,7 @@
     "axios": "^0.18.1",
     "bootstrap": "^4.3.1",
     "create-react-class": "^15.6.3",
+    "graphql-request": "^1.8.2",
     "jquery": "^3.4.1",
     "next": "^7.0.3",
     "next-images": "^1.2.0",

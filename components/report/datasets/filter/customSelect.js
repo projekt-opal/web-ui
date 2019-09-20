@@ -5,6 +5,8 @@ import Select, { components } from 'react-select';
 import createClass from "create-react-class";
 import {connect} from 'react-redux';
 import * as actionCreators from '../../../../store/actions/index';
+import axios from '../../../../webservice/axios-dataSets';
+import { request } from 'graphql-request'
 
 const Option = createClass({
   render() {
@@ -32,23 +34,41 @@ const MultiValue = props => {
   );
 };
 
-const options = [
-          { value: 'chocolate', label: 'Chocolate' },
-          { value: 'strawberry', label: 'Strawberry' },
-          { value: 'vanilla', label: 'Vanilla' },
-          { value: 'vanillas', label: 'Vanillas' },
-          { value: 'vanillars', label: 'Vanrillas' },
-          { value: 'Lhocolate', label: 'Lhocolate' },
-          { value: 'strawberry', label: 'Strawberry' },
-          { value: 'vanilla', label: 'Vanilla' },
-          { value: 'vanillas', label: 'Vanillas' },
-          { value: 'vanillars', label: 'Vanrillas' },
-        ];
+const filterOptions = (inputValue) => {
+  // request after typing in search and after clicking the button 
+  request(axios.defaults.baseURL+'filteredOptions', 
+  `{
+    filteredOptions(inputValue: ${inputValue}){
+      value,
+      label
+    }
+  }`
+  ).then(data =>
+    {
+      return data;
+    }
+  )
+  .catch(err => {
+      return err;
+  } );
 
-const filterColors = (inputValue) => {
-  return options.filter(i =>
-    i.label.toLowerCase().includes(inputValue.toLowerCase())
-  );
+  // const options = [
+  //         { value: 'chocolate', label: 'Chocolate' },
+  //         { value: 'strawberry', label: 'Strawberry' },
+  //         { value: 'vanilla', label: 'Vanilla' },
+  //         { value: 'vanillas', label: 'Vanillas' },
+  //         { value: 'vanillars', label: 'Vanrillas' },
+  //         { value: 'Lhocolate', label: 'Lhocolate' },
+  //         { value: 'strawberry', label: 'Strawberry' },
+  //         { value: 'vanilla', label: 'Vanilla' },
+  //         { value: 'vanillas', label: 'Vanillas' },
+  //         { value: 'vanillars', label: 'Vanrillas' },
+  //       ];
+  //return options;
+
+  // return options.filter(i =>
+  //   i.label.toLowerCase().includes(inputValue.toLowerCase())
+  // );
 };
 
 class CustomSelect extends React.Component {
@@ -84,19 +104,8 @@ class CustomSelect extends React.Component {
         });
     }
 
-   //  getOptions = (input, callback) => {
-   //  setTimeout(function () {
-   //    callback(null, {
-   //      options: [
-   //        {value: 'one', label: 'One'},
-   //        {value: 'two', label: 'Two'}
-   //      ]
-   //     });
-   //   }, 500);
-   // };   
-
     updateOptions = (inputValue) => {
-      this.selectAsync.state.loadedOptions = filterColors(inputValue);
+      this.selectAsync.state.loadedOptions = filterOptions(inputValue);
       //defaultOptions
     }
 
