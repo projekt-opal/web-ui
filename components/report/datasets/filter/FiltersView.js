@@ -27,7 +27,7 @@ class FiltersView extends React.Component {
     render() {
         return (
             <Container fluid>
-                <Row>
+                <Row style={{'marginTop': '10px'}}>
                     <Col md={{size: 12}}>
                         <div style={{display: 'flex', flexFlow: 'row'}}>
                             <Button color="primary" onClick={this.applyFilters}
@@ -41,7 +41,7 @@ class FiltersView extends React.Component {
                         (filter, idx) => {
                             const selectedFilterValues = this.props.selectedFilters.filter(x => x.property === filter.uri);
                             return (
-                                <Row key={idx}>
+                                <Row key={idx} style={{'marginTop': '10px'}}>
                                     <Col md={{size: 12}}>
                                         <FilterView
                                             selectedValues={selectedFilterValues.length > 0 ? selectedFilterValues[0].values : []}

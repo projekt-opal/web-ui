@@ -133,7 +133,7 @@ class TableView extends React.Component {
         return (
             <Col md={{size: 12}}>
                 <Row>
-                    <Col md={{size: 10}}>
+                    <Col md={{size: 9}}>
                         <Table hover bordered responsive striped>
                             <thead>
                             <tr>
@@ -178,7 +178,7 @@ class TableView extends React.Component {
                                 10 more </Button>
                         </Row>
                     </Col>
-                    <Col md={{size: 2}}>
+                    <Col md={{size: 3}}>
                         {filterView}
                     </Col>
                 </Row>

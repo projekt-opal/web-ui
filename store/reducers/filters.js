@@ -6,7 +6,8 @@ const initialState = {
     loadingFiltersError: false,
     filters: null,
 
-    selectedFilters: []
+    selectedFilters: [],
+    selectedValues: [],
 };
 
 const updateSelectedFilters = (state, property, uri) => {
@@ -26,6 +27,19 @@ const updateSelectedFilters = (state, property, uri) => {
     return {selectedFilters: selectedFilters};
 };
 
+const updateSelectedValues = (state, title, value, label) => {
+    let selectedValues = [...state.selectedValues];
+    if(value === null){
+        let arr = selectedValues.filter(i => title !== i.title );
+        //selectedValues = [];
+        selectedValues = arr;
+    }
+    if(value && !selectedValues.some(x => value === x.value)){
+        selectedValues.push({title: title, value: value, label: label});
+    }
+    return {selectedValues: selectedValues};
+};
+
 const reducer = ( state = initialState, action ) => {
     switch ( action.type ) {
         case actionTypes.FETCH_FITLERS_START:
@@ -37,6 +51,9 @@ const reducer = ( state = initialState, action ) => {
 
         case actionTypes.APPEND_FILTER:
             return updateObject(state, updateSelectedFilters(state, action.property, action.uri));
+                    case actionTypes.APPEND_FILTER:
+        case actionTypes.APPEND_FILTER_VALUE:            
+            return updateObject(state, updateSelectedValues(state, action.title, action.value, action.label));
     }
     return state;
 };

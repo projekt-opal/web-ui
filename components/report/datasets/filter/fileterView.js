@@ -1,5 +1,6 @@
 import React from 'react';
 import {Badge, Button, ListGroup, ListGroupItem} from "reactstrap";
+import CustomSelect from './customSelect';
 
 import {FaAngleDown, FaAngleRight} from 'react-icons/fa'
 
@@ -14,26 +15,16 @@ class FilterView extends React.Component {
         this.setState({isExpanded: isExpanded});
     };
 
+
     render() {
         let values = null;
-        if (this.state.isExpanded)
+        //if (this.state.isExpanded){
             values = (
-                <ListGroup>
-                    {
-                        this.props.filter.values.map(
-                            ({uri, value, count}, idx) => {
-                                return (
-                                    <ListGroupItem key={idx}>
-                                        <label><input type="checkbox" value={uri}
-                                                      checked={!!this.props.selectedValues.find(x => x === uri)}
-                                                      onChange={(event) => this.props.checked(event)}/>
-                                            {value}
-                                            <Badge style={{marginLeft: '2px'}} pill>{count}</Badge>
-                                        </label>
-                                    </ListGroupItem>);
-                            })
-                    }
-                </ListGroup>);
+                //<ListGroup>
+                    <CustomSelect title={this.props.filter.title} values={this.props.filter.values} ></CustomSelect>
+                //</ListGroup>
+                );
+       // }
 
         return (
             <div>
@@ -43,10 +34,25 @@ class FilterView extends React.Component {
                         {this.props.filter.title}
                     </Button>
                 </div>
-                {values}
+                {this.state.isExpanded && values }
             </div>
         );
     }
 };
 
 export default FilterView;
+
+// {
+//                         this.props.filter.values.map(
+//                             ({uri, value, count}, idx) => {
+//                                 return (
+//                                     <ListGroupItem key={idx}>
+//                                         <label><input type="checkbox" value={uri}
+//                                                       checked={!!this.props.selectedValues.find(x => x === uri)}
+//                                                       onChange={(event) => this.props.checked(event)}/>
+//                                             {value}
+//                                             <Badge style={{marginLeft: '2px'}} pill>{count}</Badge>
+//                                         </label>
+//                                     </ListGroupItem>);
+//                             })
+//                     }
