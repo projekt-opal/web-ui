@@ -6,7 +6,7 @@ import createClass from "create-react-class";
 import {connect} from 'react-redux';
 import * as actionCreators from '../../../../store/actions/index';
 import axios from '../../../../webservice/axios-dataSets';
-import { request } from 'graphql-request'
+//import { request } from 'graphql-request'
 
 const Option = createClass({
   render() {
@@ -35,22 +35,16 @@ const MultiValue = props => {
 };
 
 const filterOptions = (inputValue) => {
-  // request after typing in search and after clicking the button 
-  request(axios.defaults.baseURL+'filteredOptions', 
-  `{
-    filteredOptions(inputValue: ${inputValue}){
-      value,
-      label
-    }
-  }`
-  ).then(data =>
-    {
-      return data;
-    }
-  )
-  .catch(err => {
-      return err;
-  } );
+  // request after typing in search and after clicking the button
+
+  axios.get("/filteredOptions", {inputValue: inputValue})
+            .then(response => {
+                const options = response.data;
+                return options;
+            })
+            .catch( err => {
+                return err;
+            });
 
   // const options = [
   //         { value: 'chocolate', label: 'Chocolate' },

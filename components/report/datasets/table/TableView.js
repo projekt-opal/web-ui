@@ -23,10 +23,10 @@ class TableView extends React.Component {
         isTooltipDataSetsOpen: false
     };
 
-    componentDidMount() {
+    async componentDidMount() {
         this.props.onFetchingDataSets(this.props.searchKey, this.props.selectedSearchIn, this.props.selectedFilters);
         this.props.onGettingNumberOfDataSets(this.props.searchKey, this.props.selectedSearchIn, this.props.selectedFilters);
-        this.props.onFetchFilters();
+        await this.props.onFetchFilters();
     }
 
     toggle = () => {
