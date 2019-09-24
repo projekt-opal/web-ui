@@ -5,6 +5,8 @@ const initialState = {
     loadingFilters: false,
     loadingFiltersError: false,
     filters: null,
+    headers: null,
+    values: null,
 
     selectedFilters: [],
     selectedValues: [],
@@ -48,6 +50,11 @@ const reducer = ( state = initialState, action ) => {
             return updateObject(state, {loadingFilters: false, loadingFiltersError: false, filters: action.filters});
         case actionTypes.FETCH_FITLERS_FAIL:
             return updateObject(state, {loadingFilters: false, loadingFiltersError: true});
+        case actionTypes.FETCH_HEADERS:
+            return updateObject(state, {loadingFilters: false, loadingFiltersError: false, headers: action.headers});
+        case actionTypes.FETCH_VALUES:
+            return updateObject(state, {loadingFilters: false, loadingFiltersError: false, values: action.values});
+    
 
         case actionTypes.APPEND_FILTER:
             return updateObject(state, updateSelectedFilters(state, action.property, action.uri));

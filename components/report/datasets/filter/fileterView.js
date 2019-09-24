@@ -17,9 +17,8 @@ class FilterView extends React.Component {
 
 
     render() {
-        let values = null;
         //if (this.state.isExpanded){
-            values = (
+            let values = (
                 //<ListGroup>
                     <CustomSelect title={this.props.filter.title} values={this.props.filter.values} ></CustomSelect>
                 //</ListGroup>

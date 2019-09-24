@@ -22,6 +22,20 @@ export const fetchFiltersFail = (error ) => {
     };
 };
 
+export const fetchHeaders = (headers) => {
+    return {
+        type: actionTypes.FETCH_HEADERS,
+        headers: headers
+    };
+};
+
+export const fetchValues = (filters) => {
+    return {
+        type: actionTypes.FETCH_VALUES,
+        values: filters
+    };
+};
+
 export const fetchFilters = () => {
     return dispatch => {    
         dispatch(fetchFiltersStart());
@@ -31,6 +45,7 @@ export const fetchFilters = () => {
                 const headers = response.data;
 
                 //const headers = ["theme", "theme2", "theme3"];
+                dispatch(fetchHeaders(headers));
                 headers.forEach(h => {
                     axios.get("/values", { title : h })
                     .then(response => {
@@ -41,31 +56,34 @@ export const fetchFilters = () => {
                             values: values,
                         });
 
-                        //const filters = [
+
+                        // const filters = [
                         // {
                         //     title: "theme",
                         //     values: [
-                                // {uri:"uri1",value:"value 1",label:"l1",count:10},
-                                // {uri:"uri2",value:"value 2",label:"l2",count:10},
-                                // {uri:"uri3",value:"value 3",label:"l3",count:310}
+                        //         {uri:"uri1",value:"value 1",label:"l1",count:10},
+                        //         {uri:"uri2",value:"value 2",label:"l2",count:10},
+                        //         {uri:"uri3",value:"value 3",label:"l3",count:310}
                         //      ]
                         // },
                         // {
                         //     title: "theme2",
                         //     values: [
-                                // {uri:"uri1",value:"value 1",label:"l1",count:10},
-                                // {uri:"uri2",value:"value 2",label:"l2",count:10},
-                                // {uri:"uri3",value:"value 3",label:"l3",count:310}
+                        //         {uri:"uri1",value:"value 1",label:"l1",count:10},
+                        //         {uri:"uri2",value:"value 2",label:"l2",count:10},
+                        //         {uri:"uri3",value:"value 3",label:"l3",count:310}
                         //      ]
                         // },
-                        //{
+                        // {
                         //     title: "theme3",
                         //     values: [
-                                // {uri:"uri1",value:"value 1",label:"l1",count:10},
-                                // {uri:"uri2",value:"value 2",label:"l2",count:10},
-                                // {uri:"uri3",value:"value 3",label:"l3",count:310}
+                        //         {uri:"uri1",value:"value 1",label:"l1",count:10},
+                        //         {uri:"uri2",value:"value 2",label:"l2",count:10},
+                        //         {uri:"uri3",value:"value 3",label:"l3",count:310}
                         //      ]
                         // }];
+                        //filters.forEach(i => dispatch(fetchValues(filters)));
+                        dispatch(fetchValues(filters));
 
                         filters.forEach(f => {
                             f.values.forEach(v => {
@@ -78,34 +96,36 @@ export const fetchFilters = () => {
                                 .then(response => {
                                     let count = response.data;
                                     const results = [];
-                                    const fullvalues = [];
-                                    fullvalues.push({
-                                        uri: v.uri,
-                                        value: v.value,
-                                        label: v.label,
-                                        count: count,
-                                    });
                                     results.push({
                                         title: f.title,
-                                        values: fullvalues,
+                                        value: {
+                                            uri: v.uri,
+                                            value: v.value,
+                                            label: v.label,
+                                            count: count,
+                                        },
                                     });
 
-                                    //const results = 
+                                    // const results = 
                                     // [   {
                                     //         title: "Theme",
-                                    //         values: [
-                                    //             {uri:"uri1",value:"value 1",label:"l1",count:10},
-                                    //             {uri:"uri2",value:"value 2",label:"l2",count:10},
-                                    //             {uri:"uri3",value:"value 3",label:"l3",count:310}
-                                    //         ]
+                                    //         value: {uri:"uri1",value:"value 1",label:"l1",count:10},
+                                               
+                                    //     },
+                                    //     {
+                                    //         title: "Theme",
+                                    //         value: {uri:"uri2",value:"value 2",label:"l2",count:10},
+                                                
                                     //     },
                                     //     {
                                     //         title: "Theme2",
-                                    //         values: [
-                                    //             {uri:"uri1",value:"value 4",label:"l4",count:10},
-                                    //             {uri:"uri2",value:"value 5",label:"l5",count:10},
-                                    //             {uri:"uri3",value:"value 6",label:"l6",count:310}
-                                    //         ]
+                                    //         value: {uri:"uri3",value:"value 4",label:"l4",count:10},
+                                                
+                                    //     },
+                                    //     {
+                                    //         title: "Theme2",
+                                    //         value: {uri:"uri4",value:"value 5",label:"l5",count:10},
+                                               
                                     // }];
 
                                     dispatch(fetchFiltersSuccess(results));

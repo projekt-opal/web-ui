@@ -25,6 +25,22 @@ class FiltersView extends React.Component {
     };
 
     render() {
+        let filters = [];
+        let titles = {};
+        this.props.filters.forEach(i => {
+            titles[i.title] = {};
+        });
+
+        Object.keys(titles).forEach((t,index) => {
+            filters.push({title: t, values: []});
+            this.props.filters.forEach(i => {
+                if(t === i.title){
+                    filters[index].values.push(i.value);
+                }
+            })
+        });
+
+
         return (
             <Container fluid>
                 <Row style={{'marginTop': '10px'}}>
@@ -37,7 +53,7 @@ class FiltersView extends React.Component {
                     </Col>
                 </Row>
                 {
-                    this.props.filters.map(
+                    filters.map(
                         (filter, idx) => {
                             const selectedFilterValues = this.props.selectedFilters.filter(x => x.property === filter.uri);
                             return (
