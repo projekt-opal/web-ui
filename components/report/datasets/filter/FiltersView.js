@@ -27,19 +27,31 @@ class FiltersView extends React.Component {
     render() {
         let filters = [];
         let titles = {};
-        this.props.filters.forEach(i => {
-            titles[i.title] = {};
-        });
-
-        Object.keys(titles).forEach((t,index) => {
-            filters.push({title: t, values: []});
+        if(this.props.filters.length){
             this.props.filters.forEach(i => {
-                if(t === i.title){
-                    filters[index].values.push(i.value);
-                }
-            })
-        });
+                titles[i.title] = {};
+            });
+        } else {
+            this.props.headers.forEach(t => {
+                filters.push({title: t, values: []});
+            });    
+        }
 
+        if(this.props.values.length){
+            filters = this.props.values;
+        } else
+        {
+            Object.keys(titles).forEach((t,index) => {
+                filters.push({title: t, values: []});
+                if(this.props.filters.length){
+                    this.props.filters.forEach(i => {
+                        if(t === i.title){
+                            filters[index].values.push(i.value);
+                        }
+                    })
+                }  
+            });
+        }
 
         return (
             <Container fluid>
@@ -77,7 +89,9 @@ class FiltersView extends React.Component {
 
 const mapStateToProps = state => {
     return {
-        selectedFilters: state.filters.selectedFilters
+        selectedFilters: state.filters.selectedFilters,
+        headers: state.filters.headers,
+        values: state.filters.values
     }
 };
 

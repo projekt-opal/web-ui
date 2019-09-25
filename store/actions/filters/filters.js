@@ -46,6 +46,7 @@ export const fetchFilters = () => {
 
                 //const headers = ["theme", "theme2", "theme3"];
                 dispatch(fetchHeaders(headers));
+                dispatch(fetchFiltersSuccess([]));
                 headers.forEach(h => {
                     axios.get("/values", { title : h })
                     .then(response => {
