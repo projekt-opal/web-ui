@@ -39,8 +39,10 @@ class FiltersView extends React.Component {
 
         if(this.props.values.length){
             filters = this.props.values;
-        } else
-        {
+        }
+        
+        if(Object.keys(titles).length){
+            filters = {};
             Object.keys(titles).forEach((t,index) => {
                 filters.push({title: t, values: []});
                 if(this.props.filters.length){
@@ -51,7 +53,9 @@ class FiltersView extends React.Component {
                     })
                 }  
             });
+
         }
+        
 
         return (
             <Container fluid>
