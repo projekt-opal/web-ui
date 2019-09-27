@@ -47,7 +47,7 @@ export const fetchFilters = () => {
                 dispatch(fetchHeaders(titles));
 
                 titles.forEach(h => {
-                    axios.get("/values", { title : h })
+                    axios.get("/values/?title=" + h)
                     .then(response => {
                         const values = response.data;
                         const filter = { 
@@ -67,11 +67,11 @@ export const fetchFilters = () => {
                         dispatch(fetchValues(filter));
 
                         filter.values.forEach(v => {
-                            axios.get("/count", { 
+                            axios.post("/count", {
                                 header: filter.title,
                                 uri: v.uri,
-                                searchKey: this.props.searchKey,
-                                searchIn: this.props.searchIn, 
+                                searchKey: "", //todo complete it
+                                searchIn: "", //complete it
                             })
                             .then(response => {
                                 let count = response.data;
