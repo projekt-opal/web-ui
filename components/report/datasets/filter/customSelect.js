@@ -6,7 +6,6 @@ import createClass from "create-react-class";
 import {connect} from 'react-redux';
 import * as actionCreators from '../../../../store/actions/index';
 import axios from '../../../../webservice/axios-dataSets';
-//import { request } from 'graphql-request'
 
 const Option = createClass({
   render() {
@@ -81,11 +80,10 @@ class CustomSelect extends React.Component {
     changeHandler = (e) => {
       let arr = this.props.selectedValues.filter(i => this.props.title === i.title );
       if(e && e.length < arr.length){
-        this.props.onAppendFilter(this.props.title, null, null);
+        this.props.onAppendSelectedValues(this.props.title, null, null);
       }
-      console.log(this.props.title);
       if(e){
-        e.forEach(i => this.props.onAppendFilter(this.props.title, i.value, i.label));
+        e.forEach(i => this.props.onAppendSelectedValues(this.props.title, i.value, i.label));
       }
     };
 
@@ -161,7 +159,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onAppendFilter: (title, value, label) => dispatch(actionCreators.appendSelectedValues(title, value, label)),
+        onAppendSelectedValues: (title, value, label) => dispatch(actionCreators.appendSelectedValues(title, value, label)),
     }
 };
 

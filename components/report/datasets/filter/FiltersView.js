@@ -27,22 +27,22 @@ class FiltersView extends React.Component {
     render() {
         let filters = [];
         let titles = {};
-        if(this.props.filters.length){
+        if(this.props.filters && this.props.filters.length){
             this.props.filters.forEach(i => {
                 titles[i.title] = {};
             });
-        } else {
-            this.props.headers.forEach(t => {
+        } else if(this.props.titles){
+            this.props.titles.forEach(t => {
                 filters.push({title: t, values: []});
             });    
         }
 
-        if(this.props.values.length){
+        if(this.props.values && this.props.values.length){
             filters = this.props.values;
         }
         
         if(Object.keys(titles).length){
-            filters = {};
+            filters = [];
             Object.keys(titles).forEach((t,index) => {
                 filters.push({title: t, values: []});
                 if(this.props.filters.length){
@@ -94,8 +94,9 @@ class FiltersView extends React.Component {
 const mapStateToProps = state => {
     return {
         selectedFilters: state.filters.selectedFilters,
-        headers: state.filters.headers,
-        values: state.filters.values
+        titles: state.filters.titles,
+        values: state.filters.values,
+        filters: state.filters.filters,
     }
 };
 

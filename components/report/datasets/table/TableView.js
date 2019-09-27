@@ -126,8 +126,8 @@ class TableView extends React.Component {
                 )
             );
 
-        let filterView = this.props.filters ?
-            <FiltersView filters={this.props.filters} applyFilters={this.applyFilters}/> : <Spinner color="primary"/>;
+        //let filterView = this.props.filters ?
+            // <FiltersView filters={this.props.filters} applyFilters={this.applyFilters}/> : <Spinner color="primary"/>;
 
 
         return (
@@ -179,7 +179,7 @@ class TableView extends React.Component {
                         </Row>
                     </Col>
                     <Col md={{size: 3}}>
-                        {filterView}
+                        <FiltersView applyFilters={this.applyFilters}/>
                     </Col>
                 </Row>
 

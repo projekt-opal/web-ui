@@ -17,13 +17,9 @@ class FilterView extends React.Component {
 
 
     render() {
-        //if (this.state.isExpanded){
             let values = (
-                //<ListGroup>
-                    <CustomSelect title={this.props.filter.title} values={this.props.filter.values} ></CustomSelect>
-                //</ListGroup>
-                );
-       // }
+                <CustomSelect title={this.props.filter.title} values={this.props.filter.values} ></CustomSelect>
+            );
 
         return (
             <div>
@@ -40,18 +36,3 @@ class FilterView extends React.Component {
 };
 
 export default FilterView;
-
-// {
-//                         this.props.filter.values.map(
-//                             ({uri, value, count}, idx) => {
-//                                 return (
-//                                     <ListGroupItem key={idx}>
-//                                         <label><input type="checkbox" value={uri}
-//                                                       checked={!!this.props.selectedValues.find(x => x === uri)}
-//                                                       onChange={(event) => this.props.checked(event)}/>
-//                                             {value}
-//                                             <Badge style={{marginLeft: '2px'}} pill>{count}</Badge>
-//                                         </label>
-//                                     </ListGroupItem>);
-//                             })
-//                     }

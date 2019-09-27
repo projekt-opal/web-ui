@@ -1,12 +1,12 @@
 import * as actionTypes from '../actions/filters/actionTypes';
-import {updateObject} from '../utility';
+import {updateObject, addObject} from '../utility';
 
 const initialState = {
     loadingFilters: false,
     loadingFiltersError: false,
-    filters: null,
-    headers: null,
-    values: null,
+    filters: [],
+    titles: [],
+    values: [],
 
     selectedFilters: [],
     selectedValues: [],
@@ -47,13 +47,13 @@ const reducer = ( state = initialState, action ) => {
         case actionTypes.FETCH_FITLERS_START:
             return updateObject(state, {loadingFilters: true, loadingFiltersError: false});
         case actionTypes.FETCH_FITLERS_SUCCESS:
-            return updateObject(state, {loadingFilters: false, loadingFiltersError: false, filters: action.filters});
+            return addObject(state, {loadingFilters: false, loadingFiltersError: false, filters: action.filters});
         case actionTypes.FETCH_FITLERS_FAIL:
             return updateObject(state, {loadingFilters: false, loadingFiltersError: true});
         case actionTypes.FETCH_HEADERS:
-            return updateObject(state, {loadingFilters: false, loadingFiltersError: false, headers: action.headers});
+            return updateObject(state, {loadingFilters: false, loadingFiltersError: false, titles: action.titles});
         case actionTypes.FETCH_VALUES:
-            return updateObject(state, {loadingFilters: false, loadingFiltersError: false, values: action.values});
+            return addObject(state, {loadingFilters: false, loadingFiltersError: false, values: action.values});
     
 
         case actionTypes.APPEND_FILTER:

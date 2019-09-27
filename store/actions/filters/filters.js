@@ -1,6 +1,5 @@
 import * as actionTypes from './actionTypes';
 import axios from '../../../webservice/axios-dataSets';
-//import { request } from 'graphql-request'
 
 export const fetchFiltersStart = () => {
     return {
@@ -22,10 +21,10 @@ export const fetchFiltersFail = (error ) => {
     };
 };
 
-export const fetchHeaders = (headers) => {
+export const fetchHeaders = (titles) => {
     return {
         type: actionTypes.FETCH_HEADERS,
-        headers: headers
+        titles: titles
     };
 };
 
@@ -40,99 +39,61 @@ export const fetchFilters = () => {
     return dispatch => {    
         dispatch(fetchFiltersStart());
 
-        axios.get("/headers")
+        axios.get("/titles")
             .then(response => {
-                const headers = response.data;
+                const titles = response.data;
 
-                //const headers = ["theme", "theme2", "theme3"];
-                dispatch(fetchHeaders(headers));
-                dispatch(fetchFiltersSuccess([]));
-                headers.forEach(h => {
+                //const titles = ["theme", "theme2", "theme3"];
+                dispatch(fetchHeaders(titles));
+
+                titles.forEach(h => {
                     axios.get("/values", { title : h })
                     .then(response => {
                         const values = response.data;
-                        const filters = [];
-                        filters.push({ 
+                        const filter = { 
                             title: h,
                             values: values,
-                        });
+                        };
 
-
-                        // const filters = [
-                        // {
+                        // const filter = {
                         //     title: "theme",
                         //     values: [
-                        //         {uri:"uri1",value:"value 1",label:"l1",count:10},
-                        //         {uri:"uri2",value:"value 2",label:"l2",count:10},
-                        //         {uri:"uri3",value:"value 3",label:"l3",count:310}
+                        //         {uri:"uri1",value:"value 1",label:"l1"},
+                        //         {uri:"uri2",value:"value 2",label:"l2"},
+                        //         {uri:"uri3",value:"value 3",label:"l3"}
                         //      ]
-                        // },
-                        // {
-                        //     title: "theme2",
-                        //     values: [
-                        //         {uri:"uri1",value:"value 1",label:"l1",count:10},
-                        //         {uri:"uri2",value:"value 2",label:"l2",count:10},
-                        //         {uri:"uri3",value:"value 3",label:"l3",count:310}
-                        //      ]
-                        // },
-                        // {
-                        //     title: "theme3",
-                        //     values: [
-                        //         {uri:"uri1",value:"value 1",label:"l1",count:10},
-                        //         {uri:"uri2",value:"value 2",label:"l2",count:10},
-                        //         {uri:"uri3",value:"value 3",label:"l3",count:310}
-                        //      ]
-                        // }];
-                        //filters.forEach(i => dispatch(fetchValues(filters)));
-                        dispatch(fetchValues(filters));
+                        // };
 
-                        filters.forEach(f => {
-                            f.values.forEach(v => {
-                                axios.get("/count", { 
-                                    header: f.title,
-                                    uri: v.uri,
-                                    searchKey: this.props.searchKey,
-                                    searchIn: this.props.searchIn, 
-                                })
-                                .then(response => {
-                                    let count = response.data;
-                                    const results = [];
-                                    results.push({
-                                        title: f.title,
-                                        value: {
-                                            uri: v.uri,
-                                            value: v.value,
-                                            label: v.label,
-                                            count: count,
-                                        },
-                                    });
+                        dispatch(fetchValues(filter));
 
-                                    // const results = 
-                                    // [   {
-                                    //         title: "Theme",
-                                    //         value: {uri:"uri1",value:"value 1",label:"l1",count:10},
-                                               
-                                    //     },
-                                    //     {
-                                    //         title: "Theme",
-                                    //         value: {uri:"uri2",value:"value 2",label:"l2",count:10},
-                                                
-                                    //     },
-                                    //     {
-                                    //         title: "Theme2",
-                                    //         value: {uri:"uri3",value:"value 4",label:"l4",count:10},
-                                                
-                                    //     },
-                                    //     {
-                                    //         title: "Theme2",
-                                    //         value: {uri:"uri4",value:"value 5",label:"l5",count:10},
-                                               
-                                    // }];
-
-                                    dispatch(fetchFiltersSuccess(results));
-                                }) 
+                        filter.values.forEach(v => {
+                            axios.get("/count", { 
+                                header: filter.title,
+                                uri: v.uri,
+                                searchKey: this.props.searchKey,
+                                searchIn: this.props.searchIn, 
                             })
-                        }) 
+                            .then(response => {
+                                let count = response.data;
+                                const result = {
+                                    title: filter.title,
+                                    value: {
+                                        uri: v.uri,
+                                        value: v.value,
+                                        label: v.label,
+                                        count: count,
+                                    },
+                                };
+
+                                // const result = {
+                                //     title: "Theme",
+                                //     value: {uri:"uri1",value:"value 1",label:"l1",count:10},                 
+                                // };
+
+                                dispatch(fetchFiltersSuccess(result));
+                            }) 
+                        })
+
                     })
                 }) 
             })
