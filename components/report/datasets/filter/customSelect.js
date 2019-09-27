@@ -1,67 +1,36 @@
 import React from 'react';
 import {Badge, Button, ListGroup, ListGroupItem} from "reactstrap";
 import AsyncSelect from 'react-select/async';
-import Select, { components } from 'react-select';
+import Select, {components} from 'react-select';
 import createClass from "create-react-class";
 import {connect} from 'react-redux';
 import * as actionCreators from '../../../../store/actions/index';
 import axios from '../../../../webservice/axios-dataSets';
 
 const Option = createClass({
-  render() {
-    return (
-      <div>
-        <components.Option {...this.props} key={this.props.data.label}>
-          <input
-            type="checkbox"
-            checked={this.props.isSelected}
-            onChange={e => null}
-          />{" "}
-          <label>{this.props.value} </label>
-          <Badge style={{marginLeft: '2px'}} pill>{this.props.data.count}</Badge>
-        </components.Option>
-      </div>
-    );
-  }
+    render() {
+        return (
+            <div>
+                <components.Option {...this.props} key={this.props.data.label}>
+                    <input
+                        type="checkbox"
+                        checked={this.props.isSelected}
+                        onChange={e => null}
+                    />{" "}
+                    <label>{this.props.value} </label>
+                    <Badge style={{marginLeft: '2px'}} pill>{this.props.data.count}</Badge>
+                </components.Option>
+            </div>
+        );
+    }
 });
 
 const MultiValue = props => {
-  return (
-    <components.MultiValue {...props}>
-      <span>{props.data.label}</span>
-    </components.MultiValue>
-  );
-};
-
-const filterOptions = (inputValue) => {
-  // request after typing in search and after clicking the button
-
-  axios.get("/filteredOptions", {inputValue: inputValue})
-            .then(response => {
-                const options = response.data;
-                return options;
-            })
-            .catch( err => {
-                return err;
-            });
-
-  // const options = [
-  //         { value: 'chocolate', label: 'Chocolate' },
-  //         { value: 'strawberry', label: 'Strawberry' },
-  //         { value: 'vanilla', label: 'Vanilla' },
-  //         { value: 'vanillas', label: 'Vanillas' },
-  //         { value: 'vanillars', label: 'Vanrillas' },
-  //         { value: 'Lhocolate', label: 'Lhocolate' },
-  //         { value: 'strawberry', label: 'Strawberry' },
-  //         { value: 'vanilla', label: 'Vanilla' },
-  //         { value: 'vanillas', label: 'Vanillas' },
-  //         { value: 'vanillars', label: 'Vanrillas' },
-  //       ];
-  //return options;
-
-  // return options.filter(i =>
-  //   i.label.toLowerCase().includes(inputValue.toLowerCase())
-  // );
+    return (
+        <components.MultiValue {...props}>
+            <span>{props.data.label}</span>
+        </components.MultiValue>
+    );
 };
 
 class CustomSelect extends React.Component {
@@ -72,79 +41,78 @@ class CustomSelect extends React.Component {
     };
 
     handleInputChange = (newValue) => {
-      const inputValue = newValue.replace(/\W/g, '');
-      this.setState({ inputValue });
-      return inputValue;
+        const inputValue = newValue.replace(/\W/g, '');
+        this.setState({inputValue});
+        return inputValue;
+    };
+
+    getOptions = (inputValue) => {
+        return new Promise(() => axios.get("/filteredOptions/?name=" + inputValue)
+            .then(response => {
+                let options = response.data;
+                this.selectAsync.state.loadedOptions = options;
+                this.setState({isButtonClicked: false});
+                return options;
+            })
+            .catch(err => {
+                return err;
+            })
+        ).then(x => console.log(x))
     };
 
     changeHandler = (e) => {
-      let arr = this.props.selectedValues.filter(i => this.props.title === i.title );
-      if(e && e.length < arr.length){
-        this.props.onAppendSelectedValues(this.props.title, null, null);
-      }
-      if(e){
-        e.forEach(i => this.props.onAppendSelectedValues(this.props.title, i.value, i.label));
-      }
+        let arr = this.props.selectedValues.filter(i => this.props.title === i.title);
+        if (e && e.length < arr.length) {
+            this.props.onAppendSelectedValues(this.props.title, null, null);
+        }
+        if (e) {
+            e.forEach(i => this.props.onAppendSelectedValues(this.props.title, i.value, i.label));
+        }
     };
 
-    promiseOptions = (inputValue) =>{
-
-        return new Promise(resolve => {
-          setTimeout(() => {
-            resolve([]);
-          }, 1000);
-        });
-    }
-
-    updateOptions = (inputValue) => {
-      this.selectAsync.state.loadedOptions = filterOptions(inputValue);
-      //defaultOptions
-    }
-
     clickButton = (inputValue) => {
-      this.setState({isButtonClicked: true});
-      this.updateOptions(inputValue);
-      this.setState({isButtonClicked: false});
+        this.setState({isButtonClicked: true});
+        this.getOptions(inputValue).then(r => console.log(r));
     };
 
     noOptionsMessage = (props) => {
-      if (props.inputValue !== '' && !this.state.isButtonClicked){
-        return (
-            <button type="button" 
-              className="btn btn-primary btn-block" 
-              onClick={()=>this.clickButton(props.inputValue)}>Search</button>
-        );
-      }
+        if (props.inputValue !== '' && !this.state.isButtonClicked) {
+            return (
+                <button type="button"
+                        className="btn btn-primary btn-block"
+                        onClick={() => this.clickButton(props.inputValue)}>Search</button>
+            );
+        }
     };
 
     render() {
-      let optionsArr = this.props.selectedValues.length 
-      && this.props.selectedValues.filter((i) => {
-        if(i.title === this.props.title){
-          return {label: i.label, value: i.value};
-        }; 
-      });
+        let optionsArr = this.props.selectedValues.length
+            && this.props.selectedValues.filter((i) => {
+                if (i.title === this.props.title) {
+                    return {label: i.label, value: i.value};
+                }
+                ;
+            });
 
         return (
-            <div> 
+            <div>
                 <div>
-                  <AsyncSelect
-                    value={optionsArr}
-                    closeMenuOnSelect={false}
-                    isMulti
-                    components={{ Option, MultiValue }}
-                    /*options={this.state.options}*/
-                    hideSelectedOptions={false}
-                    /*menuIsOpen*/
-                    backspaceRemovesValue={false}
-                    /*cacheOptions*/
-                    defaultOptions={this.props.values}
-                    ref={selectAsync => this.selectAsync = selectAsync}
-                    loadOptions={this.promiseOptions}
-                    onChange={this.changeHandler}
-                    onInputChange={this.handleInputChange}
-                    noOptionsMessage={this.noOptionsMessage}
-                  />      
+                    <AsyncSelect
+                        value={optionsArr}
+                        closeMenuOnSelect={false}
+                        isMulti
+                        components={{Option, MultiValue}}
+                        /*options={this.state.options}*/
+                        hideSelectedOptions={false}
+                        /*menuIsOpen*/
+                        backspaceRemovesValue={false}
+                        /*cacheOptions*/
+                        defaultOptions={this.props.values}
+                        ref={selectAsync => this.selectAsync = selectAsync}
+                        onChange={this.changeHandler}
+                        onInputChange={this.handleInputChange}
+                        noOptionsMessage={this.noOptionsMessage}
+                    />
                 </div>
             </div>
         );
@@ -163,5 +131,5 @@ const mapDispatchToProps = dispatch => {
     }
 };
 
-export default connect(mapStateToProps,mapDispatchToProps)(CustomSelect);
+export default connect(mapStateToProps, mapDispatchToProps)(CustomSelect);
  
