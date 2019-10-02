@@ -60,14 +60,17 @@ class CustomSelect extends React.Component {
         ).then(x => console.log(x))
     };
 
-    changeHandler = (e) => {
+    changeHandler(value){
+        if(!value){
+            value = [];
+        }
         let arr = this.props.selectedValues.filter(i => this.props.title === i.title);
-        if (e && e.length < arr.length) {
+        if (value && value.length < arr.length) {
             this.props.onAppendSelectedValues(this.props.title, null, null);
         }
-        if (e) {
-            e.forEach(i => this.props.onAppendSelectedValues(this.props.title, i.value, i.label));
-        }
+        if (value) {
+            value.forEach(i => this.props.onAppendSelectedValues(this.props.title, i.value, i.label));
+        } 
     };
 
     clickButton = (inputValue) => {
@@ -109,7 +112,7 @@ class CustomSelect extends React.Component {
                         /*cacheOptions*/
                         defaultOptions={this.props.values}
                         ref={selectAsync => this.selectAsync = selectAsync}
-                        onChange={this.changeHandler}
+                        onChange={this.changeHandler.bind(this)}
                         onInputChange={this.handleInputChange}
                         noOptionsMessage={this.noOptionsMessage}
                     />
