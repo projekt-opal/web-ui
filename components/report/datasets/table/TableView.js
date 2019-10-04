@@ -20,13 +20,17 @@ class TableView extends React.Component {
         isLongView: true,
 
         isTooltipNumberOfDataSetsOpen: false,
-        isTooltipDataSetsOpen: false
+        isTooltipDataSetsOpen: false,
+
+        screenWidth: 0,
     };
 
     async componentDidMount() {
         this.props.onFetchingDataSets(this.props.searchKey, this.props.selectedSearchIn, this.props.selectedFilters);
         this.props.onGettingNumberOfDataSets(this.props.searchKey, this.props.selectedSearchIn, this.props.selectedFilters);
         await this.props.onFetchFilters();
+        this.handleWindowSizeChange();
+        window.addEventListener('resize', this.handleWindowSizeChange);
     }
 
     toggle = () => {
@@ -84,6 +88,21 @@ class TableView extends React.Component {
         });
     };
 
+    toggleFilters = () => {
+        if(this.props.isFiltersOpen){
+            this.props.onPushLastSelectedValues(this.props.lastSelectedValues);
+        }
+        this.props.onToggleFilters(!this.props.isFiltersOpen);
+    }
+
+    componentWillUnmount() {
+      window.removeEventListener('resize', this.handleWindowSizeChange);
+    }
+
+    handleWindowSizeChange = () => {
+      this.setState({ screenWidth: window.innerWidth });
+    };
+
 
     render() {
         let numberOfResult = null;
@@ -129,15 +148,16 @@ class TableView extends React.Component {
         //let filterView = this.props.filters ?
             // <FiltersView filters={this.props.filters} applyFilters={this.applyFilters}/> : <Spinner color="primary"/>;
 
+        const isMobile = this.state.screenWidth <= 500;
 
         return (
             <Col md={{size: 12}}>
                 <Row>
                     <Col md={{size: 9}}>
-                        <Table hover bordered responsive striped>
+                        <Table hover bordered responsive striped style={{display: 'block'}}>
                             <thead>
                             <tr>
-                                <th>
+                                <th style={{width: '20%'}}>
                                     <div style={{display: 'flex', flexFlow: 'row wrap'}}>
                                         <span> {numberOfResult} </span>
                                         <div style={{flexGrow: 1}}/>
@@ -160,27 +180,34 @@ class TableView extends React.Component {
                                                 }
                                             </DropdownMenu>
                                         </ButtonDropdown>
+                                        {isMobile ? <Button style={{marginLeft: '2px'}} onClick={this.toggleFilters}>Filters</Button> : ''}
+                                        {this.props.isFiltersOpen && isMobile ? <div className="dropdown-menu" style={{top: '17%', display: 'block', left: '4%', width: '90%'}}>
+                                            <FiltersView applyFilters={this.applyFilters}/>
+                                        </div> : ''}
                                     </div>
 
                                 </th>
                             </tr>
                             </thead>
-                            <tbody>
+                            <tbody style={{display: 'block', height: '300px', 'overflowY': 'auto', width: '100%'}}>
                             <tr>
                                 <td>
                                     {dataSets}
+                                    <Row style={{'paddingTop': '1rem'}}>
+                                        <Button className="mx-auto" style={{marginBottom: '1rem'}} onClick={this.load10More} disabled={this.props.dataSets === null} > Load
+                                            10 more </Button>
+                                    </Row>
                                 </td>
                             </tr>
                             </tbody>
                         </Table>
-                        <Row>
-                            <Button className="mx-auto" style={{marginBottom: '1rem'}} onClick={this.load10More} disabled={this.props.dataSets === null} > Load
-                                10 more </Button>
-                        </Row>
+                        
                     </Col>
-                    <Col md={{size: 3}}>
-                        <FiltersView applyFilters={this.applyFilters}/>
-                    </Col>
+                    {!isMobile ? <Col md={{size: 3}}>
+                        <div style={{position: 'fixed', width: '23%'}}> 
+                            <FiltersView applyFilters={this.applyFilters}/>
+                        </div>
+                    </Col> : ''}   
                 </Row>
 
             </Col>
@@ -203,7 +230,9 @@ const mapStateToProps = state => {
 
         searchKey: state.searchKey.key,
         searchIn: state.searchKey.searchIn,
-        selectedSearchIn: state.searchKey.selectedSearchIn
+        selectedSearchIn: state.searchKey.selectedSearchIn,
+        isFiltersOpen: state.filters.isFiltersOpen,
+        lastSelectedValues: state.filters.lastSelectedValues,
     }
 };
 
@@ -215,7 +244,9 @@ const mapDispatchToProps = dispatch => {
             dispatch(actionCreators.getNumberOfDataSets(searchKey, searchIn, selectedFilters)),
         onLoad10More: (searchKey, searchIn, low, selectedFilters) =>
             dispatch(actionCreators.load10More(searchKey, searchIn, low, selectedFilters)),
-        onFetchFilters: () => dispatch(actionCreators.fetchFilters())
+        onFetchFilters: () => dispatch(actionCreators.fetchFilters()),
+        onToggleFilters: (isFiltersOpen) => dispatch(actionCreators.toggleFilters(isFiltersOpen)),
+        onPushLastSelectedValues: (lastSelectedValues) => dispatch(actionCreators.pushLastSelectedValues(lastSelectedValues)),
     }
 };
 

@@ -9,7 +9,9 @@ const initialState = {
     values: [],
 
     selectedFilters: [],
+    lastSelectedValues: [],
     selectedValues: [],
+    isFiltersOpen: false,
 };
 
 const updateSelectedFilters = (state, property, uri) => {
@@ -61,6 +63,12 @@ const reducer = ( state = initialState, action ) => {
                     case actionTypes.APPEND_FILTER:
         case actionTypes.APPEND_FILTER_VALUE:            
             return updateObject(state, updateSelectedValues(state, action.title, action.value, action.label));
+    
+        case actionTypes.TOGGLE_FILTERS:
+            return updateObject(state, {lastSelectedValues: state.selectedValues,isFiltersOpen: action.isFiltersOpen});
+        case actionTypes.PUSH_LAST_SELECTED_VALUES:
+            return updateObject(state, {selectedValues: action.lastSelectedValues});
+
     }
     return state;
 };
