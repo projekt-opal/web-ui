@@ -21,19 +21,90 @@ export const fetchFiltersFail = (error ) => {
     };
 };
 
+export const fetchHeaders = (titles) => {
+    return {
+        type: actionTypes.FETCH_HEADERS,
+        titles: titles
+    };
+};
+
+export const fetchValues = (filters) => {
+    return {
+        type: actionTypes.FETCH_VALUES,
+        values: filters
+    };
+};
+
 export const fetchFilters = () => {
-    return dispatch => {
+    return dispatch => {    
         dispatch(fetchFiltersStart());
-        axios.get("/filters/list")
+
+        axios.get("/titles")
             .then(response => {
-                const filters = response.data;
-                dispatch(fetchFiltersSuccess(filters));
-            } )
+                const titles = response.data;
+
+                //const titles = ["theme", "theme2", "theme3"];
+                dispatch(fetchHeaders(titles));
+
+                titles.forEach(h => {
+                    axios.get("/values/?title=" + h)
+                    .then(response => {
+                        const values = response.data;
+                        const filter = { 
+                            title: h,
+                            values: values,
+                        };
+
+                        // const filter = {
+                        //     title: "theme",
+                        //     values: [
+                        //         {uri:"uri1",value:"value 1",label:"l1"},
+                        //         {uri:"uri2",value:"value 2",label:"l2"},
+                        //         {uri:"uri3",value:"value 3",label:"l3"}
+                        //      ]
+                        // };
+
+                        dispatch(fetchValues(filter));
+
+                        filter.values.forEach(v => {
+                            axios.post("/count", {
+                                header: filter.title,
+                                uri: v.uri,
+                                searchKey: "", //todo complete it
+                                searchIn: "", //complete it
+                            })
+                            .then(response => {
+                                let count = response.data;
+                                const result = {
+                                    title: filter.title,
+                                    value: {
+                                        uri: v.uri,
+                                        value: v.value,
+                                        label: v.label,
+                                        count: count,
+                                    },
+                                };
+
+                                // const result = {
+                                //     title: "Theme",
+                                //     value: {uri:"uri1",value:"value 1",label:"l1",count:10},                 
+                                // };
+
+                                dispatch(fetchFiltersSuccess(result));
+                            }) 
+                        })
+
+                    })
+                }) 
+            })
             .catch( err => {
                 dispatch(fetchFiltersFail(err));
             } );
+
     };
 };
+
+
 
 export const func = (selectedFilterPropertyURI, selectedFilterURI) => {
     return {
@@ -47,5 +118,17 @@ export const func = (selectedFilterPropertyURI, selectedFilterURI) => {
 export const appendSelectedFilter = (selectedFilterPropertyURI, selectedFilterURI) => {
     return dispatch => {
         dispatch(func(selectedFilterPropertyURI, selectedFilterURI));
+    };
+};
+
+export const appendSelectedValues = (title, value, label) => {
+    return dispatch => {
+        let obj = {
+            title: title,
+            value: value,
+            label: label,
+            type: actionTypes.APPEND_FILTER_VALUE,
+        }
+        dispatch(obj);
     };
 };

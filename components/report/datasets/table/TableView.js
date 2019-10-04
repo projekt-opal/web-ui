@@ -23,10 +23,10 @@ class TableView extends React.Component {
         isTooltipDataSetsOpen: false
     };
 
-    componentDidMount() {
+    async componentDidMount() {
         this.props.onFetchingDataSets(this.props.searchKey, this.props.selectedSearchIn, this.props.selectedFilters);
         this.props.onGettingNumberOfDataSets(this.props.searchKey, this.props.selectedSearchIn, this.props.selectedFilters);
-        this.props.onFetchFilters();
+        await this.props.onFetchFilters();
     }
 
     toggle = () => {
@@ -126,14 +126,14 @@ class TableView extends React.Component {
                 )
             );
 
-        let filterView = this.props.filters ?
-            <FiltersView filters={this.props.filters} applyFilters={this.applyFilters}/> : <Spinner color="primary"/>;
+        //let filterView = this.props.filters ?
+            // <FiltersView filters={this.props.filters} applyFilters={this.applyFilters}/> : <Spinner color="primary"/>;
 
 
         return (
             <Col md={{size: 12}}>
                 <Row>
-                    <Col md={{size: 10}}>
+                    <Col md={{size: 9}}>
                         <Table hover bordered responsive striped>
                             <thead>
                             <tr>
@@ -178,8 +178,8 @@ class TableView extends React.Component {
                                 10 more </Button>
                         </Row>
                     </Col>
-                    <Col md={{size: 2}}>
-                        {filterView}
+                    <Col md={{size: 3}}>
+                        <FiltersView applyFilters={this.applyFilters}/>
                     </Col>
                 </Row>
 

@@ -25,9 +25,41 @@ class FiltersView extends React.Component {
     };
 
     render() {
+        let filters = [];
+        let titles = {};
+        if(this.props.filters && this.props.filters.length){
+            this.props.filters.forEach(i => {
+                titles[i.title] = {};
+            });
+        } else if(this.props.titles){
+            this.props.titles.forEach(t => {
+                filters.push({title: t, values: []});
+            });    
+        }
+
+        if(this.props.values && this.props.values.length){
+            filters = this.props.values;
+        }
+        
+        if(Object.keys(titles).length){
+            filters = [];
+            Object.keys(titles).forEach((t,index) => {
+                filters.push({title: t, values: []});
+                if(this.props.filters.length){
+                    this.props.filters.forEach(i => {
+                        if(t === i.title){
+                            filters[index].values.push(i.value);
+                        }
+                    })
+                }  
+            });
+
+        }
+        
+
         return (
             <Container fluid>
-                <Row>
+                <Row style={{'marginTop': '10px'}}>
                     <Col md={{size: 12}}>
                         <div style={{display: 'flex', flexFlow: 'row'}}>
                             <Button color="primary" onClick={this.applyFilters}
@@ -37,11 +69,11 @@ class FiltersView extends React.Component {
                     </Col>
                 </Row>
                 {
-                    this.props.filters.map(
+                    filters.map(
                         (filter, idx) => {
                             const selectedFilterValues = this.props.selectedFilters.filter(x => x.property === filter.uri);
                             return (
-                                <Row key={idx}>
+                                <Row key={idx} style={{'marginTop': '10px'}}>
                                     <Col md={{size: 12}}>
                                         <FilterView
                                             selectedValues={selectedFilterValues.length > 0 ? selectedFilterValues[0].values : []}
@@ -61,7 +93,10 @@ class FiltersView extends React.Component {
 
 const mapStateToProps = state => {
     return {
-        selectedFilters: state.filters.selectedFilters
+        selectedFilters: state.filters.selectedFilters,
+        titles: state.filters.titles,
+        values: state.filters.values,
+        filters: state.filters.filters,
     }
 };
 
