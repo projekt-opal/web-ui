@@ -132,3 +132,17 @@ export const appendSelectedValues = (title, value, label) => {
         dispatch(obj);
     };
 };
+
+export const toggleFilters = (isFiltersOpen) => {
+    return {
+        type: actionTypes.TOGGLE_FILTERS,
+        isFiltersOpen: isFiltersOpen
+    };
+};
+
+export const pushLastSelectedValues = (lastSelectedValues) => {
+    return {
+        type: actionTypes.PUSH_LAST_SELECTED_VALUES,
+        lastSelectedValues: lastSelectedValues
+    };
+};

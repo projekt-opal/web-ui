@@ -18,6 +18,7 @@ class FiltersView extends React.Component {
 
     applyFilters = () => {
         this.props.applyFilters();
+        this.props.onToggleFilters(!this.props.isFiltersOpen);
     };
 
     clearSelection = () => {
@@ -55,7 +56,6 @@ class FiltersView extends React.Component {
             });
 
         }
-        
 
         return (
             <Container fluid>
@@ -64,7 +64,7 @@ class FiltersView extends React.Component {
                         <div style={{display: 'flex', flexFlow: 'row'}}>
                             <Button color="primary" onClick={this.applyFilters}
                                     style={{flexGrow: 1, textAlign: 'left'}}> Apply </Button>
-                            <Button color="link" onClick={this.clearSelection}> clear </Button>
+                            
                         </div>
                     </Col>
                 </Row>
@@ -97,6 +97,7 @@ const mapStateToProps = state => {
         titles: state.filters.titles,
         values: state.filters.values,
         filters: state.filters.filters,
+        isFiltersOpen: state.filters.isFiltersOpen
     }
 };
 
@@ -104,6 +105,7 @@ const mapDispatchToProps = dispatch => {
     return {
         onAppendFilter: (property, uri) => dispatch(actionCreators.appendSelectedFilter(property, uri)),
         // onApplyFilter:
+        onToggleFilters: (isFiltersOpen) => dispatch(actionCreators.toggleFilters(isFiltersOpen)),
     }
 };
 
