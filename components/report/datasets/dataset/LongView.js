@@ -9,7 +9,8 @@ import {
     CardSubtitle,
     CardText,
     CardTitle,
-    Input
+    Input,
+    Modal, ModalHeader, ModalBody, ModalFooter, Table
 } from "reactstrap";
 import {
     FaRegStar,
@@ -20,11 +21,12 @@ import {
     FaStarOfDavid,
     FaStarOfLife
 } from "react-icons/fa";
+import ModalDatasetView from './ModalDatasetView';
 
 class LongView extends React.Component {
 
     state = {
-        isOneLineDescription: true
+        isOneLineDescription: true,
     };
 
     oneLineDescriptionClicked = () => {
@@ -58,14 +60,16 @@ class LongView extends React.Component {
             }
         </span>);
 
+        // <Input addon type="checkbox" style={{verticalAlign: 'middle', position: 'relative'}}
+        //        aria-label="Checkbox for following text input"/>
+
+        //<CardTitle style={{display: 'inline', marginLeft: '0.5em'}} onClick={this.showDatasetView}>{title}</CardTitle>
         return (
             <Card color="LightCard" style={{flexGrow: '1'}}>
                 <CardHeader>
                     <div style={{display: 'flex', flexFlow: 'row wrap'}}>
-                        <label style={{display: 'block'}}>
-                            <Input addon type="checkbox" style={{verticalAlign: 'middle', position: 'relative'}}
-                                   aria-label="Checkbox for following text input"/>
-                            <CardTitle style={{display: 'inline', marginLeft: '0.5em'}}>{title}</CardTitle>
+                        <label style={{display: 'block'}}>                      
+                            <ModalDatasetView dataSet={this.props.dataSet}/>                           
                         </label>
                         <div style={{flexGrow: '1'}}/>
                         {overallRatingStarts}

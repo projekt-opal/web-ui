@@ -43,13 +43,14 @@ class ShortView extends React.Component {
                 rating.map((r, idx) => r === 0 ? <FaRegStar key={idx}/> : r === 1 ? <FaStarHalfAlt key={idx}/> : <FaStar key={idx}/>)
             }
         </span>);
+
+        //<Input addon type="checkbox" style={{verticalAlign: 'middle', position: 'relative'}}
+                                   //aria-label="Checkbox for following text input"/>
         return (
             <Card color="LightCard" style={{flexGrow: '1'}}>
                 <CardHeader>
                     <div style={{display: 'flex', flexFlow: 'row wrap'}}>
                         <label style={{display: 'block'}}>
-                            <Input addon type="checkbox" style={{verticalAlign: 'middle', position: 'relative'}}
-                                   aria-label="Checkbox for following text input"/>
                             <CardTitle style={{display: 'inline', marginLeft: '0.5em'}}>{title}</CardTitle>
                         </label>
                         <div style={{flexGrow: '1'}}/>

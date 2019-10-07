@@ -190,8 +190,8 @@ class TableView extends React.Component {
                             </tr>
                             </thead>
                             <tbody style={{display: 'block', height: '300px', 'overflowY': 'auto', width: '100%'}}>
-                            <tr>
-                                <td>
+                            <tr style={{display: 'block'}}>
+                                <td style={{display: 'block'}}>
                                     {dataSets}
                                     <Row style={{'paddingTop': '1rem'}}>
                                         <Button className="mx-auto" style={{marginBottom: '1rem'}} onClick={this.load10More} disabled={this.props.dataSets === null} > Load
