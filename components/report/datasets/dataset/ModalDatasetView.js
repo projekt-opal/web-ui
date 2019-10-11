@@ -92,81 +92,88 @@ class ModalDatasetView extends React.Component {
         });
 
         return (
-            <div>
-                <CardTitle style={{display: 'inline', marginLeft: '0.5em'}} onClick={this.showDatasetView}>{this.props.dataSet.title}</CardTitle>
-                <Modal isOpen={this.state.modal} size='lg'
-                  toggle={this.showDatasetView}>
-                  <ModalHeader toggle={this.showDatasetView}>{datasetView.title}</ModalHeader>
-                  <ModalBody>
-                    <p>Description: {datasetView.description}</p>
-                    <p style={{'float': 'left', 'marginRight': '15px', 'marginTop': '10px'}}>Data file(s)</p>
-                    <Card style={{'marginBottom': '15px', 'padding': '10px'}}>
-                        <div style={{'display': 'flex'}}>
-                            <div style={{'flex': '50%'}}>{datasetView.dataFiles.name}</div>
-                            <div style={{'flex': '50%'}}>{datasetView.dataFiles.publisher}</div>
-                        </div>
-                        
-                        {datasetView.dataFiles.links.map(i => {
-                            return <div>
-                                <Badge>{i.fileType}</Badge>
-                                <a href={i.link}>
-                                    {i.link}
-                                </a>
-                            </div>
-                        })}
-                        
-                        
-                     </Card>     
-                    
-                    <Card style={{'padding': '10px', 'marginBottom': '15px'}}>
-                        <CardTitle style={{display: 'inline', marginLeft: '0.5em'}}>Metadata info</CardTitle>
-                        <Table bordered>
-                            <tbody>
-                            {
-                                Object.keys(datasetView.metadataInfo).map(key => {
-                                    return  <tr>
-                                                <td>{key}</td>
-                                                <td>{datasetView.metadataInfo[key]}</td>
-                                              </tr>
-                                })
-                            }
-                            </tbody>
-                        </Table>
-                    </Card>
+            <CardHeader onClick={this.showDatasetView}>
+                    <div style={{display: 'flex', flexFlow: 'row wrap'}}>
+                        <label style={{display: 'block'}}>                      
 
-                    <Card style={{'padding': '10px'}}>
-                        <CardTitle style={{display: 'inline', marginLeft: '0.5em'}}>Quality metrics</CardTitle>
-                        <Table bordered>
-                            <thead>
-                              <tr>
-                                <th>Overall score</th>
-                                <th>
-                                    {overallRatingMain}
-                                </th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                            {
-                                Object.keys(otherRatings).map(key => {
-                                    return  <tr>
-                                                <td><span data-tip="some text">{key}</span>
-                                                    <ReactTooltip place="bottom" />
-                                                </td>
-                                                
-                                                <td>{otherRatings[key]}</td>
-                                              </tr>
-                                })
-                            }
-                            </tbody>
-                        </Table>
-                    </Card>
+                            <CardTitle style={{display: 'inline', marginLeft: '0.5em'}}><a href="#">{this.props.dataSet.title}</a></CardTitle>
+                            <Modal isOpen={this.state.modal} size='lg'
+                              toggle={this.showDatasetView}>
+                              <ModalHeader toggle={this.showDatasetView}>{datasetView.title}</ModalHeader>
+                              <ModalBody>
+                                <p>Description: {datasetView.description}</p>
+                                <p style={{'float': 'left', 'marginRight': '15px', 'marginTop': '10px'}}>Data file(s)</p>
+                                <Card style={{'marginBottom': '15px', 'padding': '10px'}}>
+                                    <div style={{'display': 'flex'}}>
+                                        <div style={{'flex': '50%'}}>{datasetView.dataFiles.name}</div>
+                                        <div style={{'flex': '50%'}}>{datasetView.dataFiles.publisher}</div>
+                                    </div>
+                                    
+                                    {datasetView.dataFiles.links.map((i,idx) => {
+                                        return <div key={idx}>
+                                            <Badge>{i.fileType}</Badge>
+                                            <a href={i.link}>
+                                                {i.link}
+                                            </a>
+                                        </div>
+                                    })}
+                                    
+                                    
+                                 </Card>     
+                                
+                                <Card style={{'padding': '10px', 'marginBottom': '15px'}}>
+                                    <CardTitle style={{display: 'inline', marginLeft: '0.5em'}}>Metadata info</CardTitle>
+                                    <Table bordered>
+                                        <tbody>
+                                        {
+                                            Object.keys(datasetView.metadataInfo).map((key,idx) => {
+                                                return  <tr key={idx}>
+                                                            <td>{key}</td>
+                                                            <td>{datasetView.metadataInfo[key]}</td>
+                                                          </tr>
+                                            })
+                                        }
+                                        </tbody>
+                                    </Table>
+                                </Card>
 
-                  </ModalBody>
-                  <ModalFooter>
-                    <Button color="secondary" onClick={this.showDatasetView}>Cancel</Button>
-                  </ModalFooter>
-                </Modal>
-            </div>            
+                                <Card style={{'padding': '10px'}}>
+                                    <CardTitle style={{display: 'inline', marginLeft: '0.5em'}}>Quality metrics</CardTitle>
+                                    <Table bordered>
+                                        <thead>
+                                          <tr>
+                                            <th>Overall score</th>
+                                            <th>
+                                                {overallRatingMain}
+                                            </th>
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+                                        {
+                                            Object.keys(otherRatings).map((key,idx) => {
+                                                return  <tr key={idx}>
+                                                            <td><span data-tip="some text">{key}</span>
+                                                                <ReactTooltip place="bottom" />
+                                                            </td>
+                                                            
+                                                            <td>{otherRatings[key]}</td>
+                                                          </tr>
+                                            })
+                                        }
+                                        </tbody>
+                                    </Table>
+                                </Card>
+
+                              </ModalBody>
+                              <ModalFooter>
+                                <Button color="secondary" onClick={this.showDatasetView}>Cancel</Button>
+                              </ModalFooter>
+                            </Modal>                           
+                        </label>
+                        <div style={{flexGrow: '1'}}/>
+                        {overallRatingMain}
+                    </div>
+            </CardHeader>          
         );
     }
 

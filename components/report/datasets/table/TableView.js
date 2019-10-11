@@ -148,16 +148,16 @@ class TableView extends React.Component {
         //let filterView = this.props.filters ?
             // <FiltersView filters={this.props.filters} applyFilters={this.applyFilters}/> : <Spinner color="primary"/>;
 
-        const isMobile = this.state.screenWidth <= 500;
+        const isMobile = this.state.screenWidth <= 700;
 
         return (
             <Col md={{size: 12}}>
                 <Row>
-                    <Col md={{size: 9}}>
+                    <Col xs={isMobile ? {size: 12} : {size: 9}}>
                         <Table hover bordered responsive striped style={{display: 'block'}}>
                             <thead>
                             <tr>
-                                <th style={{width: '20%'}}>
+                                <th style={{width: '1%'}}>
                                     <div style={{display: 'flex', flexFlow: 'row wrap'}}>
                                         <span> {numberOfResult} </span>
                                         <div style={{flexGrow: 1}}/>
@@ -189,7 +189,8 @@ class TableView extends React.Component {
                                 </th>
                             </tr>
                             </thead>
-                            <tbody style={{display: 'block', height: '300px', 'overflowY': 'auto', width: '100%'}}>
+                            <tbody style={isMobile ? {display: 'block', height: '300px', 'overflowX': 'hidden', width: '100%'} :
+                            {display: 'block','overflowX': 'hidden', width: '100%'}}>
                             <tr style={{display: 'block'}}>
                                 <td style={{display: 'block'}}>
                                     {dataSets}
@@ -203,7 +204,7 @@ class TableView extends React.Component {
                         </Table>
                         
                     </Col>
-                    {!isMobile ? <Col md={{size: 3}}>
+                    {!isMobile ? <Col style={{'paddingLeft': '0'}} xs={{size: 3}}>
                         <div style={{position: 'fixed', width: '23%'}}> 
                             <FiltersView applyFilters={this.applyFilters}/>
                         </div>
