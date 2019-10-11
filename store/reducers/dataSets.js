@@ -8,7 +8,8 @@ const initialState = {
 
     loadingNumberOfDataSets: false,
     loadingNumberOfDataSetsError: false,
-    numberOfDataSets:null
+    numberOfDataSets:null,
+    isModalOpen: false,
 };
 
 const reducer = ( state = initialState, action ) => {
@@ -27,6 +28,8 @@ const reducer = ( state = initialState, action ) => {
         case actionTypes.GET_NUMBER_DATASETS_FAIL:
             return updateObject(state, {loadingNumberOfDataSets: false, loadingNumberOfDataSetsError: true, numberOfDataSets: null});
 
+        case actionTypes.TOGGLE_MODAL:
+            return updateObject(state, {isModalOpen: action.isModalOpen});
         case actionTypes.LOAD_10_MORE:
             return updateObject(state, { dataSets: state.dataSets.concat(action.additionalDataSets)})
     }

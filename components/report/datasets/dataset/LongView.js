@@ -22,6 +22,8 @@ import {
     FaStarOfLife
 } from "react-icons/fa";
 import ModalDatasetView from './ModalDatasetView';
+import {connect} from 'react-redux';
+import * as actionCreators from '../../../../store/actions/index';
 
 class LongView extends React.Component {
 
@@ -29,11 +31,16 @@ class LongView extends React.Component {
         isOneLineDescription: true,
     };
 
-    oneLineDescriptionClicked = () => {
+    oneLineDescriptionClicked = (e) => {
+        e.stopPropagation();
         let newState = {...this.state};
         newState.isOneLineDescription = !newState.isOneLineDescription;
         this.setState(newState);
     };
+
+    showDatasetView = () => {
+        this.props.onToggleModal(!this.props.isModalOpen);
+    }
 
     render() {
 
@@ -54,7 +61,7 @@ class LongView extends React.Component {
 
         //<CardTitle style={{display: 'inline', marginLeft: '0.5em'}} onClick={this.showDatasetView}>{title}</CardTitle>
         return (
-            <Card color="LightCard" style={{flexGrow: '1'}}>
+            <Card color="LightCard" style={{flexGrow: '1'}} onClick={this.showDatasetView}>
                 <ModalDatasetView dataSet={this.props.dataSet}/>                           
                 <CardBody>
                     <CardSubtitle> {description}
@@ -93,4 +100,16 @@ class LongView extends React.Component {
 
 }
 
-export default LongView;
+const mapStateToProps = state => {
+    return {
+        isModalOpen: state.ds.isModalOpen
+    }
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onToggleModal: (isModalOpen) => dispatch(actionCreators.toggleModal(isModalOpen)),
+    }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps) (LongView);

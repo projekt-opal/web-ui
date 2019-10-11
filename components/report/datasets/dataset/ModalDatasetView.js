@@ -22,18 +22,17 @@ import {
     FaStarOfLife
 } from "react-icons/fa";
 import ReactTooltip from 'react-tooltip'
+import {connect} from 'react-redux';
+import * as actionCreators from '../../../../store/actions/index';
 
 class ModalDatasetView extends React.Component {
 
     state = {
-        modal: false,
         tooltipOpen: false
     };
 
     showDatasetView = () => {
-        this.setState(prevState => ({
-          modal: !prevState.modal
-        }));
+        this.props.onToggleModal(!this.props.isModalOpen);
     }
 
     countRating = (overallRating) => {
@@ -92,12 +91,12 @@ class ModalDatasetView extends React.Component {
         });
 
         return (
-            <CardHeader onClick={this.showDatasetView}>
+            <CardHeader>
                     <div style={{display: 'flex', flexFlow: 'row wrap'}}>
                         <label style={{display: 'block'}}>                      
 
                             <CardTitle style={{display: 'inline', marginLeft: '0.5em'}}><a href="#">{this.props.dataSet.title}</a></CardTitle>
-                            <Modal isOpen={this.state.modal} size='lg'
+                            <Modal isOpen={this.props.isModalOpen} size='lg'
                               toggle={this.showDatasetView}>
                               <ModalHeader toggle={this.showDatasetView}>{datasetView.title}</ModalHeader>
                               <ModalBody>
@@ -179,4 +178,16 @@ class ModalDatasetView extends React.Component {
 
 }
 
-export default ModalDatasetView;
+const mapStateToProps = state => {
+    return {
+        isModalOpen: state.ds.isModalOpen
+    }
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onToggleModal: (isModalOpen) => dispatch(actionCreators.toggleModal(isModalOpen)),
+    }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps) (ModalDatasetView);

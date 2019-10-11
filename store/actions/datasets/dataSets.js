@@ -202,3 +202,10 @@ export const load10More = (searchKey, searchIn, /*todo orderBy, */low, selectedF
             });
     };
 };
+
+export const toggleModal = (isModalOpen) => {
+    return {
+        type: actionTypes.TOGGLE_MODAL,
+        isModalOpen: isModalOpen
+    };
+};
