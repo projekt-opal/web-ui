@@ -9,7 +9,8 @@ import {
     CardSubtitle,
     CardText,
     CardTitle,
-    Input
+    Input,
+    Modal, ModalHeader, ModalBody, ModalFooter, Table
 } from "reactstrap";
 import {
     FaRegStar,
@@ -20,18 +21,26 @@ import {
     FaStarOfDavid,
     FaStarOfLife
 } from "react-icons/fa";
+import ModalDatasetView from './ModalDatasetView';
+import {connect} from 'react-redux';
+import * as actionCreators from '../../../../store/actions/index';
 
 class LongView extends React.Component {
 
     state = {
-        isOneLineDescription: true
+        isOneLineDescription: true,
     };
 
-    oneLineDescriptionClicked = () => {
+    oneLineDescriptionClicked = (e) => {
+        e.stopPropagation();
         let newState = {...this.state};
         newState.isOneLineDescription = !newState.isOneLineDescription;
         this.setState(newState);
     };
+
+    showDatasetView = () => {
+        this.props.onToggleModal(!this.props.isModalOpen);
+    }
 
     render() {
 
@@ -46,31 +55,14 @@ class LongView extends React.Component {
         let catalog = this.props.dataSet.catalog;
         let harvestingDate = this.props.dataSet.issueDate;
         let dataSetFileType = this.props.dataSet.fileType;
-        let overallRating = this.props.dataSet.overallRating;
-        const rating = [0, 0, 0, 0, 0];
-        for (let i = 1; i <= overallRating; i++)
-            rating[i - 1] = 2;
-        if (overallRating - Math.floor(overallRating) >= 0.5)
-            rating[Math.floor(overallRating)] = 1;
-        let overallRatingStarts = (<span>
-            {
-                rating.map((r, idx) => r === 0 ? <FaRegStar key={idx}/> : r === 1 ? <FaStarHalfAlt key={idx}/> : <FaStar key={idx}/>)
-            }
-        </span>);
 
+        // <Input addon type="checkbox" style={{verticalAlign: 'middle', position: 'relative'}}
+        //        aria-label="Checkbox for following text input"/>
+
+        //<CardTitle style={{display: 'inline', marginLeft: '0.5em'}} onClick={this.showDatasetView}>{title}</CardTitle>
         return (
-            <Card color="LightCard" style={{flexGrow: '1'}}>
-                <CardHeader>
-                    <div style={{display: 'flex', flexFlow: 'row wrap'}}>
-                        <label style={{display: 'block'}}>
-                            <Input addon type="checkbox" style={{verticalAlign: 'middle', position: 'relative'}}
-                                   aria-label="Checkbox for following text input"/>
-                            <CardTitle style={{display: 'inline', marginLeft: '0.5em'}}>{title}</CardTitle>
-                        </label>
-                        <div style={{flexGrow: '1'}}/>
-                        {overallRatingStarts}
-                    </div>
-                </CardHeader>
+            <Card color="LightCard" style={{flexGrow: '1'}} onClick={this.showDatasetView}>
+                <ModalDatasetView dataSet={this.props.dataSet}/>                           
                 <CardBody>
                     <CardSubtitle> {description}
                         {
@@ -108,4 +100,16 @@ class LongView extends React.Component {
 
 }
 
-export default LongView;
+const mapStateToProps = state => {
+    return {
+        isModalOpen: state.ds.isModalOpen
+    }
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onToggleModal: (isModalOpen) => dispatch(actionCreators.toggleModal(isModalOpen)),
+    }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps) (LongView);
