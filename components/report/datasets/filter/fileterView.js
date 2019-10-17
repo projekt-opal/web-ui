@@ -1,5 +1,5 @@
 import React from 'react';
-import {Badge, Button, ListGroup, ListGroupItem} from "reactstrap";
+import {Button} from "reactstrap";
 import CustomSelect from './customSelect';
 
 import {FaAngleDown, FaAngleRight} from 'react-icons/fa'
@@ -17,9 +17,7 @@ class FilterView extends React.Component {
 
 
     render() {
-            let values = (
-                <CustomSelect title={this.props.filter.title} values={this.props.filter.values} ></CustomSelect>
-            );
+        console.log(this.props.selectedFilterValues);
 
         return (
             <div>
@@ -29,7 +27,13 @@ class FilterView extends React.Component {
                         {this.props.filter.title}
                     </Button>
                 </div>
-                {this.state.isExpanded && values }
+                {
+                    this.state.isExpanded &&
+                    <CustomSelect title={this.props.filter.title} values={this.props.filter.values}
+                                  selectedValues={this.props.selectedFilterValues}
+                                  onAppendSelectedValues={this.props.onAppendSelectedValues}
+                    />
+                }
             </div>
         );
     }
