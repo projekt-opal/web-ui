@@ -9,7 +9,6 @@ import {connect} from 'react-redux';
 import * as actionCreators from '../../../../store/actions/index';
 
 import axios from '../../../../webservice/axios-dataSets';
-import FilterView from "../filter/fileterView";
 
 class TableView extends React.Component {
 
@@ -27,7 +26,7 @@ class TableView extends React.Component {
         screenWidth: 0,
 
         filters: [],//[{title: t1, values: [{label: l, value: v, uri: u}]},{...},...]
-        selectedFilters: [] //is like [{title: "t", uri: "uri", values: ["v1", "v2"]}]
+        selectedFilters: [] //is like [{title: "t", uri: "uri", values: [{value: "v1", uti:"uri_v1"}, {value:"v2", uri:"uri_v2"}]}]
     };
 
     async componentDidMount() {
@@ -43,7 +42,6 @@ class TableView extends React.Component {
             .then(response => {
                     console.log(response);
                     // const data = response.data;
-                    // console.log(data);
                     const data = [
                         {
                             title: "t1",
@@ -71,29 +69,23 @@ class TableView extends React.Component {
 
                         },
                     ];
-                    // console.log(data);
                     this.setState({filters: data});
                 }
             ).catch(error => console.log(error));
     };
 
-    onAppendSelectedValues = (title, value, label) => {
-        console.log(title + ": " + value + " :" + label);
+    onAppendSelectedValues = (selectedFilter) => {
         let selectedFilters = [...this.state.selectedFilters];
-        const selectedFilter = selectedFilters.find(f => f.title === title && f.uri === 'later');
-        console.log(selectedFilter);
-        if(selectedFilter) {
-            let find = selectedFilter.values.find(v => v === value);
-            if(find)
-                selectedFilter.values = selectedFilter.values.filter(v => v !== value);//remove it
-            else
-                selectedFilter.values.push(value);
-        } else {
-           selectedFilters.push({title: title, uri:'later', values:[value]}) //todo
-        }
-        this.setState({selectedFilters: selectedFilters});
-        console.log(selectedFilters);
 
+        const prevSelectedFilter = selectedFilters.find(f => f.title === selectedFilter.title);
+        if (prevSelectedFilter)
+            if (selectedFilter.values.length === 0)
+                selectedFilters = selectedFilters.filter(f => f.title !== selectedFilter.title);
+            else
+                prevSelectedFilter.values = selectedFilter.values;
+        else
+            selectedFilters.push(selectedFilter);
+        this.setState({selectedFilters: selectedFilters});
     };
 
     toggle = () => {

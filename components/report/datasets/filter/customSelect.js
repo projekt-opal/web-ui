@@ -58,16 +58,19 @@ class CustomSelect extends React.Component {
         ).then(x => console.log(x))
     };
 
-    changeHandler(value) {
-        if (!value) {
-            value = [];
-        }
-        let arr = this.props.selectedValues.filter(i => this.props.title === i.title);
-        if (value && value.length < arr.length) {
-            this.props.onAppendSelectedValues(this.props.title, null, null);
-        }
-        if (value) {
-            value.forEach(i => this.props.onAppendSelectedValues(this.props.title, i.value, i.label));
+    changeHandler(values) {
+        if (values) {
+            const selectedFilter = {
+                title: this.props.title,
+                values: values
+            };
+            this.props.onAppendSelectedValues(selectedFilter);
+        } else {
+            this.props.onAppendSelectedValues({
+                    title: this.props.title,
+                    values: []
+                }
+            );
         }
     };
 
@@ -89,15 +92,15 @@ class CustomSelect extends React.Component {
     render() {
         let optionsArr = [];
         if (this.props.selectedValues.length > 0) {
-            console.log("Custom Select selected values: " + this.props.selectedValues);
-            // optionsArr =
-            let selectedFilter = this.props.selectedValues.find(f => (f.title === this.props.title));
-            console.log(selectedFilter);
-            if(selectedFilter) {
-                optionsArr = selectedFilter.values.map(v => {return {label: v, value: v}});
-            }
+            optionsArr = this.props.selectedValues.map(selectedValue => {
+                    return {
+                        label: selectedValue.value,
+                        value: selectedValue.value,
+                        uri: selectedValue.uri
+                    }
+                }
+            );
         }
-        console.log("Custom Select option arr: " + optionsArr);
         return (
             <div>
                 <div>

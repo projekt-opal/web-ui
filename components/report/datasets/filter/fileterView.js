@@ -17,8 +17,6 @@ class FilterView extends React.Component {
 
 
     render() {
-        console.log(this.props.selectedFilterValues);
-
         return (
             <div>
                 <div style={{display: 'flex', flexFlow: 'row'}}>

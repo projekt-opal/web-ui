@@ -25,7 +25,6 @@ class FiltersView extends React.Component {
 
 
     render() {
-        console.log("FiltersView")
         // let filters = [];
         // let titles = {};
         // if (this.props.filters && this.props.filters.length) {
@@ -70,12 +69,12 @@ class FiltersView extends React.Component {
                 {
                     this.props.filters.map(
                         (filter, idx) => {
-                            // const selectedFilterValues = this.props.selectedFilters.filter(x => x.title === filter.title);
+                            const selectedFilterValues = this.props.selectedFilters.filter(x => x.title === filter.title);
                             return (
                                 <Row key={idx} style={{'marginTop': '10px'}}>
                                     <Col md={{size: 12}}>
                                         <FilterView
-                                            selectedFilterValues={/*selectedFilterValues.length > 0 ? selectedFilterValues[0].values :*/ []}
+                                            selectedFilterValues={selectedFilterValues.length > 0 ? selectedFilterValues[0].values : []}
                                             onAppendSelectedValues={this.props.onAppendSelectedValues}
                                             filter={filter}
                                         />
