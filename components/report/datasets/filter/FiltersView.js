@@ -15,48 +15,14 @@ class FiltersView extends React.Component {
 
     applyFilters = () => {
         this.props.applyFilters();
-        this.props.onToggleFilters(!this.props.isFiltersOpen);
-    };
-
-    clearSelection = () => {
-        // todo call the TableView clear filter function
+        // this.props.onToggleFilters(!this.props.isFiltersOpen);
     };
 
 
 
     render() {
-        // let filters = [];
-        // let titles = {};
-        // if (this.props.filters && this.props.filters.length) {
-        //     this.props.filters.forEach(i => {
-        //         titles[i.title] = {};
-        //     });
-        // } else if (this.props.titles) {
-        //     this.props.titles.forEach(t => {
-        //         filters.push({title: t, values: []});
-        //     });
-        // }
-        //
-        // if (this.props.values && this.props.values.length) {
-        //     filters = this.props.values;
-        // }
-        //
-        // if (Object.keys(titles).length) {
-        //     filters = [];
-        //     Object.keys(titles).forEach((t, index) => {
-        //         filters.push({title: t, values: []});
-        //         if (this.props.filters.length) {
-        //             this.props.filters.forEach(i => {
-        //                 if (t === i.title) {
-        //                     filters[index].values.push(i.value);
-        //                 }
-        //             })
-        //         }
-        //     });
-        //
-        // }
-
         return (
+            !this.props.filters ? '' :
             <Container fluid>
                 <Row style={{'marginTop': '10px'}}>
                     <Col md={{size: 12}}>
