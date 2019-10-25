@@ -27,8 +27,8 @@ class SearchBar extends React.Component {
     };
 
     searchClicked = () => {
-        this.props.onFetchingDataSets(this.props.searchKey, this.props.selectedSearchIn, this.props.selectedFilters);
-        this.props.onGettingNumberOfDataSets(this.props.searchKey, this.props.selectedSearchIn, this.props.selectedFilters);
+        this.props.onFetchingDataSets(this.props.searchKey, this.props.selectedSearchIn);
+        this.props.onGettingNumberOfDataSets(this.props.searchKey, this.props.selectedSearchIn);
     };
 
     searchKeyChanged = (event) => {
@@ -96,7 +96,6 @@ class SearchBar extends React.Component {
 
 const mapStateToProps = state => {
     return {
-        selectedFilters: state.filters.selectedFilters,
         searchKey: state.searchKey.key,
         searchIn: state.searchKey.searchIn,
         selectedSearchIn: state.searchKey.selectedSearchIn
@@ -107,10 +106,10 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onFetchingDataSets: (searchKey, searchIn, selectedFilters) =>
-            dispatch(actionCreators.fetchDataSets(searchKey, searchIn, selectedFilters)),
-        onGettingNumberOfDataSets: (searchKey, searchIn, selectedFilters) =>
-            dispatch(actionCreators.getNumberOfDataSets(searchKey, searchIn, selectedFilters)),
+        onFetchingDataSets: (searchKey, searchIn) =>
+            dispatch(actionCreators.fetchDataSets(searchKey, searchIn, [])),
+        onGettingNumberOfDataSets: (searchKey, searchIn) =>
+            dispatch(actionCreators.getNumberOfDataSets(searchKey, searchIn, [])),
         onSearchKeyChanged: (key) => dispatch(actionCreators.searchKeyChanged(key)),
         onSearchInChanged: (idx) => dispatch(actionCreators.searchInChanged(idx)),
         onSearchInRemoved: (idx) => dispatch(actionCreators.searchInRemoved(idx))

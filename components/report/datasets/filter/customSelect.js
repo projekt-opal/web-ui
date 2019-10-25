@@ -84,7 +84,9 @@ class CustomSelect extends React.Component {
             return (
                 <button type="button"
                         className="btn btn-primary btn-block"
-                        onClick={() => this.clickButton(props.inputValue)}>Search</button>
+                        onClick={() => this.clickButton(props.inputValue)}>
+                    Search
+                </button>
             );
         }
     };

@@ -26,12 +26,13 @@ class TableView extends React.Component {
         screenWidth: 0,
 
         filters: [],//[{title: t1, values: [{label: l, value: v, uri: u}]},{...},...]
-        selectedFilters: [] //is like [{title: "t", uri: "uri", values: [{value: "v1", uti:"uri_v1"}, {value:"v2", uri:"uri_v2"}]}]
+        selectedFilters: [], //is like [{title: "t", uri: "uri", values: [{value: "v1", uti:"uri_v1"}, {value:"v2", uri:"uri_v2"}]}]
+        isFiltersOpen: true
     };
 
     async componentDidMount() {
-        this.props.onFetchingDataSets(this.props.searchKey, this.props.selectedSearchIn, this.props.selectedFilters);
-        this.props.onGettingNumberOfDataSets(this.props.searchKey, this.props.selectedSearchIn, this.props.selectedFilters);
+        this.props.onFetchingDataSets(this.props.searchKey, this.props.selectedSearchIn, this.state.selectedFilters);
+        this.props.onGettingNumberOfDataSets(this.props.searchKey, this.props.selectedSearchIn, this.state.selectedFilters);
         await this.onFetchFilters();
         this.handleWindowSizeChange();
         window.addEventListener('resize', this.handleWindowSizeChange);
@@ -85,6 +86,7 @@ class TableView extends React.Component {
                 prevSelectedFilter.values = selectedFilter.values;
         else
             selectedFilters.push(selectedFilter);
+
         this.setState({selectedFilters: selectedFilters});
     };
 
@@ -108,19 +110,19 @@ class TableView extends React.Component {
 
     load10More = () => {
         if (this.props.dataSets !== null && this.props.dataSets.length > 0)
-            this.props.onLoad10More(this.props.searchKey, this.props.selectedSearchIn, this.props.dataSets.length, this.props.selectedFilters);
+            this.props.onLoad10More(this.props.searchKey, this.props.selectedSearchIn, this.props.dataSets.length, this.state.selectedFilters);
     };
 
     applyFilters = () => {
-        this.props.onFetchingDataSets(this.props.searchKey, this.props.selectedSearchIn, this.props.selectedFilters);
-        this.props.onGettingNumberOfDataSets(this.props.searchKey, this.props.selectedSearchIn, this.props.selectedFilters);
+        this.props.onFetchingDataSets(this.props.searchKey, this.props.selectedSearchIn, this.state.selectedFilters);
+        this.props.onGettingNumberOfDataSets(this.props.searchKey, this.props.selectedSearchIn, this.state.selectedFilters);
     };
 
     reloadNumberOfDataSets = () => {
         this.setState({
             isTooltipNumberOfDataSetsOpen: false
         });
-        this.props.onGettingNumberOfDataSets(this.props.searchKey, this.props.selectedSearchIn, this.props.selectedFilters);
+        this.props.onGettingNumberOfDataSets(this.props.searchKey, this.props.selectedSearchIn, this.state.selectedFilters);
 
     };
 
@@ -128,7 +130,7 @@ class TableView extends React.Component {
         this.setState({
             isTooltipDataSetsOpen: false
         });
-        this.props.onFetchingDataSets(this.props.searchKey, this.props.selectedSearchIn, this.props.selectedFilters);
+        this.props.onFetchingDataSets(this.props.searchKey, this.props.selectedSearchIn, this.state.selectedFilters);
     };
 
     toggleToolTipNumberOfDataSets = () => {
@@ -144,11 +146,8 @@ class TableView extends React.Component {
     };
 
     toggleFilters = () => {
-        if (this.props.isFiltersOpen) {
-            this.props.onPushLastSelectedValues(this.props.lastSelectedValues);
-        }
-        this.props.onToggleFilters(!this.props.isFiltersOpen);
-    }
+        this.setState({isFiltersOpen: !this.state.isFiltersOpen});
+    };
 
     componentWillUnmount() {
         window.removeEventListener('resize', this.handleWindowSizeChange);
@@ -198,9 +197,6 @@ class TableView extends React.Component {
                     </Col>
                 )
             );
-
-        //let filterView = this.props.filters ?
-        // <FiltersView filters={this.props.filters} applyFilters={this.applyFilters}/> : <Spinner color="primary"/>;
 
         const isMobile = this.state.screenWidth <= 700;
 
@@ -298,14 +294,9 @@ const mapStateToProps = state => {
         loadingNumberOfDataSets: state.ds.loadingNumberOfDataSets,
         loadingNumberOfDataSetsError: state.ds.loadingNumberOfDataSetsError,
 
-        filters: state.filters.filters,
-        selectedFilters: state.filters.selectedFilters,
-
         searchKey: state.searchKey.key,
         searchIn: state.searchKey.searchIn,
-        selectedSearchIn: state.searchKey.selectedSearchIn,
-        isFiltersOpen: state.filters.isFiltersOpen,
-        lastSelectedValues: state.filters.lastSelectedValues,
+        selectedSearchIn: state.searchKey.selectedSearstachIn
     }
 };
 
@@ -316,10 +307,7 @@ const mapDispatchToProps = dispatch => {
         onGettingNumberOfDataSets: (searchKey, searchIn, selectedFilters) =>
             dispatch(actionCreators.getNumberOfDataSets(searchKey, searchIn, selectedFilters)),
         onLoad10More: (searchKey, searchIn, low, selectedFilters) =>
-            dispatch(actionCreators.load10More(searchKey, searchIn, low, selectedFilters)),
-        onFetchFilters: () => dispatch(actionCreators.fetchFilters()),
-        onToggleFilters: (isFiltersOpen) => dispatch(actionCreators.toggleFilters(isFiltersOpen)),
-        onPushLastSelectedValues: (lastSelectedValues) => dispatch(actionCreators.pushLastSelectedValues(lastSelectedValues)),
+            dispatch(actionCreators.load10More(searchKey, searchIn, low, selectedFilters))
     }
 };
 
