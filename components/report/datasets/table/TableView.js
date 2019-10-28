@@ -24,23 +24,14 @@ class TableView extends React.Component {
 
         screenWidth: 0,
 
-        dataSets: [],
-        loadingDataSets: true,
-        loadingDataSetsError: false,
-
-        numberOfDataSets: 0,
-        loadingNumberOfDataSets: true,
-        loadingNumberOfDataSetsError: false,
-
         filters: [],//[{title: t1, values: [{label: l, value: v, uri: u}]},{...},...]
-        selectedFilters: [], //is like [{title: "t", uri: "uri", values: [{value: "v1", uti:"uri_v1"}, {value:"v2", uri:"uri_v2"}]}]
         isFiltersOpen: true
     };
 
-    async componentDidMount() {
-        this.fetchDataSets(this.props.searchKey, this.props.selectedSearchIn, this.state.selectedFilters);
-        this.getNumberOfDataSets(this.props.searchKey, this.props.selectedSearchIn, this.state.selectedFilters);
-        await this.onFetchFilters();
+    componentDidMount() {
+        this.props.fetchDataSets();
+        this.props.getNumberOfDataSets();
+        this.onFetchFilters();
         this.handleWindowSizeChange();
         window.addEventListener('resize', this.handleWindowSizeChange);
     }
@@ -82,21 +73,6 @@ class TableView extends React.Component {
             ).catch(error => console.log(error));
     };
 
-    onAppendSelectedValues = (selectedFilter) => {
-        let selectedFilters = [...this.state.selectedFilters];
-
-        const prevSelectedFilter = selectedFilters.find(f => f.title === selectedFilter.title);
-        if (prevSelectedFilter)
-            if (selectedFilter.values.length === 0)
-                selectedFilters = selectedFilters.filter(f => f.title !== selectedFilter.title);
-            else
-                prevSelectedFilter.values = selectedFilter.values;
-        else
-            selectedFilters.push(selectedFilter);
-
-        this.setState({selectedFilters: selectedFilters});
-    };
-
     toggle = () => {
         this.setState({
             dropdownOpen: !this.state.dropdownOpen
@@ -115,31 +91,24 @@ class TableView extends React.Component {
         this.setState(newState);
     };
 
-    load10More = () => {
-        if (this.state.dataSets !== null && this.state.dataSets.length > 0)
-            onLoad10More(this.props.searchKey, this.props.selectedSearchIn, this.state.dataSets.length, this.state.selectedFilters);
-    };
-
     applyFilters = () => {
-        this.fetchDataSets(this.props.searchKey, this.props.selectedSearchIn, this.state.selectedFilters);
-        this.getNumberOfDataSets(this.props.searchKey, this.props.selectedSearchIn, this.state.selectedFilters);
+        this.props.fetchDataSets();
+        this.props.getNumberOfDataSets();
     };
 
     reloadNumberOfDataSets = () => {
         this.setState({
             isTooltipNumberOfDataSetsOpen: false
         });
-        this.getNumberOfDataSets(this.props.searchKey, this.props.selectedSearchIn, this.state.selectedFilters);
-
+        this.props.getNumberOfDataSets();
     };
 
     reloadDataSets = () => {
         this.setState({
             isTooltipDataSetsOpen: false
         });
-        this.fetchDataSets(this.props.searchKey, this.props.selectedSearchIn, this.state.selectedFilters);
+        this.props.fetchDataSets();
     };
-
 
     toggleToolTipNumberOfDataSets = () => {
         this.setState({
@@ -165,194 +134,19 @@ class TableView extends React.Component {
         this.setState({screenWidth: window.innerWidth});
     };
 
-    getNumberOfDataSets = (searchKey, searchIn, /*todo orderBy, */selectedFilters) => {
-        this.setState({
-            loadingNumberOfDataSets: true,
-            loadingNumberOfDataSetsError: false
-        });
-        const numberOfDataSets = 79423;
-        this.setState({
-            loadingNumberOfDataSets: false,
-            loadingNumberOfDataSetsError: false,
-            numberOfDataSets: numberOfDataSets
-        });
-
-        // dispatch(getNumberOfDataSetsSuccess(numberOfDataSets));
-        // axios.post(`/dataSets/getNumberOfDataSets?searchQuery=${searchKey}&searchIn=${searchIn}`, selectedFilters)
-        //     .then( response => {
-        //         const numberOfDataSets = response.data;
-        // this.setState({
-        //     loadingNumberOfDataSets: false,
-        //     loadingNumberOfDataSetsError: false,
-        //     numberOfDataSets: numberOfDataSets
-        // });
-        //     } )
-        //     .catch( err => {
-        // this.setState({
-        //     loadingNumberOfDataSets: false,
-        //     loadingNumberOfDataSetsError: true,
-        //     numberOfDataSets: -1
-        // });
-        //     } );
-    };
-
-    fetchDataSets = (searchKey, searchIn, /*todo orderBy, */selectedFilters) => {
-        this.setState({
-            loadingDataSets: true,
-            loadingDataSetsError: false,
-            dataSets: []
-        });
-        const dataSets = [
-            {
-                catalog: "http://projekt-opal.de/catalog/mcloud",
-                description: "0Die Raster wurden aus aus den jährlichen Rastern des Vegetationsbeginns gemittelt. Der Vegetationsbeginn wird über die phänologische Phase Forsythie - Beginn der Blüte festgelegt und kennzeichnet den Beginn des Erstfrühlings. Weitere Informationen: https://opendata.dwd.de/climate_environment/CDC/grids_germany/multi_annual/vegetation_begin/BESCHREIBUNG_gridsgermany_multi_annual_vegetation_begin_de.pdf",
-                fileType: "PDF",
-                issueDate: "2018-12-05",
-                keywords: ["key1", "key2"],
-                overallRating: "3.648858349950768",
-                theme: "http://projeckt-opal.de/theme/mcloud/climateAndWeather",
-                title: "Vieljährliche Raster des mittleren Vegetationsbeginns in Deutschland",
-                uri: "http://projekt-opal.de/dataset/_mcloudde_vieljhrlicherasterdesmittlerenvegetationsbeginnsindeutschland_0",
-
-                dataFiles: {
-                    name: "NAME",
-                    publisher: "PUBLISHER",
-                    links: [
-                        {
-                            fileType: "PDF",
-                            link: "https://www.govdata.de/ckan/dataset/windkraftanlagen-im-genehmigungsverfahren.rdf",
-                        },
-                        {
-                            fileType: "CSV",
-                            link: "http://185.223.104.6/data/llur72/genehmigungsverfahren.csv",
-                        },
-                    ],
-                },
-                metadataInfo:
-                    {
-                        "Letzte Änderung": "15.08.2019",
-                        "Veröffentlichungsdatum": "01.07.2019",
-                        "Zeitraum": "01.07.2019 - 01.07.2019"
-                    },
-                qualityMetrics:
-                    {
-                        "score1": 1,
-                        "score2": 0,
-                        "score3": 4.5,
-                    }
-            }, {
-                catalog: "http://projekt-opal.de/catalog/mcloud",
-                description: "1Die Raster wurden aus aus den jährlichen Rastern des Vegetationsbeginns gemittelt. Der Vegetationsbeginn wird über die phänologische Phase Forsythie - Beginn der Blüte festgelegt und kennzeichnet den Beginn des Erstfrühlings. Weitere Informationen: https://opendata.dwd.de/climate_environment/CDC/grids_germany/multi_annual/vegetation_begin/BESCHREIBUNG_gridsgermany_multi_annual_vegetation_begin_de.pdf",
-                fileType: "PDF",
-                issueDate: "2018-12-05",
-                keywords: ["key1", "key2"],
-                overallRating: "3.648858349950768",
-                theme: "http://projeckt-opal.de/theme/mcloud/climateAndWeather",
-                title: "Vieljährliche Raster des mittleren Vegetationsbeginns in Deutschland",
-                uri: "http://projekt-opal.de/dataset/_mcloudde_vieljhrlicherasterdesmittlerenvegetationsbeginnsindeutschland_1",
-
-                dataFiles: {
-                    name: "Lana",
-                    publisher: "DS group",
-                    links: [
-                        {
-                            fileType: "PDF",
-                            link: "https://www.govdata.de/ckan/dataset/windkraftanlagen-im-genehmigungsverfahren.rdf",
-                        },
-                        {
-                            fileType: "CSV",
-                            link: "http://185.223.104.6/data/llur72/genehmigungsverfahren.csv",
-                        },
-                    ],
-                },
-                metadataInfo:
-                    {
-                        "Letzte Änderung": "15.08.2019",
-                        "Veröffentlichungsdatum": "01.07.2019",
-                        "Zeitraum": "01.07.2019 - 01.07.2019"
-                    },
-                qualityMetrics:
-                    {
-                        "score1": 5,
-                        "score2": 4,
-                        "score3": 1,
-                    }
-            }, {
-                catalog: "http://projekt-opal.de/catalog/mcloud",
-                description: "2Die Raster wurden aus aus den jährlichen Rastern des Vegetationsbeginns gemittelt. Der Vegetationsbeginn wird über die phänologische Phase Forsythie - Beginn der Blüte festgelegt und kennzeichnet den Beginn des Erstfrühlings. Weitere Informationen: https://opendata.dwd.de/climate_environment/CDC/grids_germany/multi_annual/vegetation_begin/BESCHREIBUNG_gridsgermany_multi_annual_vegetation_begin_de.pdf",
-                fileType: "PDF",
-                issueDate: "2018-12-05",
-                keywords: ["key1", "key2"],
-                overallRating: "3.648858349950768",
-                theme: "http://projeckt-opal.de/theme/mcloud/climateAndWeather",
-                title: "Vieljährliche Raster des mittleren Vegetationsbeginns in Deutschland",
-                uri: "http://projekt-opal.de/dataset/_mcloudde_vieljhrlicherasterdesmittlerenvegetationsbeginnsindeutschland_2",
-
-                dataFiles: {
-                    name: "NAME",
-                    publisher: "PUBLISHER",
-                    links: [
-                        {
-                            fileType: "PDF",
-                            link: "https://www.govdata.de/ckan/dataset/windkraftanlagen-im-genehmigungsverfahren.rdf",
-                        },
-                        {
-                            fileType: "CSV",
-                            link: "http://185.223.104.6/data/llur72/genehmigungsverfahren.csv",
-                        },
-                    ],
-                },
-                metadataInfo:
-                    {
-                        "Letzte Änderung": "15.08.2019",
-                        "Veröffentlichungsdatum": "01.07.2019",
-                        "Zeitraum": "01.07.2019 - 01.07.2019"
-                    },
-                qualityMetrics:
-                    {
-                        "score1": 1,
-                        "score2": 2,
-                        "score3": 3,
-                    }
-            },
-        ];
-        this.setState({
-            loadingDataSets: false,
-            loadingDataSetsError: false,
-            dataSets: dataSets
-        });
-        // axios.post(`/dataSets/getSubList?searchQuery=${searchKey}&searchIn=${searchIn}`, selectedFilters)
-        //     .then( response => {
-        //         const dataSets = response.data;
-        //         this.setState({
-        //             loadingDataSets: false,
-        //             loadingDataSetsError: false,
-        //             dataSets: dataSets
-        //         });
-        //     } )
-        //     .catch( err => {
-        //         this.setState({
-        //             loadingDataSets: false,
-        //             loadingDataSetsError: true,
-        //             dataSets: []
-        //         });
-        //     } );
-    };
-
-
     render() {
         let numberOfResult = null;
-        if (this.state.loadingNumberOfDataSetsError)
+        if (this.props.loadingNumberOfDataSetsError)
             numberOfResult =
                 <div>
                     <Button onClick={this.reloadNumberOfDataSets}><FaRedo
                         id="TooltipNumberOfDataSetsFetchError"/></Button>
                     <span style={{marginLeft: '3px', fontSize: '8px', fontWeight: '500'}}>Error in Fetching number of datasets from the server</span>
                 </div>;
-        else if (this.state.loadingNumberOfDataSets)
+        else if (this.props.loadingNumberOfDataSets)
             numberOfResult = <Spinner color="primary"/>;
-        else if (this.state.numberOfDataSets !== null)
-            if (this.state.numberOfDataSets === -1)
+        else if (this.props.numberOfDataSets !== null)
+            if (this.props.numberOfDataSets === -1)
                 numberOfResult =
                     <div>
                         <Button onClick={this.reloadNumberOfDataSets}><FaRedo
@@ -361,19 +155,19 @@ class TableView extends React.Component {
                             style={{marginLeft: '3px', fontSize: '8px', fontWeight: '500'}}>Internal Server Error</span>
                     </div>;
             else
-                numberOfResult = this.state.numberOfDataSets;
+                numberOfResult = this.props.numberOfDataSets;
 
         let dataSets = null;
-        if (this.state.loadingDataSetsError)
+        if (this.props.loadingDataSetsError)
             dataSets =
                 <div>
                     <Button onClick={this.reloadDataSets}><FaRedo id="ToolTipDataSets"/></Button>
                     <span style={{marginLeft: '3px', fontSize: '8px', fontWeight: '500'}}>Error in Fetching dataSets from the server</span>
                 </div>;
-        else if (this.state.loadingDataSets)
+        else if (this.props.loadingDataSets)
             dataSets = <Spinner type="grow" color="primary"/>;
-        else if (this.state.dataSets !== null)
-            dataSets = this.state.dataSets.map(
+        else if (this.props.dataSets !== null)
+            dataSets = this.props.dataSets.map(
                 dataSet => (
                     <Col md={{size: 12}} key={dataSet.uri}>
                         {this.state.isLongView ? <LongView dataSet={dataSet}/> : <ShortView dataSet={dataSet}/>}
@@ -440,7 +234,7 @@ class TableView extends React.Component {
                                     {dataSets}
                                     <Row style={{'paddingTop': '1rem'}}>
                                         <Button className="mx-auto" style={{marginBottom: '1rem'}}
-                                                onClick={this.load10More} disabled={this.state.dataSets === null}> Load
+                                                onClick={this.props.load10More} disabled={this.props.dataSets === null}> Load
                                             10 more </Button>
                                     </Row>
                                 </td>
@@ -455,8 +249,8 @@ class TableView extends React.Component {
                             <div style={{position: 'fixed', width: '23%'}}>
                                 <FiltersView
                                     filters={this.state.filters}
-                                    selectedFilters={this.state.selectedFilters}
-                                    onAppendSelectedValues={this.onAppendSelectedValues}
+                                    selectedFilters={this.props.selectedFilters}
+                                    onAppendSelectedValues={this.props.onAppendSelectedValues}
                                     applyFilters={this.applyFilters}
                                 />
                             </div>
@@ -469,12 +263,4 @@ class TableView extends React.Component {
     }
 }
 
-const mapStateToProps = state => {
-    return {
-        searchKey: state.searchKey.key,
-        searchIn: state.searchKey.searchIn,
-        selectedSearchIn: state.searchKey.selectedSearstachIn
-    }
-};
-
-export default connect(mapStateToProps, null)(TableView);
+export default TableView;
