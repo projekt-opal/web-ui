@@ -57,7 +57,7 @@ class FirstPage extends React.Component {
 
     load10More = () => {
         if (this.state.dataSets !== null && this.state.dataSets.length > 0) {
-            let url = `${this.props.getDataSetList}searchQuery=${this.props.searchKey}&searchIn=${this.props.searchIn}&low=${this.state.dataSets.length}`;
+            let url = `/dataSets/getSubList?searchQuery=${this.props.searchKey}&searchIn=${this.props.searchIn}&low=${this.state.dataSets.length}`;
             axios.post(url, this.state.selectedFilters)
                 .then(response => {
                     const dataSets = response.data;
@@ -112,7 +112,7 @@ class FirstPage extends React.Component {
             dataSets: []
         });
         let url = `/dataSets/getSubList?searchQuery=${this.state.searchKey}&searchIn=${this.state.selectedSearchIn}`;
-        axios.post(url, this.props.selectedFilters)
+        axios.post(url, this.state.selectedFilters)
             .then(response => {
                 const dataSets = response.data;
                 console.log(dataSets);
@@ -138,8 +138,8 @@ class FirstPage extends React.Component {
                 <br/>
                 <Row>
                     <SearchBar
-                        onFetchingDataSets={this.fetchDataSets}
-                        onGettingNumberOfDataSets={this.getNumberOfDataSets}
+                        onFetchingDataSets={() => this.fetchDataSets}
+                        onGettingNumberOfDataSets={() => this.getNumberOfDataSets}
                         onUpdatedSearchInRemoved={(domain) => this.onUpdatedSearchInRemoved(domain)}
                         onSearchInChanged={(domain) => this.onSearchInChanged(domain)}
                         onUpdateSearchKey={(searchKey) => this.onUpdateSearchKey(searchKey)}
@@ -149,9 +149,9 @@ class FirstPage extends React.Component {
                 <br/>
                 <Row>
                     <TableView
-                        fetchDataSets={this.fetchDataSets}
-                        getNumberOfDataSets={this.getNumberOfDataSets}
-                        load10More={this.load10More}
+                        fetchDataSets={() => this.fetchDataSets()}
+                        getNumberOfDataSets={() => this.getNumberOfDataSets()}
+                        load10More={() => this.load10More()}
                         dataSets={this.state.dataSets}
                         numberOfDataSets={this.state.numberOfDataSets}
                         loadingNumberOfDataSets={this.state.loadingNumberOfDataSets}
@@ -159,6 +159,7 @@ class FirstPage extends React.Component {
                         loadingDataSets={this.state.loadingDataSets}
                         loadingDataSetsError={this.state.loadingDataSetsError}
                         selectedFilters={this.state.selectedFilters}
+                        onAppendSelectedValues={(selectedFilter) => this.onAppendSelectedValues(selectedFilter)}
                     />
                 </Row>
             </Container>

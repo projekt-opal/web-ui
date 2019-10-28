@@ -29,6 +29,7 @@ class TableView extends React.Component {
     };
 
     componentDidMount() {
+        console.log("TableView is mounted");
         this.props.fetchDataSets();
         this.props.getNumberOfDataSets();
         this.onFetchFilters();
