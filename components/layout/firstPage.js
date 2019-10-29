@@ -61,7 +61,7 @@ class FirstPage extends React.Component {
 
     load10More = () => {
         if (this.state.dataSets !== null && this.state.dataSets.length > 0) {
-            let url = `/dataSets/getSubList?searchQuery=${this.props.searchKey}&searchIn=${this.props.searchIn}&low=${this.state.dataSets.length}`;
+            let url = `/dataSets/getSubList?searchQuery=${this.state.searchKey}&searchIn=${this.state.selectedSearchIn}&low=${this.state.dataSets.length}`;
             axios.post(url, this.state.selectedFilters)
                 .then(response => {
                     const dataSets = response.data;
