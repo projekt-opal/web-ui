@@ -1,50 +1,45 @@
 import React from 'react';
-
-import {connect} from 'react-redux';
-import {Button, Form, Collapse, Input, InputGroup, InputGroupAddon, Row, Col, Badge} from 'reactstrap';
+import {Badge, Button, Col, Collapse, Form, Input, InputGroup, InputGroupAddon} from 'reactstrap';
 
 import {FaAngleRight} from 'react-icons/fa';
 
-import * as actionCreators from "../../store/actions";
-
 class SearchBar extends React.Component {
     state = {
-        collapse: true
+        collapse: true,
+        searchIn: ['title', 'description', 'keyword']
     };
 
     toggleMoreOptions = () => {
-        let newState = {...this.state};
-        newState.collapse = !newState.collapse;
-        this.setState(newState);
+        const collapse = !this.state.collapse;
+        this.setState({collapse: collapse});
     };
 
-    checkFilter = (domain) => {
+    checkDomain = (domain) => {
         this.props.onSearchInChanged(domain);
     };
 
-    removeFilter = (domain) => {
-        this.props.onSearchInRemoved(domain);
+    removeDomain = (domain) => {
+        this.props.onUpdatedSearchInRemoved(domain);
     };
 
     searchClicked = () => {
-        this.props.onFetchingDataSets(this.props.searchKey, this.props.selectedSearchIn, this.props.selectedFilters);
-        this.props.onGettingNumberOfDataSets(this.props.searchKey, this.props.selectedSearchIn, this.props.selectedFilters);
+        this.props.onFetchingDataSets();
+        this.props.onGettingNumberOfDataSets();
     };
 
     searchKeyChanged = (event) => {
         let searchKey = event.target.value;
-        this.props.onSearchKeyChanged(searchKey);
+        this.props.onUpdateSearchKey(searchKey);
     };
 
     render() {
-
         let searchDomainButtons = (
             <>
                 {
-                    this.props.searchIn.map((domain) => (
+                    this.state.searchIn.map((domain) => (
                         <Button color="primary" size="sm" key={domain} style={{marginLeft: '5px'}}
-                                onClick={() => this.checkFilter(domain)}>
-                            {domain} {this.props.selectedSearchIn.includes(domain)  && <Badge> selected </Badge>}
+                                onClick={() => this.checkDomain(domain)}>
+                            {domain} {this.props.selectedSearchIn.includes(domain) && <Badge> selected </Badge>}
                         </Button>
                     ))
                 }
@@ -56,22 +51,22 @@ class SearchBar extends React.Component {
         if (this.props.selectedSearchIn.length > 0)
             searchDomains = (<span style={{marginLeft: '5px', color: 'gray'}}>
                 {
-                    this.props.selectedSearchIn.map( (domain) => (
-                                <span style={{marginLeft: '5px'}} key={domain}>
-                                    <Badge onClick={() => this.removeFilter(domain)}> X </Badge>
+                    this.props.selectedSearchIn.map((domain) => (
+                            <span style={{marginLeft: '5px'}} key={domain}>
+                                    <Badge onClick={() => this.removeDomain(domain)}> X </Badge>
                                     <span style={{marginLeft: '2px'}}>{domain}</span>
                                 </span>
-                            )
+                        )
                     )
                 }
             </span>);
 
         return (
-
             <Col md={{size: 12}}>
                 <Form>
                     <InputGroup size="lg">
-                        <Input placeholder="Search ..." onChange={this.searchKeyChanged} value={this.props.searchKey} />
+                        <Input placeholder="Search ..." onChange={this.searchKeyChanged}
+                               value={this.props.searchKey}/>
                         <InputGroupAddon addonType="prepend">
                             <InputGroupAddon addonType="prepend">
                                 <Button onClick={this.searchClicked}>Search</Button>
@@ -94,27 +89,4 @@ class SearchBar extends React.Component {
     }
 }
 
-const mapStateToProps = state => {
-    return {
-        selectedFilters: state.filters.selectedFilters,
-        searchKey: state.searchKey.key,
-        searchIn: state.searchKey.searchIn,
-        selectedSearchIn: state.searchKey.selectedSearchIn
-    }
-};
-
-
-
-const mapDispatchToProps = dispatch => {
-    return {
-        onFetchingDataSets: (searchKey, searchIn, selectedFilters) =>
-            dispatch(actionCreators.fetchDataSets(searchKey, searchIn, selectedFilters)),
-        onGettingNumberOfDataSets: (searchKey, searchIn, selectedFilters) =>
-            dispatch(actionCreators.getNumberOfDataSets(searchKey, searchIn, selectedFilters)),
-        onSearchKeyChanged: (key) => dispatch(actionCreators.searchKeyChanged(key)),
-        onSearchInChanged: (idx) => dispatch(actionCreators.searchInChanged(idx)),
-        onSearchInRemoved: (idx) => dispatch(actionCreators.searchInRemoved(idx))
-    }
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(SearchBar);
+export default SearchBar;

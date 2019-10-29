@@ -1,3 +1,2 @@
-export {fetchDataSets, getNumberOfDataSets, load10More, toggleModal} from './datasets/dataSets';
-export {fetchFilters, appendSelectedFilter, appendSelectedValues, toggleFilters, pushLastSelectedValues} from './filters/filters';
+export {load10More, toggleModal} from './datasets/dataSets';
 export {searchKeyChanged, searchInChanged, searchInRemoved} from './searchkey/searchKey';

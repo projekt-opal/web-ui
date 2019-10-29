@@ -59,10 +59,12 @@ class LongView extends React.Component {
         // <Input addon type="checkbox" style={{verticalAlign: 'middle', position: 'relative'}}
         //        aria-label="Checkbox for following text input"/>
 
-        //<CardTitle style={{display: 'inline', marginLeft: '0.5em'}} onClick={this.showDatasetView}>{title}</CardTitle>
         return (
             <Card color="LightCard" style={{flexGrow: '1'}} onClick={this.showDatasetView}>
-                <ModalDatasetView dataSet={this.props.dataSet}/>                           
+                <ModalDatasetView dataSet={this.props.dataSet}/>
+                <CardHeader>
+                    <CardTitle style={{display: 'inline', marginLeft: '0.5em'}} onClick={this.showDatasetView}>{title}</CardTitle>
+                </CardHeader>
                 <CardBody>
                     <CardSubtitle> {description}
                         {

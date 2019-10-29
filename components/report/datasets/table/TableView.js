@@ -5,9 +5,7 @@ import ShortView from "../dataset/ShortView";
 import LongView from "../dataset/LongView";
 import FiltersView from '../filter/FiltersView';
 
-import {connect} from 'react-redux';
-import * as actionCreators from '../../../../store/actions/index';
-
+import axios from '../../../../webservice/axios-dataSets';
 
 class TableView extends React.Component {
 
@@ -23,15 +21,58 @@ class TableView extends React.Component {
         isTooltipDataSetsOpen: false,
 
         screenWidth: 0,
+
+        filters: [],//[{title: t1, values: [{label: l, value: v, uri: u}]},{...},...]
+        isFiltersOpen: true,
+        lastSelectedValues: []
     };
 
-    async componentDidMount() {
-        this.props.onFetchingDataSets(this.props.searchKey, this.props.selectedSearchIn, this.props.selectedFilters);
-        this.props.onGettingNumberOfDataSets(this.props.searchKey, this.props.selectedSearchIn, this.props.selectedFilters);
-        await this.props.onFetchFilters();
+    componentDidMount() {
+        this.props.fetchDataSets();
+        this.props.getNumberOfDataSets();
+        this.onFetchFilters();
         this.handleWindowSizeChange();
         window.addEventListener('resize', this.handleWindowSizeChange);
     }
+
+    onFetchFilters = () => {
+        axios.get('/filters/list')
+            .then(response => {
+                    const data = response.data;
+                    // const data = [
+                    //     {
+                    //         title: "t1",
+                    //         uri: "uri",
+                    //         values: [
+                    //             {label: "label_t1_11", value: "label_t1_v1", uri: "label_t1_uri1"},
+                    //             {label: "label_t1_12", value: "label_t1_v2", uri: "label_t1_uri2"},
+                    //             {label: "label_t1_13", value: "label_t1_v3", uri: "label_t1_uri3"}
+                    //         ]
+                    //
+                    //     }, {
+                    //         title: "t2",
+                    //         uri: "uri",
+                    //         values: [
+                    //             {label: "label_t2_11", value: "label_t2_v1", uri: "label_t2_uri1"},
+                    //             {label: "label_t2_12", value: "label_t2_v2", uri: "label_t2_uri2"},
+                    //             {label: "label_t2_13", value: "label_t2_v3", uri: "label_t2_uri3"}
+                    //         ]
+                    //
+                    //     }, {
+                    //         title: "t3",
+                    //         uri: "uri",
+                    //         values: [
+                    //             {label: "label_t3_11", value: "label_t3_v1", uri: "label_t3_uri1"},
+                    //             {label: "label_t3_12", value: "label_t3_v2", uri: "label_t3_uri2"},
+                    //             {label: "label_t3_13", value: "label_t3_v3", uri: "label_t3_uri3"}
+                    //         ]
+                    //
+                    //     },
+                    // ];
+                    this.setState({filters: data});
+                }
+            ).catch(error => console.log(error));
+    };
 
     toggle = () => {
         this.setState({
@@ -51,29 +92,24 @@ class TableView extends React.Component {
         this.setState(newState);
     };
 
-    load10More = () => {
-        if(this.props.dataSets !== null && this.props.dataSets.length > 0)
-            this.props.onLoad10More(this.props.searchKey, this.props.selectedSearchIn, this.props.dataSets.length, this.props.selectedFilters);
-    };
-
     applyFilters = () => {
-        this.props.onFetchingDataSets(this.props.searchKey, this.props.selectedSearchIn, this.props.selectedFilters);
-        this.props.onGettingNumberOfDataSets(this.props.searchKey, this.props.selectedSearchIn, this.props.selectedFilters);
+        this.setState({lastSelectedValues: this.props.selectedFilters});
+        this.props.fetchDataSets();
+        this.props.getNumberOfDataSets();
     };
 
     reloadNumberOfDataSets = () => {
         this.setState({
             isTooltipNumberOfDataSetsOpen: false
         });
-        this.props.onGettingNumberOfDataSets(this.props.searchKey, this.props.selectedSearchIn, this.props.selectedFilters);
-
+        this.props.getNumberOfDataSets();
     };
 
     reloadDataSets = () => {
         this.setState({
             isTooltipDataSetsOpen: false
         });
-        this.props.onFetchingDataSets(this.props.searchKey, this.props.selectedSearchIn, this.props.selectedFilters);
+        this.props.fetchDataSets();
     };
 
     toggleToolTipNumberOfDataSets = () => {
@@ -89,20 +125,19 @@ class TableView extends React.Component {
     };
 
     toggleFilters = () => {
-        if(this.props.isFiltersOpen){
-            this.props.onPushLastSelectedValues(this.props.lastSelectedValues);
+        if (this.state.isFiltersOpen) {
+            this.props.onReplaceSelectedFilters(this.state.lastSelectedValues);
         }
-        this.props.onToggleFilters(!this.props.isFiltersOpen);
-    }
+        this.setState({isFiltersOpen: !this.state.isFiltersOpen});
+    };
 
     componentWillUnmount() {
-      window.removeEventListener('resize', this.handleWindowSizeChange);
+        window.removeEventListener('resize', this.handleWindowSizeChange);
     }
 
     handleWindowSizeChange = () => {
-      this.setState({ screenWidth: window.innerWidth });
+        this.setState({screenWidth: window.innerWidth});
     };
-
 
     render() {
         let numberOfResult = null;
@@ -145,9 +180,6 @@ class TableView extends React.Component {
                 )
             );
 
-        //let filterView = this.props.filters ?
-            // <FiltersView filters={this.props.filters} applyFilters={this.applyFilters}/> : <Spinner color="primary"/>;
-
         const isMobile = this.state.screenWidth <= 700;
 
         return (
@@ -180,35 +212,65 @@ class TableView extends React.Component {
                                                 }
                                             </DropdownMenu>
                                         </ButtonDropdown>
-                                        {isMobile ? <Button style={{marginLeft: '2px'}} onClick={this.toggleFilters}>Filters</Button> : ''}
-                                        {this.props.isFiltersOpen && isMobile ? <div className="dropdown-menu" style={{top: '17%', display: 'block', left: '4%', width: '90%'}}>
-                                            <FiltersView applyFilters={this.applyFilters}/>
-                                        </div> : ''}
+                                        {isMobile ? <Button style={{marginLeft: '2px'}}
+                                                            onClick={this.toggleFilters}>Filters</Button> : ''}
+                                        {
+                                            this.state.isFiltersOpen && isMobile ?
+                                                <div className="dropdown-menu" style={{
+                                                    top: '17%',
+                                                    display: 'block',
+                                                    left: '4%',
+                                                    width: '90%',
+                                                    fontWeight: 'normal'
+                                                }}>
+                                                    <FiltersView
+                                                        filters={this.state.filters}
+                                                        selectedFilters={this.props.selectedFilters}
+                                                        onAppendSelectedValues={this.props.onAppendSelectedValues}
+                                                        applyFilters={this.applyFilters}
+                                                    />
+                                                </div>
+                                                : ''}
                                     </div>
 
                                 </th>
                             </tr>
                             </thead>
-                            <tbody style={isMobile ? {display: 'block', height: '300px', 'overflowX': 'hidden', width: '100%'} :
-                            {display: 'block','overflowX': 'hidden', width: '100%'}}>
+                            <tbody style={isMobile ? {
+                                    display: 'block',
+                                    height: '300px',
+                                    'overflowX': 'hidden',
+                                    width: '100%'
+                                } :
+                                {display: 'block', 'overflowX': 'hidden', width: '100%'}}>
                             <tr style={{display: 'block'}}>
                                 <td style={{display: 'block'}}>
                                     {dataSets}
                                     <Row style={{'paddingTop': '1rem'}}>
-                                        <Button className="mx-auto" style={{marginBottom: '1rem'}} onClick={this.load10More} disabled={this.props.dataSets === null} > Load
+                                        <Button className="mx-auto" style={{marginBottom: '1rem'}}
+                                                onClick={this.props.load10More}
+                                                disabled={this.props.dataSets === null}> Load
                                             10 more </Button>
                                     </Row>
                                 </td>
                             </tr>
                             </tbody>
                         </Table>
-                        
+
                     </Col>
-                    {!isMobile ? <Col style={{'paddingLeft': '0'}} xs={{size: 3}}>
-                        <div style={{position: 'fixed', width: '23%'}}> 
-                            <FiltersView applyFilters={this.applyFilters}/>
-                        </div>
-                    </Col> : ''}   
+                    {
+                        !isMobile &&
+                        <Col style={{'paddingLeft': '0'}} xs={{size: 3}}>
+                            <div style={{position: 'fixed', width: '23%'}}>
+                                <FiltersView
+                                    filters={this.state.filters}
+                                    selectedFilters={this.props.selectedFilters}
+                                    onAppendSelectedValues={this.props.onAppendSelectedValues}
+                                    applyFilters={this.applyFilters}
+                                />
+                            </div>
+                        </Col>
+                    }
                 </Row>
 
             </Col>
@@ -216,39 +278,4 @@ class TableView extends React.Component {
     }
 }
 
-const mapStateToProps = state => {
-    return {
-        dataSets: state.ds.dataSets,
-        loadingDataSets: state.ds.loadingDataSets,
-        loadingDataSetsError: state.ds.loadingDataSetsError,
-
-        numberOfDataSets: state.ds.numberOfDataSets,
-        loadingNumberOfDataSets: state.ds.loadingNumberOfDataSets,
-        loadingNumberOfDataSetsError: state.ds.loadingNumberOfDataSetsError,
-
-        filters: state.filters.filters,
-        selectedFilters: state.filters.selectedFilters,
-
-        searchKey: state.searchKey.key,
-        searchIn: state.searchKey.searchIn,
-        selectedSearchIn: state.searchKey.selectedSearchIn,
-        isFiltersOpen: state.filters.isFiltersOpen,
-        lastSelectedValues: state.filters.lastSelectedValues,
-    }
-};
-
-const mapDispatchToProps = dispatch => {
-    return {
-        onFetchingDataSets: (searchKey, searchIn, selectedFilters) =>
-            dispatch(actionCreators.fetchDataSets(searchKey, searchIn, selectedFilters)),
-        onGettingNumberOfDataSets: (searchKey, searchIn, selectedFilters) =>
-            dispatch(actionCreators.getNumberOfDataSets(searchKey, searchIn, selectedFilters)),
-        onLoad10More: (searchKey, searchIn, low, selectedFilters) =>
-            dispatch(actionCreators.load10More(searchKey, searchIn, low, selectedFilters)),
-        onFetchFilters: () => dispatch(actionCreators.fetchFilters()),
-        onToggleFilters: (isFiltersOpen) => dispatch(actionCreators.toggleFilters(isFiltersOpen)),
-        onPushLastSelectedValues: (lastSelectedValues) => dispatch(actionCreators.pushLastSelectedValues(lastSelectedValues)),
-    }
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(TableView);
+export default TableView;

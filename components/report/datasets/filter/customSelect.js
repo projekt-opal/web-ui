@@ -1,10 +1,8 @@
 import React from 'react';
-import {Badge, Button, ListGroup, ListGroupItem} from "reactstrap";
+import {Badge} from "reactstrap";
 import AsyncSelect from 'react-select/async';
-import Select, {components} from 'react-select';
+import {components} from 'react-select';
 import createClass from "create-react-class";
-import {connect} from 'react-redux';
-import * as actionCreators from '../../../../store/actions/index';
 import axios from '../../../../webservice/axios-dataSets';
 
 const Option = createClass({
@@ -60,17 +58,20 @@ class CustomSelect extends React.Component {
         ).then(x => console.log(x))
     };
 
-    changeHandler(value){
-        if(!value){
-            value = [];
+    changeHandler(values) {
+        if (values) {
+            const selectedFilter = {
+                title: this.props.title,
+                values: values
+            };
+            this.props.onAppendSelectedValues(selectedFilter);
+        } else {
+            this.props.onAppendSelectedValues({
+                    title: this.props.title,
+                    values: []
+                }
+            );
         }
-        let arr = this.props.selectedValues.filter(i => this.props.title === i.title);
-        if (value && value.length < arr.length) {
-            this.props.onAppendSelectedValues(this.props.title, null, null);
-        }
-        if (value) {
-            value.forEach(i => this.props.onAppendSelectedValues(this.props.title, i.value, i.label));
-        } 
     };
 
     clickButton = (inputValue) => {
@@ -83,20 +84,25 @@ class CustomSelect extends React.Component {
             return (
                 <button type="button"
                         className="btn btn-primary btn-block"
-                        onClick={() => this.clickButton(props.inputValue)}>Search</button>
+                        onClick={() => this.clickButton(props.inputValue)}>
+                    Search
+                </button>
             );
         }
     };
 
     render() {
-        let optionsArr = this.props.selectedValues.length
-            && this.props.selectedValues.filter((i) => {
-                if (i.title === this.props.title) {
-                    return {label: i.label, value: i.value};
+        let optionsArr = [];
+        if (this.props.selectedValues.length > 0) {
+            optionsArr = this.props.selectedValues.map(selectedValue => {
+                    return {
+                        label: selectedValue.value,
+                        value: selectedValue.value,
+                        uri: selectedValue.uri
+                    }
                 }
-                ;
-            });
-
+            );
+        }
         return (
             <div>
                 <div>
@@ -119,20 +125,9 @@ class CustomSelect extends React.Component {
                 </div>
             </div>
         );
-    }
-};
 
-const mapStateToProps = state => {
-    return {
-        selectedValues: state.filters.selectedValues
     }
-};
+}
 
-const mapDispatchToProps = dispatch => {
-    return {
-        onAppendSelectedValues: (title, value, label) => dispatch(actionCreators.appendSelectedValues(title, value, label)),
-    }
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(CustomSelect);
+export default CustomSelect;
  
