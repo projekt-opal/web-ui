@@ -40,6 +40,10 @@ class FirstPage extends React.Component {
         this.setState({selectedSearchIn: newSelectedSearchIn});
     };
 
+    onReplaceSelectedFilters = (selectedFilters) => {
+        this.setState({selectedFilters: selectedFilters});
+    };
+
     onAppendSelectedValues = (selectedFilter) => {
         let selectedFilters = [...this.state.selectedFilters];
 
@@ -115,7 +119,6 @@ class FirstPage extends React.Component {
         axios.post(url, this.state.selectedFilters)
             .then(response => {
                 const dataSets = response.data;
-                console.log(dataSets);
                 this.setState({
                     loadingDataSets: false,
                     loadingDataSetsError: false,
@@ -160,6 +163,7 @@ class FirstPage extends React.Component {
                         loadingDataSetsError={this.state.loadingDataSetsError}
                         selectedFilters={this.state.selectedFilters}
                         onAppendSelectedValues={(selectedFilter) => this.onAppendSelectedValues(selectedFilter)}
+                        onReplaceSelectedFilters={(selectedFilters) => this.onReplaceSelectedFilters(selectedFilters)}
                     />
                 </Row>
             </Container>

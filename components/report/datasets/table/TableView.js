@@ -5,8 +5,6 @@ import ShortView from "../dataset/ShortView";
 import LongView from "../dataset/LongView";
 import FiltersView from '../filter/FiltersView';
 
-import {connect} from 'react-redux';
-
 import axios from '../../../../webservice/axios-dataSets';
 
 class TableView extends React.Component {
@@ -25,11 +23,11 @@ class TableView extends React.Component {
         screenWidth: 0,
 
         filters: [],//[{title: t1, values: [{label: l, value: v, uri: u}]},{...},...]
-        isFiltersOpen: true
+        isFiltersOpen: true,
+        lastSelectedValues: []
     };
 
     componentDidMount() {
-        console.log("TableView is mounted");
         this.props.fetchDataSets();
         this.props.getNumberOfDataSets();
         this.onFetchFilters();
@@ -40,35 +38,37 @@ class TableView extends React.Component {
     onFetchFilters = () => {
         axios.get('/filters/list')
             .then(response => {
-                    console.log(response);
-                    // const data = response.data;
-                    const data = [
-                        {
-                            title: "t1",
-                            values: [
-                                {label: "label_t1_11", value: "label_t1_v1", uri: "label_t1_uri1"},
-                                {label: "label_t1_12", value: "label_t1_v2", uri: "label_t1_uri2"},
-                                {label: "label_t1_13", value: "label_t1_v3", uri: "label_t1_uri3"}
-                            ]
-
-                        }, {
-                            title: "t2",
-                            values: [
-                                {label: "label_t2_11", value: "label_t2_v1", uri: "label_t2_uri1"},
-                                {label: "label_t2_12", value: "label_t2_v2", uri: "label_t2_uri2"},
-                                {label: "label_t2_13", value: "label_t2_v3", uri: "label_t2_uri3"}
-                            ]
-
-                        }, {
-                            title: "t3",
-                            values: [
-                                {label: "label_t3_11", value: "label_t3_v1", uri: "label_t3_uri1"},
-                                {label: "label_t3_12", value: "label_t3_v2", uri: "label_t3_uri2"},
-                                {label: "label_t3_13", value: "label_t3_v3", uri: "label_t3_uri3"}
-                            ]
-
-                        },
-                    ];
+                    const data = response.data;
+                    // const data = [
+                    //     {
+                    //         title: "t1",
+                    //         uri: "uri",
+                    //         values: [
+                    //             {label: "label_t1_11", value: "label_t1_v1", uri: "label_t1_uri1"},
+                    //             {label: "label_t1_12", value: "label_t1_v2", uri: "label_t1_uri2"},
+                    //             {label: "label_t1_13", value: "label_t1_v3", uri: "label_t1_uri3"}
+                    //         ]
+                    //
+                    //     }, {
+                    //         title: "t2",
+                    //         uri: "uri",
+                    //         values: [
+                    //             {label: "label_t2_11", value: "label_t2_v1", uri: "label_t2_uri1"},
+                    //             {label: "label_t2_12", value: "label_t2_v2", uri: "label_t2_uri2"},
+                    //             {label: "label_t2_13", value: "label_t2_v3", uri: "label_t2_uri3"}
+                    //         ]
+                    //
+                    //     }, {
+                    //         title: "t3",
+                    //         uri: "uri",
+                    //         values: [
+                    //             {label: "label_t3_11", value: "label_t3_v1", uri: "label_t3_uri1"},
+                    //             {label: "label_t3_12", value: "label_t3_v2", uri: "label_t3_uri2"},
+                    //             {label: "label_t3_13", value: "label_t3_v3", uri: "label_t3_uri3"}
+                    //         ]
+                    //
+                    //     },
+                    // ];
                     this.setState({filters: data});
                 }
             ).catch(error => console.log(error));
@@ -93,6 +93,7 @@ class TableView extends React.Component {
     };
 
     applyFilters = () => {
+        this.setState({lastSelectedValues: this.props.selectedFilters});
         this.props.fetchDataSets();
         this.props.getNumberOfDataSets();
     };
@@ -124,6 +125,9 @@ class TableView extends React.Component {
     };
 
     toggleFilters = () => {
+        if (this.state.isFiltersOpen) {
+            this.props.onReplaceSelectedFilters(this.state.lastSelectedValues);
+        }
         this.setState({isFiltersOpen: !this.state.isFiltersOpen});
     };
 
@@ -210,14 +214,23 @@ class TableView extends React.Component {
                                         </ButtonDropdown>
                                         {isMobile ? <Button style={{marginLeft: '2px'}}
                                                             onClick={this.toggleFilters}>Filters</Button> : ''}
-                                        {this.state.isFiltersOpen && isMobile ? <div className="dropdown-menu" style={{
-                                            top: '17%',
-                                            display: 'block',
-                                            left: '4%',
-                                            width: '90%'
-                                        }}>
-                                            <FiltersView applyFilters={this.applyFilters}/>
-                                        </div> : ''}
+                                        {
+                                            this.state.isFiltersOpen && isMobile ?
+                                                <div className="dropdown-menu" style={{
+                                                    top: '17%',
+                                                    display: 'block',
+                                                    left: '4%',
+                                                    width: '90%',
+                                                    fontWeight: 'normal'
+                                                }}>
+                                                    <FiltersView
+                                                        filters={this.state.filters}
+                                                        selectedFilters={this.props.selectedFilters}
+                                                        onAppendSelectedValues={this.props.onAppendSelectedValues}
+                                                        applyFilters={this.applyFilters}
+                                                    />
+                                                </div>
+                                                : ''}
                                     </div>
 
                                 </th>
@@ -235,7 +248,8 @@ class TableView extends React.Component {
                                     {dataSets}
                                     <Row style={{'paddingTop': '1rem'}}>
                                         <Button className="mx-auto" style={{marginBottom: '1rem'}}
-                                                onClick={this.props.load10More} disabled={this.props.dataSets === null}> Load
+                                                onClick={this.props.load10More}
+                                                disabled={this.props.dataSets === null}> Load
                                             10 more </Button>
                                     </Row>
                                 </td>
