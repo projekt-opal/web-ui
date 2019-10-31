@@ -50,7 +50,7 @@ class CustomSelect extends React.Component {
     };
 
     getOptions = (inputValue) => {
-        return new Promise(() => axios.get("/filteredOptions/?name=" + inputValue)
+        axios.get("/filteredOptions/?name=" + inputValue)
             .then(response => {
                 let options = response.data;
                 this.selectAsync.state.loadedOptions = options;
@@ -59,8 +59,7 @@ class CustomSelect extends React.Component {
             })
             .catch(err => {
                 return err;
-            })
-        ).then(x => console.log(x))
+            });
     };
 
     changeHandler(values) {
@@ -81,12 +80,12 @@ class CustomSelect extends React.Component {
 
     clickButton = (inputValue) => {
         this.setState({isButtonClicked: true});
-        this.getOptions(inputValue).then(r => console.log(r));
+        this.getOptions(inputValue);
     };
 
     noOptionsMessage = (props) => {
-        if (props.inputValue !== '' && !this.state.isButtonClicked) {
-            return (
+        if (props.inputValue !== '') {
+            return this.state.isButtonClicked ? <Spinner size="sm"/> : (
                 <button type="button"
                         className="btn btn-primary btn-block"
                         onClick={() => this.clickButton(props.inputValue)}>
