@@ -1,16 +1,5 @@
 import React from 'react';
-import {
-    Button,
-    Card,
-    CardBody,
-    CardTitle,
-    CardSubtitle,
-    CardHeader,
-    Input,
-    CardText,
-    Badge,
-    CardFooter
-} from "reactstrap";
+import {Badge, Button, Card, CardBody, CardHeader, CardSubtitle, CardTitle} from "reactstrap";
 import {FaRegStar, FaStar, FaStarHalfAlt} from "react-icons/fa";
 
 class ShortView extends React.Component {
@@ -40,12 +29,13 @@ class ShortView extends React.Component {
             rating[Math.floor(overallRating)] = 1;
         let overallRatingStarts = (<span>
             {
-                rating.map((r, idx) => r === 0 ? <FaRegStar key={idx}/> : r === 1 ? <FaStarHalfAlt key={idx}/> : <FaStar key={idx}/>)
+                rating.map((r, idx) => r === 0 ? <FaRegStar key={idx}/> : r === 1 ? <FaStarHalfAlt key={idx}/> :
+                    <FaStar key={idx}/>)
             }
         </span>);
 
         //<Input addon type="checkbox" style={{verticalAlign: 'middle', position: 'relative'}}
-                                   //aria-label="Checkbox for following text input"/>
+        //aria-label="Checkbox for following text input"/>
         return (
             <Card color="LightCard" style={{flexGrow: '1'}}>
                 <CardHeader>
@@ -74,14 +64,3 @@ class ShortView extends React.Component {
 }
 
 export default ShortView;
-
-
-{/*<div className="card border-success mb-3" style="max-width: 18rem;">*/}
-    {/*<div className="card-header bg-transparent border-success">Header</div>*/}
-    {/*<div className="card-body text-success">*/}
-        {/*<h5 className="card-title">Success card title</h5>*/}
-        {/*<p className="card-text">Quick sample text to create the card title and make up the body of the card's*/}
-            {/*content.</p>*/}
-    {/*</div>*/}
-    {/*<div className="card-footer bg-transparent border-success">Footer</div>*/}
-{/*</div>*/}
