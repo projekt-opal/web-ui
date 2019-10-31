@@ -39,39 +39,29 @@ class TableView extends React.Component {
         axios.get('/filters/list')
             .then(response => {
                     const data = response.data;
-                    // const data = [
-                    //     {
-                    //         title: "t1",
-                    //         uri: "uri",
-                    //         values: [
-                    //             {label: "label_t1_11", value: "label_t1_v1", uri: "label_t1_uri1"},
-                    //             {label: "label_t1_12", value: "label_t1_v2", uri: "label_t1_uri2"},
-                    //             {label: "label_t1_13", value: "label_t1_v3", uri: "label_t1_uri3"}
-                    //         ]
-                    //
-                    //     }, {
-                    //         title: "t2",
-                    //         uri: "uri",
-                    //         values: [
-                    //             {label: "label_t2_11", value: "label_t2_v1", uri: "label_t2_uri1"},
-                    //             {label: "label_t2_12", value: "label_t2_v2", uri: "label_t2_uri2"},
-                    //             {label: "label_t2_13", value: "label_t2_v3", uri: "label_t2_uri3"}
-                    //         ]
-                    //
-                    //     }, {
-                    //         title: "t3",
-                    //         uri: "uri",
-                    //         values: [
-                    //             {label: "label_t3_11", value: "label_t3_v1", uri: "label_t3_uri1"},
-                    //             {label: "label_t3_12", value: "label_t3_v2", uri: "label_t3_uri2"},
-                    //             {label: "label_t3_13", value: "label_t3_v3", uri: "label_t3_uri3"}
-                    //         ]
-                    //
-                    //     },
-                    // ];
                     this.setState({filters: data});
+                    this.updateFilterValueCounts();
                 }
             ).catch(error => console.log(error));
+    };
+
+    updateFilterValueCounts = () => {
+        const filters = [...this.state.filters];
+        filters.forEach(f => {
+            console.log(f);
+            f.values.forEach(v => {
+                console.log(v);
+                if(v.count === -1) {
+                    axios.get(`/filter/count?searchKey=${this.props.searchKey}&searchIn=${this.props.selectedSearchIn}&filterUri=${f.uri}&valueUri=${v.uri}`)
+                        .then( respons => {
+                            console.log(respons);
+                            v.count = respons.data;
+                        })
+                        .catch(err => console.log(err));
+                }
+            });
+        });
+        this.setState({filters: filters});
     };
 
     toggle = () => {

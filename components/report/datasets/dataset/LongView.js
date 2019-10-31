@@ -1,26 +1,5 @@
 import React from 'react';
-import {
-    Badge,
-    Button,
-    Card,
-    CardBody,
-    CardFooter,
-    CardHeader,
-    CardSubtitle,
-    CardText,
-    CardTitle,
-    Input,
-    Modal, ModalHeader, ModalBody, ModalFooter, Table
-} from "reactstrap";
-import {
-    FaRegStar,
-    FaStar,
-    FaStarAndCrescent,
-    FaStarHalf,
-    FaStarHalfAlt,
-    FaStarOfDavid,
-    FaStarOfLife
-} from "react-icons/fa";
+import {Badge, Button, Card, CardBody, CardFooter, CardHeader, CardSubtitle, CardText, CardTitle} from "reactstrap";
 import ModalDatasetView from './ModalDatasetView';
 import {connect} from 'react-redux';
 import * as actionCreators from '../../../../store/actions/index';

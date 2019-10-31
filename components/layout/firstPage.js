@@ -9,6 +9,7 @@ class FirstPage extends React.Component {
     state = {
         searchKey: '',
         selectedSearchIn: [],
+        lastSelectedSearchIn:[],
 
         dataSets: [],
         loadingDataSets: true,
@@ -19,6 +20,10 @@ class FirstPage extends React.Component {
         loadingNumberOfDataSetsError: false,
 
         selectedFilters: [] //is like [{title: "t", uri: "uri", values: [{value: "v1", uti:"uri_v1"}, {value:"v2", uri:"uri_v2"}]}]
+    };
+
+    setLastSelectedSearchIn = () => {
+        this.setState({lastSelectedSearchIn: this.state.selectedSearchIn});
     };
 
     onUpdateSearchKey = (searchKey) => {
@@ -147,6 +152,7 @@ class FirstPage extends React.Component {
                         onSearchInChanged={(domain) => this.onSearchInChanged(domain)}
                         onUpdateSearchKey={(searchKey) => this.onUpdateSearchKey(searchKey)}
                         selectedSearchIn={this.state.selectedSearchIn}
+                        setLastSelectedSearchIn={() => this.setLastSelectedSearchIn()}
                     />
                 </Row>
                 <br/>
@@ -164,6 +170,7 @@ class FirstPage extends React.Component {
                         selectedFilters={this.state.selectedFilters}
                         onAppendSelectedValues={(selectedFilter) => this.onAppendSelectedValues(selectedFilter)}
                         onReplaceSelectedFilters={(selectedFilters) => this.onReplaceSelectedFilters(selectedFilters)}
+                        selectedSearchIn={this.state.lastSelectedSearchIn}
                     />
                 </Row>
             </Container>

@@ -1,5 +1,5 @@
 import React from 'react';
-import {Badge} from "reactstrap";
+import {Badge, Spinner} from "reactstrap";
 import AsyncSelect from 'react-select/async';
 import {components} from 'react-select';
 import createClass from "create-react-class";
@@ -16,7 +16,12 @@ const Option = createClass({
                         onChange={e => null}
                     />{" "}
                     <label>{this.props.value} </label>
-                    <Badge style={{marginLeft: '2px'}} pill>{this.props.data.count}</Badge>
+                    {
+                        this.props.data.count !== -1 ?
+                            <Badge style={{marginLeft: '2px'}} pill>{this.props.data.count}</Badge>
+                            :
+                            <Spinner size="sm"/>
+                    }
                 </components.Option>
             </div>
         );

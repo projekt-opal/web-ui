@@ -23,6 +23,7 @@ class SearchBar extends React.Component {
     };
 
     searchClicked = () => {
+        this.props.setLastSelectedSearchIn();
         this.props.onFetchingDataSets();
         this.props.onGettingNumberOfDataSets();
     };
