@@ -1,13 +1,14 @@
 import React from 'react';
-import {Badge, Button, Card, CardBody, CardFooter, CardHeader, CardSubtitle, CardText, CardTitle} from "reactstrap";
+import {Button, Card, CardBody, CardFooter, CardHeader, CardSubtitle, CardText, CardTitle} from "reactstrap";
 import ModalDatasetView from './ModalDatasetView';
-import {connect} from 'react-redux';
-import * as actionCreators from '../../../../store/actions/index';
+
+import {FaExpandArrowsAlt, FaExternalLinkAlt, FaRegStar, FaStar, FaStarHalfAlt} from "react-icons/fa";
 
 class LongView extends React.Component {
 
     state = {
         isOneLineDescription: true,
+        isModalOpen: false
     };
 
     oneLineDescriptionClicked = (e) => {
@@ -17,9 +18,10 @@ class LongView extends React.Component {
         this.setState(newState);
     };
 
-    showDatasetView = () => {
-        this.props.onToggleModal(!this.props.isModalOpen);
-    }
+    toggleModal = () => {
+        const isModalOpen = !this.state.isModalOpen;
+        this.setState({isModalOpen: isModalOpen});
+    };
 
     render() {
 
@@ -31,18 +33,53 @@ class LongView extends React.Component {
 
         let keywords = this.props.dataSet.keywords;
         let theme = this.props.dataSet.theme;
-        let catalog = this.props.dataSet.catalog;
         let harvestingDate = this.props.dataSet.issueDate;
-        let dataSetFileType = this.props.dataSet.fileType;
 
+        let overallRating = this.props.dataSet.overallRating;
+        const rating = [0, 0, 0, 0, 0];
+        for (let i = 1; i <= overallRating; i++)
+            rating[i - 1] = 2;
+        if (overallRating - Math.floor(overallRating) >= 0.5)
+            rating[Math.floor(overallRating)] = 1;
+        let overallRatingStarts = (<span>
+            {
+                rating.map((r, idx) => r === 0 ? <FaRegStar key={idx}/> : r === 1 ? <FaStarHalfAlt key={idx}/> :
+                    <FaStar key={idx}/>)
+            }
+        </span>);
         // <Input addon type="checkbox" style={{verticalAlign: 'middle', position: 'relative'}}
         //        aria-label="Checkbox for following text input"/>
 
         return (
-            <Card color="LightCard" style={{flexGrow: '1'}} onClick={this.showDatasetView}>
-                <ModalDatasetView dataSet={this.props.dataSet}/>
+            <Card color="LightCard" style={{flexGrow: '1'}}>
+                {this.state.isModalOpen &&
+                <ModalDatasetView
+                    isModalOpen={this.state.isModalOpen}
+                    onToggleModal={() => this.toggleModal()}
+                    uri={this.props.dataSet.uri}
+                />
+                }
                 <CardHeader>
-                    <CardTitle style={{display: 'inline', marginLeft: '0.5em'}} onClick={this.showDatasetView}>{title}</CardTitle>
+                    <div style={{display: 'flex', flexFlow: 'row wrap'}}>
+                        <label style={{display: 'block'}}>
+                            <CardTitle style={{display: 'inline', marginLeft: '0.5em'}}>
+                                {title}
+                                <Button size="sm"
+                                        style={{background: 'transparent', border: 'none', color: 'gray'}}
+                                        onClick={() => this.toggleModal()}
+                                >
+                                    <FaExpandArrowsAlt/>
+                                </Button>
+                                <Button size="sm"
+                                        style={{background: 'transparent', border: 'none', color: 'gray'}}>
+                                    <FaExternalLinkAlt/>
+                                </Button>
+                            </CardTitle>
+                        </label>
+
+                        <div style={{flexGrow: '1'}}/>
+                        {overallRatingStarts}
+                    </div>
                 </CardHeader>
                 <CardBody>
                     <CardSubtitle> {description}
@@ -57,10 +94,8 @@ class LongView extends React.Component {
                         <span> harvesting Date: </span>
                         <span>{harvestingDate}</span>
                     </CardText>
-                    <Badge>{dataSetFileType}</Badge>
                     <CardFooter className="text-muted">
                         <div>
-                            <span>{catalog}</span>
                             <span style={{marginLeft: '3rem'}}>{theme}</span>
                             <br/>
                             {
@@ -78,19 +113,6 @@ class LongView extends React.Component {
             </Card>
         );
     }
-
 }
 
-const mapStateToProps = state => {
-    return {
-        isModalOpen: state.ds.isModalOpen
-    }
-};
-
-const mapDispatchToProps = dispatch => {
-    return {
-        onToggleModal: (isModalOpen) => dispatch(actionCreators.toggleModal(isModalOpen)),
-    }
-};
-
-export default connect(mapStateToProps, mapDispatchToProps) (LongView);
+export default LongView;
