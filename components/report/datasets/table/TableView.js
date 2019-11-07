@@ -39,8 +39,7 @@ class TableView extends React.Component {
         axios.get('/filters/list')
             .then(response => {
                     const data = response.data;
-                    this.setState({filters: data});
-                    this.updateFilterValueCounts();
+                    this.setState({filters: data}, () => this.updateFilterValueCounts());
                 }
             ).catch(error => console.log(error));
     };
