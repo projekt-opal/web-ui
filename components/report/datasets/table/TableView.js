@@ -22,7 +22,6 @@ class TableView extends React.Component {
 
         screenWidth: 0,
 
-        filters: [],//[{title: t1, values: [{label: l, value: v, uri: u}]},{...},...]
         isFiltersOpen: true,
         lastSelectedValues: []
     };
@@ -30,35 +29,12 @@ class TableView extends React.Component {
     componentDidMount() {
         this.props.fetchDataSets();
         this.props.getNumberOfDataSets();
-        this.onFetchFilters();
+        this.props.onFetchFilters();
         this.handleWindowSizeChange();
         window.addEventListener('resize', this.handleWindowSizeChange);
     }
 
-    onFetchFilters = () => {
-        axios.get('/filters/list')
-            .then(response => {
-                    const data = response.data;
-                    this.setState({filters: data}, () => this.updateFilterValueCounts());
-                }
-            ).catch(error => console.log(error));
-    };
 
-    updateFilterValueCounts = () => {
-        const filters = [...this.state.filters];
-        filters.forEach(f => {
-            f.values.forEach(v => {
-                if(v.count === -1) {
-                    axios.get(`/filter/count?searchKey=${this.props.searchKey}&searchIn=${this.props.selectedSearchIn}&filterUri=${f.uri}&valueUri=${v.uri}`)
-                        .then( response => {
-                            v.count = response.data;
-                        })
-                        .catch(err => console.log(err));
-                }
-            });
-        });
-        this.setState({filters: filters});
-    };
 
     toggle = () => {
         this.setState({
@@ -210,7 +186,7 @@ class TableView extends React.Component {
                                                     fontWeight: 'normal'
                                                 }}>
                                                     <FiltersView
-                                                        filters={this.state.filters}
+                                                        filters={this.props.filters}
                                                         selectedFilters={this.props.selectedFilters}
                                                         onAppendSelectedValues={this.props.onAppendSelectedValues}
                                                         applyFilters={this.applyFilters}
@@ -249,7 +225,7 @@ class TableView extends React.Component {
                         <Col style={{'paddingLeft': '0'}} xs={{size: 3}}>
                             <div style={{position: 'fixed', width: '23%'}}>
                                 <FiltersView
-                                    filters={this.state.filters}
+                                    filters={this.props.filters}
                                     selectedFilters={this.props.selectedFilters}
                                     onAppendSelectedValues={this.props.onAppendSelectedValues}
                                     applyFilters={this.applyFilters}

@@ -26,6 +26,7 @@ class SearchBar extends React.Component {
         this.props.setLastSelectedSearchIn();
         this.props.onFetchingDataSets();
         this.props.onGettingNumberOfDataSets();
+        this.props.onFetchFilters();
     };
 
     searchKeyChanged = (event) => {

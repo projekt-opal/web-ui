@@ -19,6 +19,7 @@ class FirstPage extends React.Component {
         loadingNumberOfDataSets: true,
         loadingNumberOfDataSetsError: false,
 
+        filters: [],//[{title: t1, values: [{label: l, value: v, uri: u}]},{...},...]
         selectedFilters: [] //is like [{title: "t", uri: "uri", values: [{value: "v1", uti:"uri_v1"}, {value:"v2", uri:"uri_v2"}]}]
     };
 
@@ -45,6 +46,31 @@ class FirstPage extends React.Component {
         this.setState({selectedSearchIn: newSelectedSearchIn});
     };
 
+    onFetchFilters = () => {
+        axios.get(`/filters/list?searchKey=${this.state.searchKey}&searchIn=${this.state.selectedSearchIn}`)
+            .then(response => {
+                    const filters = response.data;
+                    this.setState({filters: filters}, () => this.updateFilterValueCounts());
+                }
+            ).catch(error => console.log(error));
+    };
+
+    updateFilterValueCounts = () => {
+        const filters = [...this.state.filters];
+        filters.forEach(f => {
+            f.values.forEach(v => {
+                if(v.count === -1) {
+                    axios.get(`/filter/count?searchKey=${this.state.searchKey}&searchIn=${this.state.selectedSearchIn}&filterUri=${f.uri}&valueUri=${v.uri}`)
+                        .then( response => {
+                            v.count = response.data;
+                        })
+                        .catch(err => console.log(err));
+                }
+            });
+        });
+        this.setState({filters: filters});
+    };
+
     onReplaceSelectedFilters = (selectedFilters) => {
         this.setState({selectedFilters: selectedFilters});
     };
@@ -66,7 +92,7 @@ class FirstPage extends React.Component {
 
     load10More = () => {
         if (this.state.dataSets !== null && this.state.dataSets.length > 0) {
-            let url = `/dataSets/getSubList?searchQuery=${this.state.searchKey}&searchIn=${this.state.selectedSearchIn}&low=${this.state.dataSets.length}`;
+            let url = `/dataSets/getSubList?searchKey=${this.state.searchKey}&searchIn=${this.state.selectedSearchIn}&low=${this.state.dataSets.length}`;
             axios.post(url, this.state.selectedFilters)
                 .then(response => {
                     const dataSets = response.data;
@@ -94,7 +120,7 @@ class FirstPage extends React.Component {
             loadingNumberOfDataSets: true,
             loadingNumberOfDataSetsError: false
         });
-        let url = `/dataSets/getNumberOfDataSets?searchQuery=${this.state.searchKey}&searchIn=${this.state.selectedSearchIn}`;
+        let url = `/dataSets/getNumberOfDataSets?searchKey=${this.state.searchKey}&searchIn=${this.state.selectedSearchIn}`;
         axios.post(url, this.state.selectedFilters)
             .then(response => {
                 const numberOfDataSets = response.data;
@@ -120,7 +146,7 @@ class FirstPage extends React.Component {
             loadingDataSetsError: false,
             dataSets: []
         });
-        let url = `/dataSets/getSubList?searchQuery=${this.state.searchKey}&searchIn=${this.state.selectedSearchIn}`;
+        let url = `/dataSets/getSubList?searchKey=${this.state.searchKey}&searchIn=${this.state.selectedSearchIn}`;
         axios.post(url, this.state.selectedFilters)
             .then(response => {
                 const dataSets = response.data;
@@ -153,6 +179,7 @@ class FirstPage extends React.Component {
                         onUpdateSearchKey={(searchKey) => this.onUpdateSearchKey(searchKey)}
                         selectedSearchIn={this.state.selectedSearchIn}
                         setLastSelectedSearchIn={() => this.setLastSelectedSearchIn()}
+                        onFetchFilters={() => this.onFetchFilters()}
                     />
                 </Row>
                 <br/>
@@ -171,6 +198,8 @@ class FirstPage extends React.Component {
                         onAppendSelectedValues={(selectedFilter) => this.onAppendSelectedValues(selectedFilter)}
                         onReplaceSelectedFilters={(selectedFilters) => this.onReplaceSelectedFilters(selectedFilters)}
                         selectedSearchIn={this.state.lastSelectedSearchIn}
+                        onFetchFilters={() => this.onFetchFilters()}
+                        filters={this.state.filters}
                     />
                 </Row>
             </Container>
