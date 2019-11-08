@@ -1,16 +1,5 @@
 import React from 'react';
-import {
-    Badge,
-    Button,
-    Card,
-    CardHeader,
-    CardTitle,
-    Modal,
-    ModalBody,
-    ModalFooter,
-    ModalHeader,
-    Table,
-} from "reactstrap";
+import {Badge, Button, Card, CardTitle, Modal, ModalBody, ModalFooter, ModalHeader, Table,} from "reactstrap";
 import {FaRegStar, FaStar, FaStarHalfAlt} from "react-icons/fa";
 import ReactTooltip from 'react-tooltip';
 import axios from '../../../../webservice/axios-dataSets';
@@ -64,9 +53,6 @@ class ModalDatasetView extends React.Component {
         return (
             <div style={{display: 'flex', flexFlow: 'row wrap'}}>
                 <label style={{display: 'block'}}>
-
-                    {/*<CardTitle style={{display: 'inline', marginLeft: '0.5em'}}><a*/}
-                    {/*    href="#">{this.state.dataSet.title}</a></CardTitle>*/}
                     <Modal isOpen={this.props.isModalOpen} size='lg'
                            toggle={this.showDatasetView}>
                         <ModalHeader toggle={this.showDatasetView}>{this.state.dataSet.title}</ModalHeader>

@@ -64,21 +64,22 @@ class LongView extends React.Component {
                         <label style={{display: 'block'}}>
                             <CardTitle style={{display: 'inline', marginLeft: '0.5em'}}>
                                 {title}
-                                <Button size="sm"
-                                        style={{background: 'transparent', border: 'none', color: 'gray'}}
-                                        onClick={() => this.toggleModal()}
-                                >
-                                    <FaExpandArrowsAlt/>
-                                </Button>
-                                <Button size="sm"
-                                        style={{background: 'transparent', border: 'none', color: 'gray'}}>
-                                    <FaExternalLinkAlt/>
-                                </Button>
+
                             </CardTitle>
                         </label>
 
                         <div style={{flexGrow: '1'}}/>
                         {overallRatingStarts}
+                        <Button size="sm"
+                                style={{background: 'transparent', border: 'none', color: 'gray', marginLeft: '2px'}}
+                                onClick={() => this.toggleModal()}
+                        >
+                            <FaExpandArrowsAlt/>
+                        </Button>
+                        <Button size="sm"
+                                style={{background: 'transparent', border: 'none', color: 'gray'}}>
+                            <FaExternalLinkAlt/>
+                        </Button>
                     </div>
                 </CardHeader>
                 <CardBody>
