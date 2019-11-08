@@ -8,7 +8,6 @@ class FiltersView extends React.Component {
 
     applyFilters = () => {
         this.props.applyFilters();
-        // this.props.onToggleFilters(!this.props.isFiltersOpen);
     };
 
     render() {

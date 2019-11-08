@@ -47,13 +47,10 @@ class TableView extends React.Component {
     updateFilterValueCounts = () => {
         const filters = [...this.state.filters];
         filters.forEach(f => {
-            console.log(f);
             f.values.forEach(v => {
-                console.log(v);
                 if(v.count === -1) {
                     axios.get(`/filter/count?searchKey=${this.props.searchKey}&searchIn=${this.props.selectedSearchIn}&filterUri=${f.uri}&valueUri=${v.uri}`)
                         .then( response => {
-                            console.log(response);
                             v.count = response.data;
                         })
                         .catch(err => console.log(err));

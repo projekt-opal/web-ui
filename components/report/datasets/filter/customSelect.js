@@ -66,12 +66,14 @@ class CustomSelect extends React.Component {
         if (values) {
             const selectedFilter = {
                 title: this.props.title,
+                uri: this.props.uri,
                 values: values
             };
             this.props.onAppendSelectedValues(selectedFilter);
         } else {
             this.props.onAppendSelectedValues({
                     title: this.props.title,
+                    uri: this.props.uri,
                     values: []
                 }
             );

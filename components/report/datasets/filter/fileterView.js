@@ -27,7 +27,7 @@ class FilterView extends React.Component {
                 </div>
                 {
                     this.state.isExpanded &&
-                    <CustomSelect title={this.props.filter.title} values={this.props.filter.values}
+                    <CustomSelect title={this.props.filter.title} uri={this.props.filter.uri} values={this.props.filter.values}
                                   selectedValues={this.props.selectedFilterValues}
                                   onAppendSelectedValues={this.props.onAppendSelectedValues}
                     />

@@ -146,8 +146,8 @@ class FirstPage extends React.Component {
                 <br/>
                 <Row>
                     <SearchBar
-                        onFetchingDataSets={() => this.fetchDataSets}
-                        onGettingNumberOfDataSets={() => this.getNumberOfDataSets}
+                        onFetchingDataSets={() => this.fetchDataSets()}
+                        onGettingNumberOfDataSets={() => this.getNumberOfDataSets()}
                         onUpdatedSearchInRemoved={(domain) => this.onUpdatedSearchInRemoved(domain)}
                         onSearchInChanged={(domain) => this.onSearchInChanged(domain)}
                         onUpdateSearchKey={(searchKey) => this.onUpdateSearchKey(searchKey)}
