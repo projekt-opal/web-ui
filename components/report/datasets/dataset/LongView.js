@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, Card, CardBody, CardFooter, CardHeader, CardSubtitle, CardText, CardTitle} from "reactstrap";
+import {Button, Input, Card, CardBody, CardFooter, CardHeader, CardSubtitle, CardText, CardTitle} from "reactstrap";
 import ModalDatasetView from './ModalDatasetView';
 
 import {FaExpandArrowsAlt, FaExternalLinkAlt, FaRegStar, FaStar, FaStarHalfAlt} from "react-icons/fa";
@@ -47,72 +47,80 @@ class LongView extends React.Component {
                     <FaStar key={idx}/>)
             }
         </span>);
-        // <Input addon type="checkbox" style={{verticalAlign: 'middle', position: 'relative'}}
-        //        aria-label="Checkbox for following text input"/>
 
         return (
-            <Card color="LightCard" style={{flexGrow: '1'}}>
-                {this.state.isModalOpen &&
-                <ModalDatasetView
-                    isModalOpen={this.state.isModalOpen}
-                    onToggleModal={() => this.toggleModal()}
-                    uri={this.props.dataSet.uri}
-                />
+            <>
+                {
+                    this.state.isModalOpen &&
+                    <ModalDatasetView
+                        isModalOpen={this.state.isModalOpen}
+                        onToggleModal={() => this.toggleModal()}
+                        uri={this.props.dataSet.uri}
+                    />
                 }
-                <CardHeader>
-                    <div style={{display: 'flex', flexFlow: 'row wrap'}}>
-                        <label style={{display: 'block'}}>
+                <Card color="LightCard" style={{flexGrow: '1'}}>
+                    <CardHeader>
+                        <div style={{display: 'flex', flexFlow: 'row wrap'}}>
                             <CardTitle style={{display: 'inline', marginLeft: '0.5em'}}>
-                                {title}
-
+                                <label style={{display: 'block'}}>
+                                    <Input addon type="checkbox"
+                                           style={{verticalAlign: 'middle', position: 'relative', marginRight: '2px'}}
+                                           aria-label="Checkbox for following text input"/>
+                                    {title}
+                                </label>
                             </CardTitle>
-                        </label>
-
-                        <div style={{flexGrow: '1'}}/>
-                        {overallRatingStarts}
-                        <Button size="sm"
-                                style={{background: 'transparent', border: 'none', color: 'gray', marginLeft: '2px'}}
-                                onClick={() => this.toggleModal()}
-                        >
-                            <FaExpandArrowsAlt/>
-                        </Button>
-                        <Button size="sm"
-                                style={{background: 'transparent', border: 'none', color: 'gray'}}>
-                            <FaExternalLinkAlt/>
-                        </Button>
-                    </div>
-                </CardHeader>
-                <CardBody>
-                    <CardSubtitle> {description}
-                        {
-                            this.props.dataSet.description.length > 100 &&
-                            <Button color="link" onClick={this.oneLineDescriptionClicked}>
-                                {this.state.isOneLineDescription ? 'more' : 'less'}
+                            <div style={{flexGrow: '1'}}/>
+                            {overallRatingStarts}
+                            <Button size="sm"
+                                    style={{
+                                        background: 'transparent',
+                                        border: 'none',
+                                        color: 'gray',
+                                        marginLeft: '2px'
+                                    }}
+                                    onClick={() => this.toggleModal()}
+                            >
+                                <FaExpandArrowsAlt/>
                             </Button>
-                        }
-                    </CardSubtitle>
-                    <CardText>
-                        <span> harvesting Date: </span>
-                        <span>{harvestingDate}</span>
-                    </CardText>
-                    <CardFooter className="text-muted">
-                        <div>
-                            <span style={{marginLeft: '3rem'}}>{theme}</span>
-                            <br/>
+                            <Button size="sm"
+                                    style={{background: 'transparent', border: 'none', color: 'gray'}}>
+                                <FaExternalLinkAlt/>
+                            </Button>
+                        </div>
+                    </CardHeader>
+                    <CardBody>
+                        <CardSubtitle> {description}
                             {
-                                keywords.map((keyword, idx) => {
-                                    return (
-                                        <span key={idx} style={{marginLeft: '4px'}}>
+                                this.props.dataSet.description.length > 100 &&
+                                <Button color="link" onClick={this.oneLineDescriptionClicked}>
+                                    {this.state.isOneLineDescription ? 'more' : 'less'}
+                                </Button>
+                            }
+                        </CardSubtitle>
+                        <CardText>
+                            <span> harvesting Date: </span>
+                            <span>{harvestingDate}</span>
+                        </CardText>
+                        <CardFooter className="text-muted">
+                            <div>
+                                <span style={{marginLeft: '3rem'}}>{theme}</span>
+                                <br/>
+                                {
+                                    keywords.map((keyword, idx) => {
+                                        return (
+                                            <span key={idx} style={{marginLeft: '4px'}}>
                                 {keyword}
                                 </span>
-                                    );
-                                })
-                            }
-                        </div>
-                    </CardFooter>
-                </CardBody>
-            </Card>
-        );
+                                        );
+                                    })
+                                }
+                            </div>
+                        </CardFooter>
+                    </CardBody>
+                </Card>
+            </>
+        )
+            ;
     }
 }
 
