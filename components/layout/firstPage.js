@@ -9,7 +9,7 @@ class FirstPage extends React.Component {
     state = {
         searchKey: '',
         selectedSearchIn: [],
-        lastSelectedSearchIn:[],
+        lastSelectedSearchIn: [],
 
         dataSets: [],
         loadingDataSets: true,
@@ -19,7 +19,7 @@ class FirstPage extends React.Component {
         loadingNumberOfDataSets: true,
         loadingNumberOfDataSetsError: false,
 
-        filters: [],//[{title: t1, values: [{label: l, value: v, uri: u}]},{...},...]
+        filters: [],//[{title: t1, uri:"filter uri" values: [{label: l, value: v, uri: u},{...},...]
         selectedFilters: [] //is like [{title: "t", uri: "uri", values: [{value: "v1", uti:"uri_v1"}, {value:"v2", uri:"uri_v2"}]}]
     };
 
@@ -59,9 +59,13 @@ class FirstPage extends React.Component {
         const filters = [...this.state.filters];
         filters.forEach(f => {
             f.values.forEach(v => {
-                if(v.count === -1) {
-                    axios.get(`/filter/count?searchKey=${this.state.searchKey}&searchIn=${this.state.selectedSearchIn}&filterUri=${f.uri}&valueUri=${v.uri}`)
-                        .then( response => {
+                if (v.count === -1) {
+                    axios.post(`/filter/count?searchKey=${this.state.searchKey}&searchIn=${this.state.selectedSearchIn}`,
+                        {
+                            filterUri: f.uri,
+                            valueUri: v.uri
+                        })
+                        .then(response => {
                             v.count = response.data;
                         })
                         .catch(err => console.log(err));
