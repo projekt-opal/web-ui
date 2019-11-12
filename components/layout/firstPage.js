@@ -21,6 +21,8 @@ class FirstPage extends React.Component {
         loadingNumberOfDataSetsError: false,
 
         filters: [],//[{title: t1, uri:"filter uri" values: [{label: l, value: v, uri: u},{...},...]
+        loadingFilters: true,
+        loadingFiltersError: false,
         selectedFilters: [] //is like [{title: "t", uri: "uri", values: [{value: "v1", uti:"uri_v1"}, {value:"v2", uri:"uri_v2"}]}]
     };
 
@@ -48,12 +50,29 @@ class FirstPage extends React.Component {
     };
 
     onFetchFilters = () => {
-        axios.get(`/filters/list?searchKey=${this.state.searchKey}&searchIn=${this.state.selectedSearchIn}`)
-            .then(response => {
-                    const filters = response.data;
-                    this.setState({filters: filters}, () => this.updateFilterValueCounts());
-                }
-            ).catch(error => console.log(error));
+        this.setState({
+            filters:[],
+            loadingFilters: true,
+            loadingFiltersError: false
+        }, () => {
+            axios.get(`/filters/list?searchKey=${this.state.searchKey}&searchIn=${this.state.selectedSearchIn}`)
+                .then(response => {
+                        const filters = response.data;
+                        this.setState(
+                            {
+                                filters: filters,
+                                loadingFilters: false,
+                                loadingFiltersError: false
+                            }, () => this.updateFilterValueCounts());
+                    }
+                ).catch(error => {
+                this.setState({
+                    filters:[],
+                    loadingFilters: false,
+                    loadingFiltersError: true
+                });
+            });
+        });
     };
 
     updateFilterValueCounts = () => {
@@ -214,6 +233,8 @@ class FirstPage extends React.Component {
                         selectedSearchIn={this.state.lastSelectedSearchIn}
                         onFetchFilters={() => this.onFetchFilters()}
                         filters={this.state.filters}
+                        loadingFilters={this.state.loadingFilters}
+                        loadingFiltersError={this.state.loadingFiltersError}
                         getSelectedSearchIn={() => this.getSelectedSearchIn()}
                     />
                 </Row>

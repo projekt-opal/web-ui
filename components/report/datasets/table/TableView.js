@@ -4,7 +4,6 @@ import {FaRedo, FaThLarge, FaThList} from "react-icons/fa";
 import ShortView from "../dataset/ShortView";
 import LongView from "../dataset/LongView";
 import FiltersView from '../filter/FiltersView';
-import CustomSelect from "../filter/customSelect";
 
 class TableView extends React.Component {
 
@@ -21,7 +20,7 @@ class TableView extends React.Component {
 
         screenWidth: 0,
 
-        isFiltersOpen: true,
+        isFiltersOpen: false,
         lastSelectedValues: []
     };
 
@@ -55,6 +54,10 @@ class TableView extends React.Component {
         this.setState({lastSelectedValues: this.props.selectedFilters});
         this.props.fetchDataSets();
         this.props.getNumberOfDataSets();
+    };
+
+    reloadFilters = () => {
+        this.props.onFetchFilters();
     };
 
     reloadNumberOfDataSets = () => {
@@ -223,14 +226,26 @@ class TableView extends React.Component {
                         !isMobile &&
                         <Col style={{'paddingLeft': '0'}} xs={{size: 3}}>
                             <div style={{position: 'fixed', width: '23%'}}>
-                                <FiltersView
-                                    filters={this.props.filters}
-                                    selectedFilters={this.props.selectedFilters}
-                                    onAppendSelectedValues={this.props.onAppendSelectedValues}
-                                    onGetSearchKey={this.props.onGetSearchKey}
-                                    getSelectedSearchIn={this.props.getSelectedSearchIn}
-                                    applyFilters={this.applyFilters}
-                                />
+                                {
+                                    this.props.loadingFilters ?
+                                        <Spinner  /> :
+                                        this.props.loadingFiltersError ?
+                                            <div>
+                                                <Button onClick={this.reloadFilters}><FaRedo
+                                                    id="TooltipFiltersInternalServerError"/></Button>
+                                                <span
+                                                    style={{marginLeft: '3px', fontSize: '8px', fontWeight: '500'}}>Internal Server Error</span>
+                                            </div>
+                                            :
+                                            <FiltersView
+                                                filters={this.props.filters}
+                                                selectedFilters={this.props.selectedFilters}
+                                                onAppendSelectedValues={this.props.onAppendSelectedValues}
+                                                onGetSearchKey={this.props.onGetSearchKey}
+                                                getSelectedSearchIn={this.props.getSelectedSearchIn}
+                                                applyFilters={this.applyFilters}
+                                            />
+                                }
                             </div>
                         </Col>
                     }
