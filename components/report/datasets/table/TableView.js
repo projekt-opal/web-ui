@@ -4,8 +4,7 @@ import {FaRedo, FaThLarge, FaThList} from "react-icons/fa";
 import ShortView from "../dataset/ShortView";
 import LongView from "../dataset/LongView";
 import FiltersView from '../filter/FiltersView';
-
-import axios from '../../../../webservice/axios-dataSets';
+import CustomSelect from "../filter/customSelect";
 
 class TableView extends React.Component {
 
@@ -33,8 +32,6 @@ class TableView extends React.Component {
         this.handleWindowSizeChange();
         window.addEventListener('resize', this.handleWindowSizeChange);
     }
-
-
 
     toggle = () => {
         this.setState({
@@ -189,6 +186,8 @@ class TableView extends React.Component {
                                                         filters={this.props.filters}
                                                         selectedFilters={this.props.selectedFilters}
                                                         onAppendSelectedValues={this.props.onAppendSelectedValues}
+                                                        onGetSearchKey={this.props.onGetSearchKey}
+                                                        getSelectedSearchIn={this.props.getSelectedSearchIn}
                                                         applyFilters={this.applyFilters}
                                                     />
                                                 </div>
@@ -228,6 +227,8 @@ class TableView extends React.Component {
                                     filters={this.props.filters}
                                     selectedFilters={this.props.selectedFilters}
                                     onAppendSelectedValues={this.props.onAppendSelectedValues}
+                                    onGetSearchKey={this.props.onGetSearchKey}
+                                    getSelectedSearchIn={this.props.getSelectedSearchIn}
                                     applyFilters={this.applyFilters}
                                 />
                             </div>

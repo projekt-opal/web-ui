@@ -2,6 +2,8 @@ import React from 'react';
 import {Button, Col, Container, Row} from "reactstrap";
 
 import FilterView from './fileterView';
+import CustomSelect from "./customSelect";
+import TableView from "../table/TableView";
 
 
 class FiltersView extends React.Component {
@@ -9,6 +11,7 @@ class FiltersView extends React.Component {
     applyFilters = () => {
         this.props.applyFilters();
     };
+
 
     render() {
         return (
@@ -32,7 +35,9 @@ class FiltersView extends React.Component {
                                         <FilterView
                                             selectedFilterValues={selectedFilterValues.length > 0 ? selectedFilterValues[0].values : []}
                                             onAppendSelectedValues={this.props.onAppendSelectedValues}
+                                            onGetSearchKey={this.props.onGetSearchKey}
                                             filter={filter}
+                                            getSelectedSearchIn={this.props.getSelectedSearchIn}
                                         />
                                     </Col>
                                 </Row>

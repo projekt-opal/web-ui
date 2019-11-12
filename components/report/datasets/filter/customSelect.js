@@ -1,5 +1,5 @@
 import React from 'react';
-import {Badge, Spinner} from "reactstrap";
+import {Badge, Button, Spinner} from "reactstrap";
 import AsyncSelect from 'react-select/async';
 import {components} from 'react-select';
 import createClass from "create-react-class";
@@ -41,6 +41,7 @@ class CustomSelect extends React.Component {
     state = {
         inputValue: '',
         isButtonClicked: false,
+        prevInputValue:''
     };
 
     handleInputChange = (newValue) => {
@@ -50,16 +51,22 @@ class CustomSelect extends React.Component {
     };
 
     getOptions = (inputValue) => {
-        axios.get("/filteredOptions/?name=" + inputValue)
-            .then(response => {
-                let options = response.data;
-                this.selectAsync.state.loadedOptions = options;
-                this.setState({isButtonClicked: false});
-                return options;
-            })
-            .catch(err => {
-                return err;
-            });
+        this.setState({prevInputValue: inputValue}, () => {
+            const searchKey = this.props.onGetSearchKey();
+            const selectedSearchIn = this.props.getSelectedSearchIn();
+            axios.get(`/filteredOptions/?filterType=${this.props.title}&searchKey=${searchKey}&searchIn=${selectedSearchIn}&filterText=${inputValue}`)
+                .then(response => {
+                    if (this.state.prevInputValue === inputValue) {
+                        let options = response.data.values;
+                        this.selectAsync.state.loadedOptions = options;
+                        this.setState({isButtonClicked: false});
+                        return options;
+                    }
+                })
+                .catch(err => {
+                    return err;
+                });
+        });
     };
 
     changeHandler(values) {
@@ -87,13 +94,19 @@ class CustomSelect extends React.Component {
 
     noOptionsMessage = (props) => {
         if (props.inputValue !== '') {
-            return this.state.isButtonClicked ? <Spinner size="sm"/> : (
-                <button type="button"
-                        className="btn btn-primary btn-block"
-                        onClick={() => this.clickButton(props.inputValue)}>
-                    Search
-                </button>
-            );
+            return this.state.isButtonClicked ?
+                (
+                    <div>
+                        <Spinner size="sm"/>
+                        <Button onClick={this.stopSearch} color="link" style={{background:'transparent'}} >X</Button>
+                    </div>
+                ) : (
+                    <button type="button"
+                            className="btn btn-primary btn-block"
+                            onClick={() => this.clickButton(props.inputValue)}>
+                        Search
+                    </button>
+                );
         }
     };
 
@@ -132,6 +145,10 @@ class CustomSelect extends React.Component {
             </div>
         );
 
+    }
+
+    stopSearch = () => {
+        this.setState({isButtonClicked: false});
     }
 }
 

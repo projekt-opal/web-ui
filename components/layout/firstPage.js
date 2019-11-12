@@ -3,6 +3,7 @@ import SearchBar from "../search/SearchBar";
 import TableView from "../report/datasets/table/TableView";
 import {Container, Row} from "reactstrap";
 import axios from "../../webservice/axios-dataSets";
+import CustomSelect from "../report/datasets/filter/customSelect";
 
 class FirstPage extends React.Component {
 
@@ -94,6 +95,10 @@ class FirstPage extends React.Component {
         this.setState({selectedFilters: selectedFilters});
     };
 
+    onGetSearchKey = () => {
+        return this.state.searchKey;
+    };
+
     load10More = () => {
         if (this.state.dataSets !== null && this.state.dataSets.length > 0) {
             let url = `/dataSets/getSubList?searchKey=${this.state.searchKey}&searchIn=${this.state.selectedSearchIn}&low=${this.state.dataSets.length}`;
@@ -170,6 +175,10 @@ class FirstPage extends React.Component {
             });
     };
 
+    getSelectedSearchIn = () => {
+        return this.state.selectedSearchIn;
+    };
+
     render() {
         return (
             <Container fluid>
@@ -200,10 +209,12 @@ class FirstPage extends React.Component {
                         loadingDataSetsError={this.state.loadingDataSetsError}
                         selectedFilters={this.state.selectedFilters}
                         onAppendSelectedValues={(selectedFilter) => this.onAppendSelectedValues(selectedFilter)}
+                        onGetSearchKey={() => this.onGetSearchKey()}
                         onReplaceSelectedFilters={(selectedFilters) => this.onReplaceSelectedFilters(selectedFilters)}
                         selectedSearchIn={this.state.lastSelectedSearchIn}
                         onFetchFilters={() => this.onFetchFilters()}
                         filters={this.state.filters}
+                        getSelectedSearchIn={() => this.getSelectedSearchIn()}
                     />
                 </Row>
             </Container>
