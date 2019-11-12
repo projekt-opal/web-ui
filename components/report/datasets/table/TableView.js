@@ -142,6 +142,27 @@ class TableView extends React.Component {
                 )
             );
 
+        const filtersView =
+            this.props.loadingFilters ?
+                <Spinner color="primary" /> :
+                this.props.loadingFiltersError ?
+                    <div>
+                        <Button onClick={this.reloadFilters}><FaRedo
+                            id="TooltipFiltersInternalServerError"/></Button>
+                        <span
+                            style={{marginLeft: '3px', fontSize: '8px', fontWeight: '500'}}>Internal Server Error</span>
+                    </div>
+                    :
+                    <FiltersView
+                        filters={this.props.filters}
+                        selectedFilters={this.props.selectedFilters}
+                        onAppendSelectedValues={this.props.onAppendSelectedValues}
+                        onGetSearchKey={this.props.onGetSearchKey}
+                        getSelectedSearchIn={this.props.getSelectedSearchIn}
+                        applyFilters={this.applyFilters}
+                    />
+        ;
+
         const isMobile = this.state.screenWidth <= 700;
 
         return (
@@ -177,24 +198,7 @@ class TableView extends React.Component {
                                         {isMobile ? <Button style={{marginLeft: '2px'}}
                                                             onClick={this.toggleFilters}>Filters</Button> : ''}
                                         {
-                                            this.state.isFiltersOpen && isMobile ?
-                                                <div className="dropdown-menu" style={{
-                                                    top: '17%',
-                                                    display: 'block',
-                                                    left: '4%',
-                                                    width: '90%',
-                                                    fontWeight: 'normal'
-                                                }}>
-                                                    <FiltersView
-                                                        filters={this.props.filters}
-                                                        selectedFilters={this.props.selectedFilters}
-                                                        onAppendSelectedValues={this.props.onAppendSelectedValues}
-                                                        onGetSearchKey={this.props.onGetSearchKey}
-                                                        getSelectedSearchIn={this.props.getSelectedSearchIn}
-                                                        applyFilters={this.applyFilters}
-                                                    />
-                                                </div>
-                                                : ''}
+                                            this.state.isFiltersOpen && isMobile ? filtersView : ''}
                                     </div>
 
                                 </th>
@@ -226,26 +230,7 @@ class TableView extends React.Component {
                         !isMobile &&
                         <Col style={{'paddingLeft': '0'}} xs={{size: 3}}>
                             <div style={{position: 'fixed', width: '23%'}}>
-                                {
-                                    this.props.loadingFilters ?
-                                        <Spinner  /> :
-                                        this.props.loadingFiltersError ?
-                                            <div>
-                                                <Button onClick={this.reloadFilters}><FaRedo
-                                                    id="TooltipFiltersInternalServerError"/></Button>
-                                                <span
-                                                    style={{marginLeft: '3px', fontSize: '8px', fontWeight: '500'}}>Internal Server Error</span>
-                                            </div>
-                                            :
-                                            <FiltersView
-                                                filters={this.props.filters}
-                                                selectedFilters={this.props.selectedFilters}
-                                                onAppendSelectedValues={this.props.onAppendSelectedValues}
-                                                onGetSearchKey={this.props.onGetSearchKey}
-                                                getSelectedSearchIn={this.props.getSelectedSearchIn}
-                                                applyFilters={this.applyFilters}
-                                            />
-                                }
+                                {filtersView}
                             </div>
                         </Col>
                     }
