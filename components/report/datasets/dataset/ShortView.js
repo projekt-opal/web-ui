@@ -1,17 +1,24 @@
 import React from 'react';
-import {Badge, Button, Card, CardBody, CardHeader, CardSubtitle, CardTitle} from "reactstrap";
-import {FaRegStar, FaStar, FaStarHalfAlt} from "react-icons/fa";
+import {Badge, Button, Input, Card, CardBody, CardHeader, CardSubtitle, CardTitle} from "reactstrap";
+import {FaExpandArrowsAlt, FaExternalLinkAlt, FaRegStar, FaStar, FaStarHalfAlt} from "react-icons/fa";
+import ModalDatasetView from "./ModalDatasetView";
 
 class ShortView extends React.Component {
 
     state = {
-        isOneLineDescription: true
+        isOneLineDescription: true,
+        isModalOpen: false
     };
 
     oneLineDescriptionClicked = () => {
         let newState = {...this.state};
         newState.isOneLineDescription = !newState.isOneLineDescription;
         this.setState(newState);
+    };
+
+    toggleModal = () => {
+        const isModalOpen = !this.state.isModalOpen;
+        this.setState({isModalOpen: isModalOpen});
     };
 
     render() {
@@ -34,17 +41,43 @@ class ShortView extends React.Component {
             }
         </span>);
 
-        //<Input addon type="checkbox" style={{verticalAlign: 'middle', position: 'relative'}}
-        //aria-label="Checkbox for following text input"/>
         return (
             <Card color="LightCard" style={{flexGrow: '1'}}>
+                {
+                    this.state.isModalOpen &&
+                    <ModalDatasetView
+                        isModalOpen={this.state.isModalOpen}
+                        onToggleModal={() => this.toggleModal()}
+                        uri={this.props.dataSet.uri}
+                    />
+                }
                 <CardHeader>
                     <div style={{display: 'flex', flexFlow: 'row wrap'}}>
-                        <label style={{display: 'block'}}>
-                            <CardTitle style={{display: 'inline', marginLeft: '0.5em'}}>{title}</CardTitle>
-                        </label>
+                        <CardTitle style={{display: 'inline', marginLeft: '0.5em'}}>
+                            <label style={{display: 'block'}}>
+                                <Input addon type="checkbox"
+                                       style={{verticalAlign: 'middle', position: 'relative', marginRight: '2px'}}
+                                       aria-label="Checkbox for following text input"/>
+                                {title}
+                            </label>
+                        </CardTitle>
                         <div style={{flexGrow: '1'}}/>
                         {overallRatingStarts}
+                        <Button size="sm"
+                                style={{
+                                    background: 'transparent',
+                                    border: 'none',
+                                    color: 'gray',
+                                    marginLeft: '2px'
+                                }}
+                                onClick={() => this.toggleModal()}
+                        >
+                            <FaExpandArrowsAlt/>
+                        </Button>
+                        <Button size="sm"
+                                style={{background: 'transparent', border: 'none', color: 'gray'}}>
+                            <FaExternalLinkAlt/>
+                        </Button>
                     </div>
                 </CardHeader>
                 <CardBody>

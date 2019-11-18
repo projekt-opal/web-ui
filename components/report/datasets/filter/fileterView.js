@@ -3,6 +3,7 @@ import {Button} from "reactstrap";
 import CustomSelect from './customSelect';
 
 import {FaAngleDown, FaAngleRight} from 'react-icons/fa'
+import TableView from "../table/TableView";
 
 class FilterView extends React.Component {
 
@@ -27,9 +28,14 @@ class FilterView extends React.Component {
                 </div>
                 {
                     this.state.isExpanded &&
-                    <CustomSelect title={this.props.filter.title} values={this.props.filter.values}
-                                  selectedValues={this.props.selectedFilterValues}
-                                  onAppendSelectedValues={this.props.onAppendSelectedValues}
+                    <CustomSelect
+                        title={this.props.filter.title}
+                        uri={this.props.filter.uri}
+                        values={this.props.filter.values}
+                        getSelectedSearchIn={this.props.getSelectedSearchIn}
+                        selectedValues={this.props.selectedFilterValues}
+                        onAppendSelectedValues={this.props.onAppendSelectedValues}
+                        onGetSearchKey={this.props.onGetSearchKey}
                     />
                 }
             </div>

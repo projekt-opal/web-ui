@@ -5,8 +5,6 @@ import ShortView from "../dataset/ShortView";
 import LongView from "../dataset/LongView";
 import FiltersView from '../filter/FiltersView';
 
-import axios from '../../../../webservice/axios-dataSets';
-
 class TableView extends React.Component {
 
     state = {
@@ -22,47 +20,17 @@ class TableView extends React.Component {
 
         screenWidth: 0,
 
-        filters: [],//[{title: t1, values: [{label: l, value: v, uri: u}]},{...},...]
-        isFiltersOpen: true,
+        isFiltersOpen: false,
         lastSelectedValues: []
     };
 
     componentDidMount() {
         this.props.fetchDataSets();
         this.props.getNumberOfDataSets();
-        this.onFetchFilters();
+        this.props.onFetchFilters();
         this.handleWindowSizeChange();
         window.addEventListener('resize', this.handleWindowSizeChange);
     }
-
-    onFetchFilters = () => {
-        axios.get('/filters/list')
-            .then(response => {
-                const data = response.data;
-                this.setState({ filters: data });
-                this.updateFilterValueCounts();
-            }
-            ).catch(error => console.log(error));
-    };
-
-    updateFilterValueCounts = () => {
-        const filters = [...this.state.filters];
-        filters.forEach(f => {
-            //  console.log(f);
-            f.values.forEach(v => {
-                //   console.log(v);
-                if (v.count === -1) {
-                    axios.get(`/filter/count?searchKey=${this.props.searchKey}&searchIn=${this.props.selectedSearchIn}&filterUri=${f.uri}&valueUri=${v.uri}`)
-                        .then(respons => {
-                            console.log(respons);
-                            v.count = respons.data;
-                        })
-                        .catch(err => console.log(err));
-                }
-            });
-        });
-        this.setState({ filters: filters });
-    };
 
     toggle = () => {
         this.setState({
@@ -86,6 +54,10 @@ class TableView extends React.Component {
         this.setState({ lastSelectedValues: this.props.selectedFilters });
         this.props.fetchDataSets();
         this.props.getNumberOfDataSets();
+    };
+
+    reloadFilters = () => {
+        this.props.onFetchFilters();
     };
 
     reloadNumberOfDataSets = () => {
@@ -171,6 +143,27 @@ class TableView extends React.Component {
                 )
             );
 
+        const filtersView =
+            this.props.loadingFilters ?
+                <Spinner color="primary" /> :
+                this.props.loadingFiltersError ?
+                    <div>
+                        <Button onClick={this.reloadFilters}><FaRedo
+                            id="TooltipFiltersInternalServerError"/></Button>
+                        <span
+                            style={{marginLeft: '3px', fontSize: '8px', fontWeight: '500'}}>Internal Server Error</span>
+                    </div>
+                    :
+                    <FiltersView
+                        filters={this.props.filters}
+                        selectedFilters={this.props.selectedFilters}
+                        onAppendSelectedValues={this.props.onAppendSelectedValues}
+                        onGetSearchKey={this.props.onGetSearchKey}
+                        getSelectedSearchIn={this.props.getSelectedSearchIn}
+                        applyFilters={this.applyFilters}
+                    />
+        ;
+
         const isMobile = this.state.screenWidth <= 700;
 
         return (
@@ -179,6 +172,7 @@ class TableView extends React.Component {
                     <Col xs={isMobile ? { size: 12 } : { size: 9 }}>
                         <Table hover bordered responsive striped style={{ display: 'block' }}>
                             <thead>
+<<<<<<< HEAD
                                 <tr>
                                     <th style={{ width: '1%' }}>
                                         <div style={{ display: 'flex', flexFlow: 'row wrap' }}>
@@ -223,6 +217,37 @@ class TableView extends React.Component {
                                                     </div>
                                                     : ''}
                                         </div>
+=======
+                            <tr>
+                                <th style={{width: '1%'}}>
+                                    <div style={{display: 'flex', flexFlow: 'row wrap'}}>
+                                        <span> {numberOfResult} </span>
+                                        <div style={{flexGrow: 1}}/>
+                                        <Button style={{marginLeft: '2px'}}> Export</Button>
+                                        <Button style={{marginLeft: '2px'}} onClick={this.largeViewChanged}>
+                                            {this.state.isLongView ? <FaThLarge/> : <FaThList/>}
+                                        </Button>
+                                        <ButtonDropdown style={{marginLeft: '2px'}} isOpen={this.state.dropdownOpen}
+                                                        toggle={this.toggle}>
+                                            <DropdownToggle caret>
+                                                {this.state.listOrderByValues[this.state.selectedOrder]}
+                                            </DropdownToggle>
+                                            <DropdownMenu>
+                                                {
+                                                    this.state.listOrderByValues.map((orderBy, idx) => {
+                                                        return <DropdownItem onClick={() => this.orderByChanged(idx)}
+                                                                             active={idx === this.state.selectedOrder}
+                                                                             key={idx}>{orderBy}</DropdownItem>
+                                                    })
+                                                }
+                                            </DropdownMenu>
+                                        </ButtonDropdown>
+                                        {isMobile ? <Button style={{marginLeft: '2px'}}
+                                                            onClick={this.toggleFilters}>Filters</Button> : ''}
+                                        {
+                                            this.state.isFiltersOpen && isMobile ? filtersView : ''}
+                                    </div>
+>>>>>>> upstream/master
 
                                     </th>
                                 </tr>
@@ -251,6 +276,7 @@ class TableView extends React.Component {
                     </Col>
                     {
                         !isMobile &&
+<<<<<<< HEAD
                         <Col style={{ 'paddingLeft': '0' }} xs={{ size: 3 }}>
                             <div style={{ position: 'fixed', width: '23%' }}>
                                 <FiltersView
@@ -259,6 +285,11 @@ class TableView extends React.Component {
                                     onAppendSelectedValues={this.props.onAppendSelectedValues}
                                     applyFilters={this.applyFilters}
                                 />
+=======
+                        <Col style={{'paddingLeft': '0'}} xs={{size: 3}}>
+                            <div style={{position: 'fixed', width: '23%'}}>
+                                {filtersView}
+>>>>>>> upstream/master
                             </div>
                         </Col>
                     }
