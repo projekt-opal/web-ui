@@ -1,5 +1,4 @@
 import React from 'react';
-<<<<<<< HEAD
 import {
     Badge,
     Button,
@@ -12,10 +11,8 @@ import {
     Table,
 } from "reactstrap";
 import { FaRegStar, FaStar, FaStarHalfAlt } from "react-icons/fa";
-=======
-import {Badge, Button, Card, CardTitle, Modal, ModalBody, ModalFooter, ModalHeader, Table,} from "reactstrap";
-import {FaRegStar, FaStar, FaStarHalfAlt} from "react-icons/fa";
->>>>>>> upstream/master
+import { Badge, Button, Card, CardTitle, Modal, ModalBody, ModalFooter, ModalHeader, Table, } from "reactstrap";
+import { FaRegStar, FaStar, FaStarHalfAlt } from "react-icons/fa";
 import ReactTooltip from 'react-tooltip';
 import axios from '../../../../webservice/axios-dataSets';
 import DatasetView from '../../../../components/layout/datasetView';

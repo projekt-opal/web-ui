@@ -24,7 +24,7 @@ class ModalDatasetView extends React.Component {
         tooltipOpen: false,
     };
 
-    componentWillMount = () => {
+    componentDidMount = () => {
         this.setState({ dataSet: this.props.dataSet })
     }
 
