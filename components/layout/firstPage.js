@@ -1,7 +1,7 @@
 import React from 'react';
 import SearchBar from "../search/SearchBar";
 import TableView from "../report/datasets/table/TableView";
-import {Container, Row} from "reactstrap";
+import { Container, Row } from "reactstrap";
 import axios from "../../webservice/axios-dataSets";
 
 class FirstPage extends React.Component {
@@ -9,7 +9,7 @@ class FirstPage extends React.Component {
     state = {
         searchKey: '',
         selectedSearchIn: [],
-        lastSelectedSearchIn:[],
+        lastSelectedSearchIn: [],
 
         dataSets: [],
         loadingDataSets: true,
@@ -23,11 +23,11 @@ class FirstPage extends React.Component {
     };
 
     setLastSelectedSearchIn = () => {
-        this.setState({lastSelectedSearchIn: this.state.selectedSearchIn});
+        this.setState({ lastSelectedSearchIn: this.state.selectedSearchIn });
     };
 
     onUpdateSearchKey = (searchKey) => {
-        this.setState({searchKey: searchKey})
+        this.setState({ searchKey: searchKey })
     };
 
     onSearchInChanged = (searchDomain) => {
@@ -36,17 +36,17 @@ class FirstPage extends React.Component {
             newSelectedSearchIn = newSelectedSearchIn.filter(x => x !== searchDomain);
         else
             newSelectedSearchIn = newSelectedSearchIn.concat(searchDomain);
-        this.setState({selectedSearchIn: newSelectedSearchIn});
+        this.setState({ selectedSearchIn: newSelectedSearchIn });
     };
 
     onUpdatedSearchInRemoved = (searchDomain) => {
         let newSelectedSearchIn = [...this.state.selectedSearchIn];
         newSelectedSearchIn = newSelectedSearchIn.filter(x => x !== searchDomain);
-        this.setState({selectedSearchIn: newSelectedSearchIn});
+        this.setState({ selectedSearchIn: newSelectedSearchIn });
     };
 
     onReplaceSelectedFilters = (selectedFilters) => {
-        this.setState({selectedFilters: selectedFilters});
+        this.setState({ selectedFilters: selectedFilters });
     };
 
     onAppendSelectedValues = (selectedFilter) => {
@@ -61,7 +61,7 @@ class FirstPage extends React.Component {
         else
             selectedFilters.push(selectedFilter);
 
-        this.setState({selectedFilters: selectedFilters});
+        this.setState({ selectedFilters: selectedFilters });
     };
 
     load10More = () => {
@@ -120,15 +120,19 @@ class FirstPage extends React.Component {
             loadingDataSetsError: false,
             dataSets: []
         });
+        console.log("Fetching..");
         let url = `/dataSets/getSubList?searchQuery=${this.state.searchKey}&searchIn=${this.state.selectedSearchIn}`;
         axios.post(url, this.state.selectedFilters)
             .then(response => {
                 const dataSets = response.data;
+                console.log("Response: " + response.data);
                 this.setState({
                     loadingDataSets: false,
                     loadingDataSetsError: false,
                     dataSets: dataSets
                 });
+
+                console.log("response not coming")
             })
             .catch(err => {
                 console.log(err);
@@ -138,12 +142,15 @@ class FirstPage extends React.Component {
                     dataSets: []
                 });
             });
+
+
+
     };
 
     render() {
         return (
             <Container fluid>
-                <br/>
+                <br />
                 <Row>
                     <SearchBar
                         onFetchingDataSets={() => this.fetchDataSets}
@@ -155,7 +162,7 @@ class FirstPage extends React.Component {
                         setLastSelectedSearchIn={() => this.setLastSelectedSearchIn()}
                     />
                 </Row>
-                <br/>
+                <br />
                 <Row>
                     <TableView
                         fetchDataSets={() => this.fetchDataSets()}

@@ -1,27 +1,34 @@
 import React from 'react';
-import {Button, Card, CardBody, CardFooter, CardHeader, CardSubtitle, CardText, CardTitle} from "reactstrap";
+import { Button, Card, CardBody, CardFooter, CardHeader, CardSubtitle, CardText, CardTitle } from "reactstrap";
 import ModalDatasetView from './ModalDatasetView';
+import Link from 'next/link';
 
-import {FaExpandArrowsAlt, FaExternalLinkAlt, FaRegStar, FaStar, FaStarHalfAlt} from "react-icons/fa";
+import { FaExpandArrowsAlt, FaExternalLinkAlt, FaRegStar, FaStar, FaStarHalfAlt } from "react-icons/fa";
 
 class LongView extends React.Component {
 
     state = {
         isOneLineDescription: true,
-        isModalOpen: false
+        isModalOpen: false,
+        isNewDatasetViewOpen: false,
+        dataSet: null
     };
 
     oneLineDescriptionClicked = (e) => {
         e.stopPropagation();
-        let newState = {...this.state};
+        let newState = { ...this.state };
         newState.isOneLineDescription = !newState.isOneLineDescription;
         this.setState(newState);
     };
 
     toggleModal = () => {
         const isModalOpen = !this.state.isModalOpen;
-        this.setState({isModalOpen: isModalOpen});
+        this.setState({ isModalOpen: isModalOpen });
     };
+
+    storeDatasetInfo = () => {
+        window.localStorage.setItem("DATASET_URI", this.props.dataSet.uri);
+    }
 
     render() {
 
@@ -43,41 +50,44 @@ class LongView extends React.Component {
             rating[Math.floor(overallRating)] = 1;
         let overallRatingStarts = (<span>
             {
-                rating.map((r, idx) => r === 0 ? <FaRegStar key={idx}/> : r === 1 ? <FaStarHalfAlt key={idx}/> :
-                    <FaStar key={idx}/>)
+                rating.map((r, idx) => r === 0 ? <FaRegStar key={idx} /> : r === 1 ? <FaStarHalfAlt key={idx} /> :
+                    <FaStar key={idx} />)
             }
         </span>);
         // <Input addon type="checkbox" style={{verticalAlign: 'middle', position: 'relative'}}
         //        aria-label="Checkbox for following text input"/>
 
         return (
-            <Card color="LightCard" style={{flexGrow: '1'}}>
+            <Card color="LightCard" style={{ flexGrow: '1' }}>
                 {this.state.isModalOpen &&
-                <ModalDatasetView
-                    isModalOpen={this.state.isModalOpen}
-                    onToggleModal={() => this.toggleModal()}
-                    uri={this.props.dataSet.uri}
-                />
+                    <ModalDatasetView
+                        isModalOpen={this.state.isModalOpen}
+                        onToggleModal={() => this.toggleModal()}
+                        uri={this.props.dataSet.uri}
+                    />
                 }
                 <CardHeader>
-                    <div style={{display: 'flex', flexFlow: 'row wrap'}}>
-                        <label style={{display: 'block'}}>
-                            <CardTitle style={{display: 'inline', marginLeft: '0.5em'}}>
+                    <div style={{ display: 'flex', flexFlow: 'row wrap' }}>
+                        <label style={{ display: 'block' }}>
+                            <CardTitle style={{ display: 'inline', marginLeft: '0.5em' }}>
                                 {title}
                                 <Button size="sm"
-                                        style={{background: 'transparent', border: 'none', color: 'gray'}}
-                                        onClick={() => this.toggleModal()}
+                                    style={{ background: 'transparent', border: 'none', color: 'gray' }}
+                                    onClick={() => this.toggleModal()}
                                 >
-                                    <FaExpandArrowsAlt/>
+                                    <FaExpandArrowsAlt />
                                 </Button>
-                                <Button size="sm"
-                                        style={{background: 'transparent', border: 'none', color: 'gray'}}>
-                                    <FaExternalLinkAlt/>
-                                </Button>
+                                <Link><a href="./view/newTabDatasetView" target="_blank" >
+                                    <Button size="sm"
+                                        style={{ background: 'transparent', border: 'none', color: 'gray' }} onClick={this.storeDatasetInfo}>
+
+                                        <FaExternalLinkAlt />
+                                    </Button></a></Link>
+
                             </CardTitle>
                         </label>
 
-                        <div style={{flexGrow: '1'}}/>
+                        <div style={{ flexGrow: '1' }} />
                         {overallRatingStarts}
                     </div>
                 </CardHeader>
@@ -96,14 +106,14 @@ class LongView extends React.Component {
                     </CardText>
                     <CardFooter className="text-muted">
                         <div>
-                            <span style={{marginLeft: '3rem'}}>{theme}</span>
-                            <br/>
+                            <span style={{ marginLeft: '3rem' }}>{theme}</span>
+                            <br />
                             {
                                 keywords.map((keyword, idx) => {
                                     return (
-                                        <span key={idx} style={{marginLeft: '4px'}}>
-                                {keyword}
-                                </span>
+                                        <span key={idx} style={{ marginLeft: '4px' }}>
+                                            {keyword}
+                                        </span>
                                     );
                                 })
                             }

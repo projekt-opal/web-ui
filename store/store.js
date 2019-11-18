@@ -4,6 +4,11 @@ import thunkMiddleware from 'redux-thunk'
 
 
 const rootReducer = combineReducers({
+    blank: function (state, action) {
+        if (state == null)
+            state = [];
+        return state;
+    }
 });
 
 
