@@ -1,9 +1,5 @@
 import React from 'react';
-<<<<<<< HEAD
-import { Button, Card, CardBody, CardFooter, CardHeader, CardSubtitle, CardText, CardTitle } from "reactstrap";
-=======
-import {Button, Input, Card, CardBody, CardFooter, CardHeader, CardSubtitle, CardText, CardTitle} from "reactstrap";
->>>>>>> upstream/master
+import { Button, Input, Card, CardBody, CardFooter, CardHeader, CardSubtitle, CardText, CardTitle } from "reactstrap";
 import ModalDatasetView from './ModalDatasetView';
 import Link from 'next/link';
 

@@ -149,9 +149,9 @@ class TableView extends React.Component {
                 this.props.loadingFiltersError ?
                     <div>
                         <Button onClick={this.reloadFilters}><FaRedo
-                            id="TooltipFiltersInternalServerError"/></Button>
+                            id="TooltipFiltersInternalServerError" /></Button>
                         <span
-                            style={{marginLeft: '3px', fontSize: '8px', fontWeight: '500'}}>Internal Server Error</span>
+                            style={{ marginLeft: '3px', fontSize: '8px', fontWeight: '500' }}>Internal Server Error</span>
                     </div>
                     :
                     <FiltersView
@@ -162,7 +162,7 @@ class TableView extends React.Component {
                         getSelectedSearchIn={this.props.getSelectedSearchIn}
                         applyFilters={this.applyFilters}
                     />
-        ;
+            ;
 
         const isMobile = this.state.screenWidth <= 700;
 
@@ -172,7 +172,6 @@ class TableView extends React.Component {
                     <Col xs={isMobile ? { size: 12 } : { size: 9 }}>
                         <Table hover bordered responsive striped style={{ display: 'block' }}>
                             <thead>
-<<<<<<< HEAD
                                 <tr>
                                     <th style={{ width: '1%' }}>
                                         <div style={{ display: 'flex', flexFlow: 'row wrap' }}>
@@ -200,54 +199,8 @@ class TableView extends React.Component {
                                             {isMobile ? <Button style={{ marginLeft: '2px' }}
                                                 onClick={this.toggleFilters}>Filters</Button> : ''}
                                             {
-                                                this.state.isFiltersOpen && isMobile ?
-                                                    <div className="dropdown-menu" style={{
-                                                        top: '17%',
-                                                        display: 'block',
-                                                        left: '4%',
-                                                        width: '90%',
-                                                        fontWeight: 'normal'
-                                                    }}>
-                                                        <FiltersView
-                                                            filters={this.state.filters}
-                                                            selectedFilters={this.props.selectedFilters}
-                                                            onAppendSelectedValues={this.props.onAppendSelectedValues}
-                                                            applyFilters={this.applyFilters}
-                                                        />
-                                                    </div>
-                                                    : ''}
+                                                this.state.isFiltersOpen && isMobile ? filtersView : ''}
                                         </div>
-=======
-                            <tr>
-                                <th style={{width: '1%'}}>
-                                    <div style={{display: 'flex', flexFlow: 'row wrap'}}>
-                                        <span> {numberOfResult} </span>
-                                        <div style={{flexGrow: 1}}/>
-                                        <Button style={{marginLeft: '2px'}}> Export</Button>
-                                        <Button style={{marginLeft: '2px'}} onClick={this.largeViewChanged}>
-                                            {this.state.isLongView ? <FaThLarge/> : <FaThList/>}
-                                        </Button>
-                                        <ButtonDropdown style={{marginLeft: '2px'}} isOpen={this.state.dropdownOpen}
-                                                        toggle={this.toggle}>
-                                            <DropdownToggle caret>
-                                                {this.state.listOrderByValues[this.state.selectedOrder]}
-                                            </DropdownToggle>
-                                            <DropdownMenu>
-                                                {
-                                                    this.state.listOrderByValues.map((orderBy, idx) => {
-                                                        return <DropdownItem onClick={() => this.orderByChanged(idx)}
-                                                                             active={idx === this.state.selectedOrder}
-                                                                             key={idx}>{orderBy}</DropdownItem>
-                                                    })
-                                                }
-                                            </DropdownMenu>
-                                        </ButtonDropdown>
-                                        {isMobile ? <Button style={{marginLeft: '2px'}}
-                                                            onClick={this.toggleFilters}>Filters</Button> : ''}
-                                        {
-                                            this.state.isFiltersOpen && isMobile ? filtersView : ''}
-                                    </div>
->>>>>>> upstream/master
 
                                     </th>
                                 </tr>
@@ -276,20 +229,9 @@ class TableView extends React.Component {
                     </Col>
                     {
                         !isMobile &&
-<<<<<<< HEAD
                         <Col style={{ 'paddingLeft': '0' }} xs={{ size: 3 }}>
                             <div style={{ position: 'fixed', width: '23%' }}>
-                                <FiltersView
-                                    filters={this.state.filters}
-                                    selectedFilters={this.props.selectedFilters}
-                                    onAppendSelectedValues={this.props.onAppendSelectedValues}
-                                    applyFilters={this.applyFilters}
-                                />
-=======
-                        <Col style={{'paddingLeft': '0'}} xs={{size: 3}}>
-                            <div style={{position: 'fixed', width: '23%'}}>
                                 {filtersView}
->>>>>>> upstream/master
                             </div>
                         </Col>
                     }
