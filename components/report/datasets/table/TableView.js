@@ -167,9 +167,10 @@ class TableView extends React.Component {
         const isMobile = this.state.screenWidth <= 700;
 
         return (
-            <Col md={{ size: 12 }}>
+            <Col md='12'>
                 <Row>
-                    <Col xs={isMobile ? { size: 12 } : { size: 9 }}>
+                    <Col xs={isMobile ? { size: 12 } : { size: 9 }} style={{ 'marginTop': '1rem' }}>
+
                         <Table hover bordered responsive striped style={{ display: 'block' }}>
                             <thead>
                                 <tr>
@@ -229,16 +230,14 @@ class TableView extends React.Component {
                     </Col>
                     {
                         !isMobile &&
-                        <Col style={{ 'paddingLeft': '0' }} xs={{ size: 3 }}>
-                            <div style={{ position: 'fixed', width: '23%' }}>
+                        <Col md={{ size: 3 }}>
+                            <div style={{ position: 'sticky', top: '2rem' }}>
                                 {filtersView}
                             </div>
                         </Col>
                     }
                 </Row>
-
-            </Col>
-        )
+            </Col>)
     }
 }
 

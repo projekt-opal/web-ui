@@ -39,7 +39,7 @@ class LongView extends React.Component {
         let title = this.props.dataSet.title;
 
         const keywords = this.props.dataSet.keywords;
-        const theme = this.props.dataSet.theme.join(", ");
+        const theme = this.props.dataSet.theme;
         let harvestingDate = this.props.dataSet.issueDate;
 
         let overallRating = this.props.dataSet.overallRating;

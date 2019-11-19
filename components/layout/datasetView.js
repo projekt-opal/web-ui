@@ -54,65 +54,61 @@ class DatasetView extends React.Component {
         } else return '';
 
         return (
-            <div style={{ display: 'flex', flexFlow: 'row wrap' }}>
-                <label style={{ display: 'block' }}>
-                    <h3 className="text-center"> {this.state.dataSet == null ? '' : this.state.dataSet.title}</h3>
-                    <Table borderless>
-                        <tbody>
-                            <tr>
-                                <td>Description:</td>
-                                <td>{this.state.dataSet == null ? '' : this.state.dataSet.description}</td>
-                            </tr>
-                            <tr>
-                                <td>Data File(s): </td>
-                                <td>
-                                    <Card style={{ 'marginBottom': '15px', 'padding': '10px' }}>
-                                        <div>
-                                            {
-                                                <div>{this.state.dataSet == null ? '' : this.state.dataSet.publisher.name}</div>
-                                            }
-                                            <div>{this.state.dataSet == null ? '' : this.state.dataSet.publisher.publisher}</div>
-                                        </div>
+            <Container fluid>
+                <Row>
+                    <Col wrapper>
+                        <h3 style={{ 'margin-top': '.5rem', 'margin-bottom': '0' }}>
+                            {this.state.dataSet == null ? '' : this.state.dataSet.title}</h3></Col>
+                </Row>
+                <hr />
+                <Row>
+                    {/* style={{ marginLeft: '3px', fontSize: '8px', fontWeight: '500' }} */}
+                    {/* <Col md='2'></Col> */}
+                    <Col md='7' wrapper>
+                        <h5>Description:</h5>
+                        <p>{this.state.dataSet == null ? '' : this.state.dataSet.description}</p>
 
-                                        {this.state.dataSet == null ? '' : this.state.dataSet.distributions.map((distribution, idx) => {
-                                            return <div key={idx}>
-                                                <Badge>{distribution.fileType}</Badge>
-                                                &nbsp;
-                                                            <a href={distribution.url}>
-                                                    {distribution.url}
-                                                </a>
-                                            </div>
-                                        })}
+                        <h5>Data File(s):</h5>
+                        <div>
+                            {
+                                <div>{this.state.dataSet == null ? '' : this.state.dataSet.publisher.name}</div>
+                            }
+                            <div>{this.state.dataSet == null ? '' : this.state.dataSet.publisher.publisher}</div>
+                        </div>
+
+                        {this.state.dataSet == null ? '' : this.state.dataSet.distributions.map((distribution, idx) => {
+                            return <div key={idx}>
+                                <Badge>{distribution.fileType}</Badge>&nbsp;
+
+                                <a href={distribution.url}>{distribution.url}</a>
 
 
-                                    </Card>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </Table>
-
-
-                    <Card style={{ 'padding': '10px', 'marginBottom': '15px' }}>
-                        <CardTitle style={{ display: 'inline', marginLeft: '0.5em' }}>Metadata
-                                    info</CardTitle>
-                        <Table bordered>
-                            <tbody>
-                                {
-                                    Object.keys(metaDataInfo).map((key, idx) => {
-                                        return <tr key={idx}>
-                                            <td>{key}</td>
-                                            <td>{metaDataInfo[key]}</td>
-                                        </tr>
-                                    })
-                                }
-                            </tbody>
-                        </Table>
-                    </Card>
-
-                    <Card style={{ 'padding': '10px' }}>
-                        <CardTitle style={{ display: 'inline', marginLeft: '0.5em' }}>Quality
-                                    metrics</CardTitle>
-                        <Table bordered>
+                            </div>
+                        })}
+                    </Col>
+                    <Col md='5' wrapper>
+                        <h5>Metadata Info:</h5>
+                        <div>
+                            <Table bordered style={{ 'table-layout': 'fixed', 'width': '100%', 'word-wrap': 'break-word' }}>
+                                <tbody>
+                                    {
+                                        Object.keys(metaDataInfo).map((key, idx) => {
+                                            return <tr key={idx}>
+                                                <td>{key}</td>
+                                                <td>{metaDataInfo[key]}</td>
+                                            </tr>
+                                        })
+                                    }
+                                </tbody>
+                            </Table>
+                        </div>
+                    </Col>
+                </Row>
+                <hr />
+                <Row>
+                    <Col md='7' wrapper>
+                        <h5>Quality Metrics:</h5>
+                        <Table bordered style={{ 'table-layout': 'fixed', 'width': '100%', 'word-wrap': 'break-word' }}>
                             <thead>
                                 <tr>
                                     <th>Overall score</th>
@@ -136,13 +132,9 @@ class DatasetView extends React.Component {
                                 }
                             </tbody>
                         </Table>
-                    </Card>
-
-
-                </label>
-            </div>
-
-            //TableView using the links that I need - related to this particular dataset!
+                    </Col>
+                </Row>
+            </Container>
         );
     }
 }
