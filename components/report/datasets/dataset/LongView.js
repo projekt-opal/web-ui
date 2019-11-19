@@ -89,7 +89,7 @@ class LongView extends React.Component {
                             >
                                 <FaExpandArrowsAlt />
                             </Button>
-                            <Link><a href="./view/newTabDatasetView" target="_blank" >
+                            <Link><a href="./view/datasetView" target="_blank" >
                                 <Button size="sm"
                                     style={{ background: 'transparent', border: 'none', color: 'gray' }} onClick={this.storeDatasetInfo}>
 

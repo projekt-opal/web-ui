@@ -7,11 +7,11 @@ import {
 } from "reactstrap";
 import { withRouter } from 'next/router'
 import axios from '../../../webservice/axios-dataSets';
-import DatasetView from '../../../components/layout/datasetView';
+import DatasetViewLayout from '../../../components/layout/datasetViewLayout';
 import TableView from '../../../components/report/datasets/table/TableView';
 import FiltersView from '../../../components/report/datasets/filter/FiltersView';
 
-class NewTabDatasetView extends React.Component {
+class DatasetView extends React.Component {
     state = {
         dataSet: null,
         relatedDatasets: null,
@@ -213,7 +213,7 @@ class NewTabDatasetView extends React.Component {
                     <Row>
                         <Col md='1'></Col>
                         <Col md='10' className="border" style={{ 'top': '2rem' }} center>
-                            {this.state.dataSet == null ? '' : <DatasetView dataset={this.state.dataSet} />}
+                            {this.state.dataSet == null ? '' : <DatasetViewLayout dataset={this.state.dataSet} />}
                         </Col>
                         <Col md='1'></Col>
                     </Row>
@@ -228,6 +228,7 @@ class NewTabDatasetView extends React.Component {
                     <Row>
                         <Col md={{ size: 1 }}></Col>
                         <Col md={{ size: 10 }} className="border" style={{ 'margin-top': '2rem' }}>
+                            {/* TODO: Below methods for fetching the Related Datasets */}
                             <TableView
                                 fetchDataSets={() => this.fetchDataSets()}
                                 getNumberOfDataSets={() => this.getNumberOfRelatedDataSets()}
@@ -258,4 +259,4 @@ class NewTabDatasetView extends React.Component {
 }
 
 
-export default withRouter(NewTabDatasetView);
+export default withRouter(DatasetView);
