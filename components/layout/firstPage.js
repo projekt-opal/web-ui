@@ -1,7 +1,7 @@
 import React from 'react';
 import SearchBar from "../search/SearchBar";
 import TableView from "../report/datasets/table/TableView";
-import {Container, Row} from "reactstrap";
+import { Container, Row } from "reactstrap";
 import axios from "../../webservice/axios-dataSets";
 import CustomSelect from "../report/datasets/filter/customSelect";
 
@@ -27,11 +27,11 @@ class FirstPage extends React.Component {
     };
 
     setLastSelectedSearchIn = () => {
-        this.setState({lastSelectedSearchIn: this.state.selectedSearchIn});
+        this.setState({ lastSelectedSearchIn: this.state.selectedSearchIn });
     };
 
     onUpdateSearchKey = (searchKey) => {
-        this.setState({searchKey: searchKey})
+        this.setState({ searchKey: searchKey })
     };
 
     onSearchInChanged = (searchDomain) => {
@@ -40,38 +40,38 @@ class FirstPage extends React.Component {
             newSelectedSearchIn = newSelectedSearchIn.filter(x => x !== searchDomain);
         else
             newSelectedSearchIn = newSelectedSearchIn.concat(searchDomain);
-        this.setState({selectedSearchIn: newSelectedSearchIn});
+        this.setState({ selectedSearchIn: newSelectedSearchIn });
     };
 
     onUpdatedSearchInRemoved = (searchDomain) => {
         let newSelectedSearchIn = [...this.state.selectedSearchIn];
         newSelectedSearchIn = newSelectedSearchIn.filter(x => x !== searchDomain);
-        this.setState({selectedSearchIn: newSelectedSearchIn});
+        this.setState({ selectedSearchIn: newSelectedSearchIn });
     };
 
     onFetchFilters = () => {
         this.setState({
-            filters:[],
+            filters: [],
             loadingFilters: true,
             loadingFiltersError: false
         }, () => {
             axios.get(`/filters/list?searchKey=${this.state.searchKey}&searchIn=${this.state.selectedSearchIn}`)
                 .then(response => {
-                        const filters = response.data;
-                        this.setState(
-                            {
-                                filters: filters,
-                                loadingFilters: false,
-                                loadingFiltersError: false
-                            }, () => this.updateFilterValueCounts());
-                    }
+                    const filters = response.data;
+                    this.setState(
+                        {
+                            filters: filters,
+                            loadingFilters: false,
+                            loadingFiltersError: false
+                        }, () => this.updateFilterValueCounts());
+                }
                 ).catch(error => {
-                this.setState({
-                    filters:[],
-                    loadingFilters: false,
-                    loadingFiltersError: true
+                    this.setState({
+                        filters: [],
+                        loadingFilters: false,
+                        loadingFiltersError: true
+                    });
                 });
-            });
         });
     };
 
@@ -92,11 +92,11 @@ class FirstPage extends React.Component {
                 }
             });
         });
-        this.setState({filters: filters});
+        this.setState({ filters: filters });
     };
 
     onReplaceSelectedFilters = (selectedFilters) => {
-        this.setState({selectedFilters: selectedFilters});
+        this.setState({ selectedFilters: selectedFilters });
     };
 
     onAppendSelectedValues = (selectedFilter) => {
@@ -111,7 +111,7 @@ class FirstPage extends React.Component {
         else
             selectedFilters.push(selectedFilter);
 
-        this.setState({selectedFilters: selectedFilters});
+        this.setState({ selectedFilters: selectedFilters });
     };
 
     onGetSearchKey = () => {
@@ -178,11 +178,14 @@ class FirstPage extends React.Component {
         axios.post(url, this.state.selectedFilters)
             .then(response => {
                 const dataSets = response.data;
+                console.log("Response: " + response.data);
                 this.setState({
                     loadingDataSets: false,
                     loadingDataSetsError: false,
                     dataSets: dataSets
                 });
+
+                console.log("response not coming")
             })
             .catch(err => {
                 console.log(err);
@@ -192,6 +195,9 @@ class FirstPage extends React.Component {
                     dataSets: []
                 });
             });
+
+
+
     };
 
     getSelectedSearchIn = () => {
@@ -201,7 +207,7 @@ class FirstPage extends React.Component {
     render() {
         return (
             <Container fluid>
-                <br/>
+                <br />
                 <Row>
                     <SearchBar
                         onFetchingDataSets={() => this.fetchDataSets()}
@@ -214,7 +220,7 @@ class FirstPage extends React.Component {
                         onFetchFilters={() => this.onFetchFilters()}
                     />
                 </Row>
-                <br/>
+                <br />
                 <Row>
                     <TableView
                         fetchDataSets={() => this.fetchDataSets()}

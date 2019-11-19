@@ -1,27 +1,34 @@
 import React from 'react';
-import {Button, Input, Card, CardBody, CardFooter, CardHeader, CardSubtitle, CardText, CardTitle} from "reactstrap";
+import { Button, Input, Card, CardBody, CardFooter, CardHeader, CardSubtitle, CardText, CardTitle } from "reactstrap";
 import ModalDatasetView from './ModalDatasetView';
+import Link from 'next/link';
 
-import {FaExpandArrowsAlt, FaExternalLinkAlt, FaRegStar, FaStar, FaStarHalfAlt} from "react-icons/fa";
+import { FaExpandArrowsAlt, FaExternalLinkAlt, FaRegStar, FaStar, FaStarHalfAlt } from "react-icons/fa";
 
 class LongView extends React.Component {
 
     state = {
         isOneLineDescription: true,
-        isModalOpen: false
+        isModalOpen: false,
+        isNewDatasetViewOpen: false,
+        dataSet: null
     };
 
     oneLineDescriptionClicked = (e) => {
         e.stopPropagation();
-        let newState = {...this.state};
+        let newState = { ...this.state };
         newState.isOneLineDescription = !newState.isOneLineDescription;
         this.setState(newState);
     };
 
     toggleModal = () => {
         const isModalOpen = !this.state.isModalOpen;
-        this.setState({isModalOpen: isModalOpen});
+        this.setState({ isModalOpen: isModalOpen });
     };
+
+    storeDatasetInfo = () => {
+        window.localStorage.setItem("DATASET_URI", this.props.dataSet.uri);
+    }
 
     render() {
 
@@ -32,7 +39,7 @@ class LongView extends React.Component {
         let title = this.props.dataSet.title;
 
         const keywords = this.props.dataSet.keywords;
-        const theme = this.props.dataSet.theme.join(", ");
+        const theme = this.props.dataSet.theme;
         let harvestingDate = this.props.dataSet.issueDate;
 
         let overallRating = this.props.dataSet.overallRating;
@@ -43,8 +50,8 @@ class LongView extends React.Component {
             rating[Math.floor(overallRating)] = 1;
         let overallRatingStarts = (<span>
             {
-                rating.map((r, idx) => r === 0 ? <FaRegStar key={idx}/> : r === 1 ? <FaStarHalfAlt key={idx}/> :
-                    <FaStar key={idx}/>)
+                rating.map((r, idx) => r === 0 ? <FaRegStar key={idx} /> : r === 1 ? <FaStarHalfAlt key={idx} /> :
+                    <FaStar key={idx} />)
             }
         </span>);
 
@@ -58,34 +65,36 @@ class LongView extends React.Component {
                         uri={this.props.dataSet.uri}
                     />
                 }
-                <Card color="LightCard" style={{flexGrow: '1'}}>
+                <Card color="LightCard" style={{ flexGrow: '1' }}>
                     <CardHeader>
-                        <div style={{display: 'flex', flexFlow: 'row wrap'}}>
-                            <CardTitle style={{display: 'inline', marginLeft: '0.5em'}}>
-                                <label style={{display: 'block'}}>
+                        <div style={{ display: 'flex', flexFlow: 'row wrap' }}>
+                            <CardTitle style={{ display: 'inline', marginLeft: '0.5em' }}>
+                                <label style={{ display: 'block' }}>
                                     <Input addon type="checkbox"
-                                           style={{verticalAlign: 'middle', position: 'relative', marginRight: '2px'}}
-                                           aria-label="Checkbox for following text input"/>
+                                        style={{ verticalAlign: 'middle', position: 'relative', marginRight: '2px' }}
+                                        aria-label="Checkbox for following text input" />
                                     {title}
                                 </label>
                             </CardTitle>
-                            <div style={{flexGrow: '1'}}/>
+                            <div style={{ flexGrow: '1' }} />
                             {overallRatingStarts}
                             <Button size="sm"
-                                    style={{
-                                        background: 'transparent',
-                                        border: 'none',
-                                        color: 'gray',
-                                        marginLeft: '2px'
-                                    }}
-                                    onClick={() => this.toggleModal()}
+                                style={{
+                                    background: 'transparent',
+                                    border: 'none',
+                                    color: 'gray',
+                                    marginLeft: '2px'
+                                }}
+                                onClick={() => this.toggleModal()}
                             >
-                                <FaExpandArrowsAlt/>
+                                <FaExpandArrowsAlt />
                             </Button>
-                            <Button size="sm"
-                                    style={{background: 'transparent', border: 'none', color: 'gray'}}>
-                                <FaExternalLinkAlt/>
-                            </Button>
+                            <Link><a href="./view/datasetView" target="_blank" >
+                                <Button size="sm"
+                                    style={{ background: 'transparent', border: 'none', color: 'gray' }} onClick={this.storeDatasetInfo}>
+
+                                    <FaExternalLinkAlt />
+                                </Button></a></Link>
                         </div>
                     </CardHeader>
                     <CardBody>
@@ -103,14 +112,14 @@ class LongView extends React.Component {
                         </CardText>
                         <CardFooter className="text-muted">
                             <div>
-                                <span style={{marginLeft: '3rem'}}>{theme}</span>
-                                <br/>
+                                <span style={{ marginLeft: '3rem' }}>{theme}</span>
+                                <br />
                                 {
                                     keywords.map((keyword, idx) => {
                                         return (
-                                            <span key={idx} style={{marginLeft: '4px'}}>
-                                {keyword}
-                                </span>
+                                            <span key={idx} style={{ marginLeft: '4px' }}>
+                                                {keyword}
+                                            </span>
                                         );
                                     })
                                 }

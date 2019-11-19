@@ -1,13 +1,13 @@
 import React from 'react'
 import Layout from "../../../components/layout/layout";
-import {Row, Container} from "reactstrap";
+import { Row, Container } from "reactstrap";
 import { withRouter } from 'next/router'
 
-class View  extends React.Component {
+class View extends React.Component {
 
 
     render() {
-        const {router} = this.props;
+        const { router } = this.props;
         console.log(router);
         return (
             <Layout>
@@ -16,7 +16,7 @@ class View  extends React.Component {
                     <Row>
                         Row1
                     </Row>
-                    <br/>
+                    <br />
                     <Row>
                         Row2
                     </Row>
