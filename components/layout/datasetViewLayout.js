@@ -16,7 +16,7 @@ import {
 import { FaRegStar, FaStar, FaStarHalfAlt } from "react-icons/fa";
 import ReactTooltip from 'react-tooltip';
 
-class DatasetView extends React.Component {
+class DatasetViewLayout extends React.Component {
 
     state = {
         dataset: null
@@ -139,4 +139,4 @@ class DatasetView extends React.Component {
     }
 }
 
-export default DatasetView;
+export default DatasetViewLayout;
