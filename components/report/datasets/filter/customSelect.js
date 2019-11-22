@@ -1,9 +1,11 @@
 import React from 'react';
-import {Badge, Button, Spinner} from "reactstrap";
+import { Badge, Button, Spinner } from "reactstrap";
 import AsyncSelect from 'react-select/async';
-import {components} from 'react-select';
+import { components } from 'react-select';
 import createClass from "create-react-class";
 import axios from '../../../../webservice/axios-dataSets';
+import { FaExternalLinkAlt } from 'react-icons/fa';
+import Link from 'next/link';
 
 const Option = createClass({
     render() {
@@ -16,17 +18,33 @@ const Option = createClass({
                         onChange={e => null}
                     />{" "}
                     <label>{this.props.value} </label>
+                    <span>
+                        <Link>
+                            /**TODO: The hyperlink has to be modified after the filterView for ViewOne is changed. */
+                            <a href="http://localhost:3000/view/one" target="_blank">
+                                <Button
+                                    style={{ background: 'transparent', border: 'none', color: 'black' }}
+                                    onClick={() => storeRelatedLicenseInfo(this.props.value)}>
+                                    <FaExternalLinkAlt />
+                                </Button>
+                            </a>
+                        </Link>
+                    </span>
                     {
                         this.props.data.count !== -1 ?
-                            <Badge style={{marginLeft: '2px'}} pill>{this.props.data.count}</Badge>
+                            <Badge style={{ marginLeft: '2px' }} pill>{this.props.data.count}</Badge>
                             :
-                            <Spinner size="sm"/>
+                            <Spinner size="sm" />
                     }
                 </components.Option>
             </div>
         );
     }
 });
+
+const storeRelatedLicenseInfo = (filterValue) => {
+    window.localStorage.setItem("LICENSE_NAME", filterValue);
+}
 
 const MultiValue = props => {
     return (
@@ -41,17 +59,17 @@ class CustomSelect extends React.Component {
     state = {
         inputValue: '',
         isButtonClicked: false,
-        prevInputValue:''
+        prevInputValue: ''
     };
 
     handleInputChange = (newValue) => {
         const inputValue = newValue.replace(/\W/g, '');
-        this.setState({inputValue});
+        this.setState({ inputValue });
         return inputValue;
     };
 
     getOptions = (inputValue) => {
-        this.setState({prevInputValue: inputValue}, () => {
+        this.setState({ prevInputValue: inputValue }, () => {
             const searchKey = this.props.onGetSearchKey();
             const selectedSearchIn = this.props.getSelectedSearchIn();
             axios.get(`/filteredOptions/?filterType=${this.props.title}&searchKey=${searchKey}&searchIn=${selectedSearchIn}&filterText=${inputValue}`)
@@ -59,7 +77,7 @@ class CustomSelect extends React.Component {
                     if (this.state.prevInputValue === inputValue) {
                         let options = response.data.values;
                         this.selectAsync.state.loadedOptions = options;
-                        this.setState({isButtonClicked: false});
+                        this.setState({ isButtonClicked: false });
                         return options;
                     }
                 })
@@ -79,16 +97,16 @@ class CustomSelect extends React.Component {
             this.props.onAppendSelectedValues(selectedFilter);
         } else {
             this.props.onAppendSelectedValues({
-                    title: this.props.title,
-                    uri: this.props.uri,
-                    values: []
-                }
+                title: this.props.title,
+                uri: this.props.uri,
+                values: []
+            }
             );
         }
     };
 
     clickButton = (inputValue) => {
-        this.setState({isButtonClicked: true});
+        this.setState({ isButtonClicked: true });
         this.getOptions(inputValue);
     };
 
@@ -97,13 +115,13 @@ class CustomSelect extends React.Component {
             return this.state.isButtonClicked ?
                 (
                     <div>
-                        <Spinner size="sm"/>
-                        <Button onClick={this.stopSearch} color="link" style={{background:'transparent'}} >X</Button>
+                        <Spinner size="sm" />
+                        <Button onClick={this.stopSearch} color="link" style={{ background: 'transparent' }} >X</Button>
                     </div>
                 ) : (
                     <button type="button"
-                            className="btn btn-primary btn-block"
-                            onClick={() => this.clickButton(props.inputValue)}>
+                        className="btn btn-primary btn-block"
+                        onClick={() => this.clickButton(props.inputValue)}>
                         Search
                     </button>
                 );
@@ -111,15 +129,16 @@ class CustomSelect extends React.Component {
     };
 
     render() {
+        console.log(window.location.href);
         let optionsArr = [];
         if (this.props.selectedValues.length > 0) {
             optionsArr = this.props.selectedValues.map(selectedValue => {
-                    return {
-                        label: selectedValue.value,
-                        value: selectedValue.value,
-                        uri: selectedValue.uri
-                    }
+                return {
+                    label: selectedValue.value,
+                    value: selectedValue.value,
+                    uri: selectedValue.uri
                 }
+            }
             );
         }
         return (
@@ -129,7 +148,7 @@ class CustomSelect extends React.Component {
                         value={optionsArr}
                         closeMenuOnSelect={false}
                         isMulti
-                        components={{Option, MultiValue}}
+                        components={{ Option, MultiValue }}
                         /*options={this.state.options}*/
                         hideSelectedOptions={false}
                         /*menuIsOpen*/
@@ -148,9 +167,8 @@ class CustomSelect extends React.Component {
     }
 
     stopSearch = () => {
-        this.setState({isButtonClicked: false});
+        this.setState({ isButtonClicked: false });
     }
 }
 
 export default CustomSelect;
- 

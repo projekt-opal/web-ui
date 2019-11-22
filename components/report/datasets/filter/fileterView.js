@@ -1,8 +1,8 @@
 import React from 'react';
-import {Button} from "reactstrap";
+import { Button } from "reactstrap";
 import CustomSelect from './customSelect';
 
-import {FaAngleDown, FaAngleRight} from 'react-icons/fa'
+import { FaAngleDown, FaAngleRight } from 'react-icons/fa'
 import TableView from "../table/TableView";
 
 class FilterView extends React.Component {
@@ -13,16 +13,17 @@ class FilterView extends React.Component {
 
     toggleFilterExpanded = () => {
         const isExpanded = !this.state.isExpanded;
-        this.setState({isExpanded: isExpanded});
+        this.setState({ isExpanded: isExpanded });
     };
 
 
     render() {
+        console.log(this.props.filter.title);
         return (
             <div>
-                <div style={{display: 'flex', flexFlow: 'row'}}>
-                    <Button onClick={this.toggleFilterExpanded} style={{flexGrow: 1, textAlign: 'left'}}>
-                        {this.state.isExpanded ? <FaAngleDown/> : <FaAngleRight/>}
+                <div style={{ display: 'flex', flexFlow: 'row' }}>
+                    <Button onClick={this.toggleFilterExpanded} style={{ flexGrow: 1, textAlign: 'left' }}>
+                        {this.state.isExpanded ? <FaAngleDown /> : <FaAngleRight />}
                         {this.props.filter.title}
                     </Button>
                 </div>
