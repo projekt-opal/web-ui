@@ -20,7 +20,7 @@ const Option = createClass({
                     <label>{this.props.value} </label>
                     <span>
                         <Link>
-                            /**TODO: The hyperlink has to be modified after the filterView for ViewOne is changed. */
+                            {/** TODO: The hyperlink has to be modified after the filterView for ViewOne is changed. */}
                             <a href="http://localhost:3000/view/one" target="_blank">
                                 <Button
                                     style={{ background: 'transparent', border: 'none', color: 'black' }}
