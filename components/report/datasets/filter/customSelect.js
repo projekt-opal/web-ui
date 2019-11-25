@@ -11,7 +11,7 @@ const Option = createClass({
     render() {
         return (
             <div>
-                <components.Option {...this.props} key={this.props.data.label}>
+                <components.Option {...this.props} key={this.props.data.value}>
                     <input
                         type="checkbox"
                         checked={this.props.isSelected}
@@ -72,32 +72,43 @@ class CustomSelect extends React.Component {
         this.setState({ prevInputValue: inputValue }, () => {
             const searchKey = this.props.onGetSearchKey();
             const selectedSearchIn = this.props.getSelectedSearchIn();
-            axios.get(`/filteredOptions/?filterType=${this.props.title}&searchKey=${searchKey}&searchIn=${selectedSearchIn}&filterText=${inputValue}`)
-                .then(response => {
-                    if (this.state.prevInputValue === inputValue) {
-                        let options = response.data.values;
-                        this.selectAsync.state.loadedOptions = options;
-                        this.setState({ isButtonClicked: false });
-                        return options;
-                    }
-                })
-                .catch(err => {
-                    return err;
-                });
-        });
+            if (!this.props.filter.isTypeStatic) {
+                axios.get(`/filteredOptions/?filterType=${this.props.filter.title}&searchKey=${searchKey}&searchIn=${selectedSearchIn}&filterText=${inputValue}`)
+                    .then(response => {
+                        if (this.state.prevInputValue === inputValue) {
+                            let options = response.data.values;
+                            this.selectAsync.state.loadedOptions = options;
+                            this.setState({ isButtonClicked: false });
+                            return options;
+                        }
+                    })
+                    .catch(err => {
+                        return err;
+                    });
+            } else {
+                if (this.state.prevInputValue === inputValue) {
+                    const options = this.props.values.filter(v => v.label.toLowerCase().includes(inputValue.toLowerCase()));
+                    this.selectAsync.state.loadedOptions = options;
+                    this.setState({ isButtonClicked: false });
+                    return options;
+
+                }
+            }
+        })
+
     };
 
     changeHandler(values) {
         if (values) {
             const selectedFilter = {
-                title: this.props.title,
+                title: this.props.filter.title,
                 uri: this.props.uri,
                 values: values
             };
             this.props.onAppendSelectedValues(selectedFilter);
         } else {
             this.props.onAppendSelectedValues({
-                title: this.props.title,
+                title: this.props.filter.title,
                 uri: this.props.uri,
                 values: []
             }
@@ -129,7 +140,6 @@ class CustomSelect extends React.Component {
     };
 
     render() {
-        console.log(window.location.href);
         let optionsArr = [];
         if (this.props.selectedValues.length > 0) {
             optionsArr = this.props.selectedValues.map(selectedValue => {

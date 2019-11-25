@@ -18,7 +18,6 @@ class FilterView extends React.Component {
 
 
     render() {
-        console.log(this.props.filter.title);
         return (
             <div>
                 <div style={{ display: 'flex', flexFlow: 'row' }}>
@@ -30,7 +29,7 @@ class FilterView extends React.Component {
                 {
                     this.state.isExpanded &&
                     <CustomSelect
-                        title={this.props.filter.title}
+                        filter={this.props.filter}
                         uri={this.props.filter.uri}
                         values={this.props.filter.values}
                         getSelectedSearchIn={this.props.getSelectedSearchIn}
