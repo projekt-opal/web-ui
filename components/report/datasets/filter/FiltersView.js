@@ -16,7 +16,7 @@ class FiltersView extends React.Component {
     render() {
         return (
             !this.props.filters ? '' :
-                <Container fluid style={{ 'margin-top': '1rem' }}>
+                <Container fluid style={{ 'marginTop': '1rem' }}>
                     <div style={{ 'position': 'sticky', 'top': '1rem' }}>
                         <Row style={{ 'marginTop': '10px' }}>
                             <Col md={{ size: 12 }}>

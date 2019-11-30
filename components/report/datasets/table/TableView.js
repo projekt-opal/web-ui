@@ -4,44 +4,139 @@ import { FaRedo, FaThLarge, FaThList } from "react-icons/fa";
 import ShortView from "../dataset/ShortView";
 import LongView from "../dataset/LongView";
 import FiltersView from '../filter/FiltersView';
+import axios from "../../../../webservice/axios-dataSets";
 
 class TableView extends React.Component {
 
-    state = {
-        dropdownOpen: false,
+    constructor(props) {
+        super(props);
+        this.state = {
+            dropdownOpen: false,
 
-        listOrderByValues: ['title', 'issue date', 'theme'],
-        selectedOrder: 0,
+            listOrderByValues: ['relevance', 'location', 'title', 'issueDate', 'description', 'Theme'],
+            selectedOrder: 0,
+            selectedOrderMobile: 1,
+            selectedOrderLabel: '',
 
-        isLongView: true,
+            isLongView: true,
 
-        isTooltipNumberOfDataSetsOpen: false,
-        isTooltipDataSetsOpen: false,
+            isTooltipNumberOfDataSetsOpen: false,
+            isTooltipDataSetsOpen: false,
 
-        screenWidth: 0,
+            screenWidth: 0,
 
-        isFiltersOpen: false,
-        lastSelectedValues: []
-    };
+            isFiltersOpen: false,
+            lastSelectedValues: [],
 
-    componentDidMount() {
+            dataSets: [],
+            loadingDataSets: true,
+            loadingDataSetsError: false,
+
+            latitude: '',
+            longtitude: '',
+            sortByLocation: true,
+            isLocationAccessDenied: false
+        }
+
+    }
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.dataSets !== this.props.dataSets) {
+            this.setState({
+                dataSets: nextProps.dataSets
+            })
+        }
+    }
+    componentDidMount = () => {
         this.props.fetchDataSets();
         this.props.getNumberOfDataSets();
         this.props.onFetchFilters();
         this.handleWindowSizeChange();
         window.addEventListener('resize', this.handleWindowSizeChange);
+        this.getAccessToPosition(navigator);
     }
 
+    getAccessToPosition = (navigator) => {
+        if (this.state.screenWidth <= 700) {
+            var orderByValue = null;
+            if (navigator && navigator.geolocation) {
+                var getPosition = function (options) {
+                    return new Promise(function (resolve, reject) {
+                        navigator.geolocation.getCurrentPosition(resolve, reject, options);
+                    });
+                }
+                getPosition()
+                    .then((position) => {
+                        orderByValue = "location";
+                        console.log("Position: " + position.coords.latitude, position.coords.longitude);
+                        this.setState({
+                            latitude: position.coords.latitude,
+                            longitude: position.coords.longitude
+                        })
+                        this.sendOrderByValues(orderByValue);
+                    })
+                    .catch((err) => {
+                        console.log(err.message);
+                        if (err.message === "User denied Geolocation") {
+                            orderByValue = "relevance";
+                            this.setState({
+                                isLocationAccessDenied: true
+                            })
+                            this.sendOrderByValues(orderByValue);
+                        }
+                    });
+            }
+        }
+    }
     toggle = () => {
         this.setState({
             dropdownOpen: !this.state.dropdownOpen
         });
     };
 
-    orderByChanged = (idx) => {
-        let newState = { ...this.state };
-        newState.selectedOrder = idx;
-        this.setState(newState);
+    sendOrderByValues = (orderByValue) => {
+        var value;
+        if (orderByValue !== "location") {
+            value = null;
+        }
+        else { //if orderByValue is location
+            this.getAccessToPosition(navigator);
+
+            //value is assumed as object of position; probably can be changed accordingly.
+            value = {
+                latitude: this.state.latitude,
+                longitude: this.state.longitude
+            }
+
+            console.log(value);
+        }
+        /**TODO: order by datasets from backend */
+        let url = `/dataSets/getSubList?orderBy=${orderByValue}&orderByKey=${value}`;
+        console.log(url);
+        // axios.post(url)
+        //     .then(response => {
+        //         const dataSets = response.data;
+        //         this.setState({
+        //             loadingDataSets: false,
+        //             loadingDataSetsError: false,
+        //             dataSets: dataSets
+        //         });
+        //     })
+        //     .catch(err => {
+        //         console.log(err);
+        //         this.setState({
+        //             loadingDataSets: false,
+        //             loadingDataSetsError: true,
+        //             dataSets: []
+        //         });
+        //     });
+    }
+    orderByChanged = (orderByValue, idx) => {
+        this.setState({
+            selectedOrder: idx,
+            selectedOrderMobile: idx
+        })
+        this.sendOrderByValues(orderByValue);
+
     };
 
     largeViewChanged = () => {
@@ -100,6 +195,7 @@ class TableView extends React.Component {
 
     handleWindowSizeChange = () => {
         this.setState({ screenWidth: window.innerWidth });
+
     };
 
     render() {
@@ -134,8 +230,8 @@ class TableView extends React.Component {
                 </div>;
         else if (this.props.loadingDataSets)
             dataSets = <Spinner type="grow" color="primary" />;
-        else if (this.props.dataSets !== null)
-            dataSets = this.props.dataSets.map(
+        else if (this.state.dataSets !== null)
+            dataSets = this.state.dataSets.map(
                 dataSet => (
                     <Col md={{ size: 12 }} key={dataSet.uri}>
                         {this.state.isLongView ? <LongView dataSet={dataSet} /> : <ShortView dataSet={dataSet} />}
@@ -182,21 +278,47 @@ class TableView extends React.Component {
                                             <Button style={{ marginLeft: '2px' }} onClick={this.largeViewChanged}>
                                                 {this.state.isLongView ? <FaThLarge /> : <FaThList />}
                                             </Button>
-                                            <ButtonDropdown style={{ marginLeft: '2px' }} isOpen={this.state.dropdownOpen}
-                                                toggle={this.toggle}>
-                                                <DropdownToggle caret>
-                                                    {this.state.listOrderByValues[this.state.selectedOrder]}
-                                                </DropdownToggle>
-                                                <DropdownMenu>
-                                                    {
-                                                        this.state.listOrderByValues.map((orderBy, idx) => {
-                                                            return <DropdownItem onClick={() => this.orderByChanged(idx)}
-                                                                active={idx === this.state.selectedOrder}
-                                                                key={idx}>{orderBy}</DropdownItem>
-                                                        })
-                                                    }
-                                                </DropdownMenu>
-                                            </ButtonDropdown>
+
+                                            {isMobile ?
+                                                <ButtonDropdown style={{ marginLeft: '2px' }} isOpen={this.state.dropdownOpen}
+                                                    toggle={this.toggle}>
+                                                    <DropdownToggle caret>
+                                                        {
+
+                                                            this.state.isLocationAccessDenied ?
+                                                                this.state.listOrderByValues[this.state.selectedOrder]
+                                                                :
+                                                                this.state.listOrderByValues[this.state.selectedOrderMobile]
+                                                        }
+
+                                                    </DropdownToggle>
+                                                    <DropdownMenu>
+                                                        {
+                                                            this.state.listOrderByValues.map((orderByValue, idx) => {
+                                                                return <DropdownItem onClick={() => this.orderByChanged(orderByValue, idx)}
+                                                                    active={idx === this.state.selectedOrderMobile}
+                                                                    key={idx}>{orderByValue}</DropdownItem>
+                                                            })
+                                                        }
+                                                    </DropdownMenu>
+                                                </ButtonDropdown>
+                                                :
+                                                <ButtonDropdown style={{ marginLeft: '2px' }} isOpen={this.state.dropdownOpen}
+                                                    toggle={this.toggle}>
+                                                    <DropdownToggle caret>
+                                                        {this.state.listOrderByValues[this.state.selectedOrder]}
+                                                    </DropdownToggle>
+                                                    <DropdownMenu>
+                                                        {
+                                                            this.state.listOrderByValues.map((orderByValue, idx) => {
+                                                                return <DropdownItem onClick={() => this.orderByChanged(orderByValue, idx)}
+                                                                    active={idx === this.state.selectedOrder}
+                                                                    key={idx}>{orderByValue}</DropdownItem>
+                                                            })
+                                                        }
+                                                    </DropdownMenu>
+                                                </ButtonDropdown>}
+
                                             {isMobile ? <Button style={{ marginLeft: '2px' }}
                                                 onClick={this.toggleFilters}>Filters</Button> : ''}
                                             {
@@ -219,7 +341,7 @@ class TableView extends React.Component {
                                         <Row style={{ 'paddingTop': '1rem' }}>
                                             <Button className="mx-auto" style={{ marginBottom: '1rem' }}
                                                 onClick={this.props.load10More}
-                                                disabled={this.props.dataSets === null}> Load
+                                                disabled={this.state.dataSets === null}> Load
                                             10 more </Button>
                                         </Row>
                                     </td>
