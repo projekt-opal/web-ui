@@ -12,6 +12,14 @@ class FirstPage extends React.Component {
         selectedSearchIn: [],
         lastSelectedSearchIn: [],
 
+        orderByValue: '',
+        isLocationAccessDenied: false,
+
+        latitude: 0,
+        longitude: 0,
+
+        screenWidth: 0,
+
         dataSets: [],
         loadingDataSets: true,
         loadingDataSetsError: false,
@@ -25,6 +33,11 @@ class FirstPage extends React.Component {
         loadingFiltersError: false,
         selectedFilters: [] //is like [{title: "t", uri: "uri", values: [{value: "v1", uti:"uri_v1"}, {value:"v2", uri:"uri_v2"}]}]
     };
+
+    componentDidMount = () => {
+        this.handleWindowSizeChange();
+        window.addEventListener('resize', this.handleWindowSizeChange);
+    }
 
     setLastSelectedSearchIn = () => {
         this.setState({ lastSelectedSearchIn: this.state.selectedSearchIn });
@@ -180,17 +193,33 @@ class FirstPage extends React.Component {
             });
     };
 
-    fetchDataSets = (/*todo orderBy, */) => {
+    fetchDataSets = () => {
         this.setState({
             loadingDataSets: true,
             loadingDataSetsError: false,
             dataSets: []
         });
+        if (this.state.orderByValue !== "location") {
+            this.setState({
+                latitude: null,
+                longitude: null
+            })
+        }
+        else { //if orderByValue is location
+            console.log(this.state.orderByValue); //should be relevance
+            this.getAccessToPosition(navigator);
+
+            //get the latitude and longitude
+            console.log(this.state.latitude + " " + this.state.longitude);
+        }
+
+        /**TODO: API needs to be changed according to the value of OrderBy using 'orderByValue' */
         let url = `/dataSets/getSubList?searchKey=${this.state.searchKey}&searchIn=${this.state.selectedSearchIn}`;
+        //let url = `/dataSets/getSubList?searchKey=${orderByValue}&searchIn=${this.state.selectedSearchIn}`
         axios.post(url, this.state.selectedFilters)
             .then(response => {
                 const dataSets = response.data;
-                console.log("Response: " + response.data);
+                console.log("Response: " + dataSets);
                 this.setState({
                     loadingDataSets: false,
                     loadingDataSetsError: false,
@@ -207,14 +236,51 @@ class FirstPage extends React.Component {
                     dataSets: []
                 });
             });
-
-
-
     };
 
     getSelectedSearchIn = () => {
         return this.state.selectedSearchIn;
     };
+
+    handleWindowSizeChange = () => {
+        if (window.innerWidth <= 700) {
+            this.getAccessToPosition(navigator);
+        }
+    };
+
+    getAccessToPosition = (navigator) => {
+        if (navigator && navigator.geolocation) {
+            var getPosition = function (options) {
+                return new Promise(function (resolve, reject) {
+                    navigator.geolocation.getCurrentPosition(resolve, reject, options);
+                });
+            }
+            getPosition()
+                .then((position) => {
+                    console.log("Position: " + position.coords.latitude, position.coords.longitude);
+                    this.setState({
+                        orderByValue: "location",
+                        latitude: position.coords.latitude,
+                        longitude: position.coords.longitude
+                    })
+                    this.fetchDataSets();
+                })
+                .catch((err) => {
+                    console.log(err.message);
+                    if (err.message === "User denied Geolocation") {
+                        this.setState({
+                            orderByValue: "relevance",
+                            isLocationAccessDenied: true
+                        })
+                        this.fetchDataSets();
+                    }
+                });
+        }
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.handleWindowSizeChange);
+    }
 
     render() {
         return (
@@ -254,6 +320,7 @@ class FirstPage extends React.Component {
                         loadingFilters={this.state.loadingFilters}
                         loadingFiltersError={this.state.loadingFiltersError}
                         getSelectedSearchIn={() => this.getSelectedSearchIn()}
+                        isLocationAccessDenied={this.state.isLocationAccessDenied}
                     />
                 </Row>
             </Container>
