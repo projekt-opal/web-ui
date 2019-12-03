@@ -12,6 +12,14 @@ class FirstPage extends React.Component {
         selectedSearchIn: [],
         lastSelectedSearchIn: [],
 
+        orderByValue: '',
+        isLocationAccessDenied: false,
+
+        latitude: 0,
+        longitude: 0,
+
+        screenWidth: 0,
+
         dataSets: [],
         loadingDataSets: true,
         loadingDataSetsError: false,
@@ -25,6 +33,11 @@ class FirstPage extends React.Component {
         loadingFiltersError: false,
         selectedFilters: [] //is like [{title: "t", uri: "uri", values: [{value: "v1", uti:"uri_v1"}, {value:"v2", uri:"uri_v2"}]}]
     };
+
+    componentDidMount = () => {
+        this.handleWindowSizeChange();
+        window.addEventListener('resize', this.handleWindowSizeChange);
+    }
 
     setLastSelectedSearchIn = () => {
         this.setState({ lastSelectedSearchIn: this.state.selectedSearchIn });
@@ -57,7 +70,19 @@ class FirstPage extends React.Component {
         }, () => {
             axios.get(`/filters/list?searchKey=${this.state.searchKey}&searchIn=${this.state.selectedSearchIn}`)
                 .then(response => {
-                    const filters = response.data;
+                    /**TODO: Fields for filters (externalLink and isTypeStatic) should be fetched from the backend. */
+                    const filters = response.data.map(filterName => {
+                        if (filterName.title === "Theme") {
+                            filterName.externalLink = false;
+                            filterName.isTypeStatic = true;
+
+                        }
+                        else {
+                            filterName.externalLink = true;
+                            filterName.isTypeStatic = false;
+                        }
+                        return filterName;
+                    })
                     this.setState(
                         {
                             filters: filters,
@@ -168,17 +193,33 @@ class FirstPage extends React.Component {
             });
     };
 
-    fetchDataSets = (/*todo orderBy, */) => {
+    fetchDataSets = (orderByValue) => {
         this.setState({
             loadingDataSets: true,
             loadingDataSetsError: false,
             dataSets: []
         });
+        if (orderByValue !== "location") {
+            this.setState({
+                latitude: null,
+                longitude: null
+            })
+        }
+        else {
+            //if orderByValue is location
+            this.getAccessToPosition(navigator);
+
+            //get the latitude and longitude
+            console.log(this.state.latitude + " " + this.state.longitude);
+        }
+
+        /**TODO: API needs to be changed according to the value of OrderBy using 'orderByValue' */
         let url = `/dataSets/getSubList?searchKey=${this.state.searchKey}&searchIn=${this.state.selectedSearchIn}`;
+        //let url = `/dataSets/getSubList?searchKey=${orderByValue}&searchIn=${this.state.selectedSearchIn}`
         axios.post(url, this.state.selectedFilters)
             .then(response => {
                 const dataSets = response.data;
-                console.log("Response: " + response.data);
+                console.log("Response: " + dataSets);
                 this.setState({
                     loadingDataSets: false,
                     loadingDataSetsError: false,
@@ -195,14 +236,59 @@ class FirstPage extends React.Component {
                     dataSets: []
                 });
             });
-
-
-
     };
 
     getSelectedSearchIn = () => {
         return this.state.selectedSearchIn;
     };
+
+    handleWindowSizeChange = () => {
+        if (window.innerWidth <= 700) {
+            this.getAccessToPosition(navigator);
+        }
+        else {
+            const orderByValue = "relevance";
+            this.fetchDataSets(orderByValue);
+        }
+    };
+
+    getAccessToPosition = (navigator) => {
+        if (navigator && navigator.geolocation) {
+            var getPosition = function (options) {
+                return new Promise(function (resolve, reject) {
+                    navigator.geolocation.getCurrentPosition(resolve, reject, options);
+                });
+            }
+            getPosition()
+                .then((position) => {
+                    console.log("Position: " + position.coords.latitude, position.coords.longitude);
+                    var orderByValue = "location";
+                    this.setState({
+                        latitude: position.coords.latitude,
+                        longitude: position.coords.longitude
+                    })
+                    this.fetchDataSets(orderByValue);
+                })
+                .catch((err) => {
+                    console.log(err.message);
+                    if (err.message === "User denied Geolocation") {
+                        var orderByValue = "relevance";
+                        this.setState({
+                            isLocationAccessDenied: true
+                        })
+                        this.fetchDataSets(orderByValue);
+                    }
+                });
+        }
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.handleWindowSizeChange);
+    }
+
+    getOrderByValue = (orderByValue) => {
+        this.fetchDataSets(orderByValue);
+    }
 
     render() {
         return (
@@ -242,6 +328,8 @@ class FirstPage extends React.Component {
                         loadingFilters={this.state.loadingFilters}
                         loadingFiltersError={this.state.loadingFiltersError}
                         getSelectedSearchIn={() => this.getSelectedSearchIn()}
+                        isLocationAccessDenied={this.state.isLocationAccessDenied}
+                        callBackForOrderByValue={(orderByValue) => this.getOrderByValue(orderByValue)}
                     />
                 </Row>
             </Container>

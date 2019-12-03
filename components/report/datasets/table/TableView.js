@@ -4,44 +4,57 @@ import { FaRedo, FaThLarge, FaThList } from "react-icons/fa";
 import ShortView from "../dataset/ShortView";
 import LongView from "../dataset/LongView";
 import FiltersView from '../filter/FiltersView';
+import axios from "../../../../webservice/axios-dataSets";
 
 class TableView extends React.Component {
 
-    state = {
-        dropdownOpen: false,
+    constructor(props) {
+        super(props);
+        this.state = {
+            dropdownOpen: false,
 
-        listOrderByValues: ['title', 'issue date', 'theme'],
-        selectedOrder: 0,
+            listOrderByValues: ['relevance', 'location', 'title', 'issueDate', 'description', 'Theme'],
+            selectedOrder: 0,
+            selectedOrderMobile: 1,
+            selectedOrderLabel: '',
 
-        isLongView: true,
+            isLongView: true,
 
-        isTooltipNumberOfDataSetsOpen: false,
-        isTooltipDataSetsOpen: false,
+            isTooltipNumberOfDataSetsOpen: false,
+            isTooltipDataSetsOpen: false,
 
-        screenWidth: 0,
+            screenWidth: 0,
 
-        isFiltersOpen: false,
-        lastSelectedValues: []
-    };
+            isFiltersOpen: false,
+            lastSelectedValues: [],
 
-    componentDidMount() {
+            dataSets: [],
+            loadingDataSets: true,
+            loadingDataSetsError: false,
+        }
+
+    }
+    componentDidMount = () => {
         this.props.fetchDataSets();
         this.props.getNumberOfDataSets();
         this.props.onFetchFilters();
         this.handleWindowSizeChange();
         window.addEventListener('resize', this.handleWindowSizeChange);
     }
-
     toggle = () => {
         this.setState({
             dropdownOpen: !this.state.dropdownOpen
         });
     };
 
-    orderByChanged = (idx) => {
-        let newState = { ...this.state };
-        newState.selectedOrder = idx;
-        this.setState(newState);
+    orderByChanged = (orderByValue, idx) => {
+        console.log("Order by value from Table View(child): " + orderByValue);
+        this.setState({
+            selectedOrder: idx,
+            selectedOrderMobile: idx
+        })
+        this.props.callBackForOrderByValue(orderByValue)
+
     };
 
     largeViewChanged = () => {
@@ -100,6 +113,7 @@ class TableView extends React.Component {
 
     handleWindowSizeChange = () => {
         this.setState({ screenWidth: window.innerWidth });
+
     };
 
     render() {
@@ -182,21 +196,46 @@ class TableView extends React.Component {
                                             <Button style={{ marginLeft: '2px' }} onClick={this.largeViewChanged}>
                                                 {this.state.isLongView ? <FaThLarge /> : <FaThList />}
                                             </Button>
-                                            <ButtonDropdown style={{ marginLeft: '2px' }} isOpen={this.state.dropdownOpen}
-                                                toggle={this.toggle}>
-                                                <DropdownToggle caret>
-                                                    {this.state.listOrderByValues[this.state.selectedOrder]}
-                                                </DropdownToggle>
-                                                <DropdownMenu>
-                                                    {
-                                                        this.state.listOrderByValues.map((orderBy, idx) => {
-                                                            return <DropdownItem onClick={() => this.orderByChanged(idx)}
-                                                                active={idx === this.state.selectedOrder}
-                                                                key={idx}>{orderBy}</DropdownItem>
-                                                        })
-                                                    }
-                                                </DropdownMenu>
-                                            </ButtonDropdown>
+
+                                            {isMobile ?
+                                                <ButtonDropdown style={{ marginLeft: '2px' }} isOpen={this.state.dropdownOpen}
+                                                    toggle={this.toggle}>
+                                                    <DropdownToggle caret>
+                                                        {
+                                                            this.props.isLocationAccessDenied ?
+                                                                this.state.listOrderByValues[this.state.selectedOrder]
+                                                                :
+                                                                this.state.listOrderByValues[this.state.selectedOrderMobile]
+                                                        }
+
+                                                    </DropdownToggle>
+                                                    <DropdownMenu>
+                                                        {
+                                                            this.state.listOrderByValues.map((orderByValue, idx) => {
+                                                                return <DropdownItem onClick={() => this.orderByChanged(orderByValue, idx)}
+                                                                    active={idx === this.state.selectedOrderMobile}
+                                                                    key={idx}>{orderByValue}</DropdownItem>
+                                                            })
+                                                        }
+                                                    </DropdownMenu>
+                                                </ButtonDropdown>
+                                                :
+                                                <ButtonDropdown style={{ marginLeft: '2px' }} isOpen={this.state.dropdownOpen}
+                                                    toggle={this.toggle}>
+                                                    <DropdownToggle caret>
+                                                        {this.state.listOrderByValues[this.state.selectedOrder]}
+                                                    </DropdownToggle>
+                                                    <DropdownMenu>
+                                                        {
+                                                            this.state.listOrderByValues.map((orderByValue, idx) => {
+                                                                return <DropdownItem onClick={() => this.orderByChanged(orderByValue, idx)}
+                                                                    active={idx === this.state.selectedOrder}
+                                                                    key={idx}>{orderByValue}</DropdownItem>
+                                                            })
+                                                        }
+                                                    </DropdownMenu>
+                                                </ButtonDropdown>}
+
                                             {isMobile ? <Button style={{ marginLeft: '2px' }}
                                                 onClick={this.toggleFilters}>Filters</Button> : ''}
                                             {
