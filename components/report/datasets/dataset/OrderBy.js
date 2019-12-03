@@ -1,14 +1,20 @@
 import React from 'react';
 import {
     Button,
-    ButtonDropdown, Container,
+    ButtonDropdown,
+    Container,
     DropdownItem,
     DropdownMenu,
-    DropdownToggle, Form,
-    Input, Label,
-    Modal, ModalBody,
-    ModalHeader, Row, Col,
-    FormGroup, ModalFooter
+    DropdownToggle,
+    Form,
+    FormGroup,
+    Input,
+    Label,
+    Modal,
+    ModalBody,
+    ModalFooter,
+    ModalHeader,
+    Row
 } from "reactstrap";
 import {FaSearchLocation} from 'react-icons/fa'
 
@@ -26,7 +32,7 @@ export default class OrderBy extends React.Component {
     };
 
     componentDidMount() {
-        //todo if it is cellphone, then select Location as order by
+        this.orderByChanged(1);
     }
 
     toggle = () => {

@@ -158,7 +158,7 @@ class TableView extends React.Component {
                     />
         ;
 
-        const isMobile = this.state.screenWidth <= 700;
+        const isMobile = this.state.screenWidth <= 800;
 
         return (
             <Col md='12'>
@@ -178,6 +178,7 @@ class TableView extends React.Component {
 
                                         <OrderBy
                                             orderByChanged={(orderByValue, idx) => this.orderByChanged(orderByValue, idx)}
+                                            isMobile={isMobile}
                                         />
 
                                         {isMobile ? <Button style={{marginLeft: '2px'}}
