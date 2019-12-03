@@ -1,10 +1,9 @@
 import React from 'react';
-import { Button, ButtonDropdown, Col, DropdownItem, DropdownMenu, DropdownToggle, Row, Spinner, Table } from "reactstrap";
-import { FaRedo, FaThLarge, FaThList } from "react-icons/fa";
+import {Button, ButtonDropdown, Col, DropdownItem, DropdownMenu, DropdownToggle, Row, Spinner, Table} from "reactstrap";
+import {FaRedo, FaThLarge, FaThList} from "react-icons/fa";
 import ShortView from "../dataset/ShortView";
 import LongView from "../dataset/LongView";
 import FiltersView from '../filter/FiltersView';
-import axios from "../../../../webservice/axios-dataSets";
 
 class TableView extends React.Component {
 
@@ -26,11 +25,7 @@ class TableView extends React.Component {
             screenWidth: 0,
 
             isFiltersOpen: false,
-            lastSelectedValues: [],
-
-            dataSets: [],
-            loadingDataSets: true,
-            loadingDataSetsError: false,
+            lastSelectedValues: []
         }
 
     }
@@ -192,7 +187,6 @@ class TableView extends React.Component {
                                         <div style={{ display: 'flex', flexFlow: 'row wrap' }}>
                                             <span> {numberOfResult} </span>
                                             <div style={{ flexGrow: 1 }} />
-                                            <Button style={{ marginLeft: '2px' }}> Export</Button>
                                             <Button style={{ marginLeft: '2px' }} onClick={this.largeViewChanged}>
                                                 {this.state.isLongView ? <FaThLarge /> : <FaThList />}
                                             </Button>

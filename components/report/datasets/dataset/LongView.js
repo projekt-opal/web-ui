@@ -69,12 +69,7 @@ class LongView extends React.Component {
                     <CardHeader>
                         <div style={{ display: 'flex', flexFlow: 'row wrap' }}>
                             <CardTitle style={{ display: 'inline', marginLeft: '0.5em' }}>
-                                <label style={{ display: 'block' }}>
-                                    <Input addon type="checkbox"
-                                        style={{ verticalAlign: 'middle', position: 'relative', marginRight: '2px' }}
-                                        aria-label="Checkbox for following text input" />
                                     {title}
-                                </label>
                             </CardTitle>
                             <div style={{ flexGrow: '1' }} />
                             {overallRatingStarts}
