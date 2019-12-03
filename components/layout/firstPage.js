@@ -193,20 +193,20 @@ class FirstPage extends React.Component {
             });
     };
 
-    fetchDataSets = () => {
+    fetchDataSets = (orderByValue) => {
         this.setState({
             loadingDataSets: true,
             loadingDataSetsError: false,
             dataSets: []
         });
-        if (this.state.orderByValue !== "location") {
+        if (orderByValue !== "location") {
             this.setState({
                 latitude: null,
                 longitude: null
             })
         }
-        else { //if orderByValue is location
-            console.log(this.state.orderByValue); //should be relevance
+        else {
+            //if orderByValue is location
             this.getAccessToPosition(navigator);
 
             //get the latitude and longitude
@@ -246,6 +246,10 @@ class FirstPage extends React.Component {
         if (window.innerWidth <= 700) {
             this.getAccessToPosition(navigator);
         }
+        else {
+            const orderByValue = "relevance";
+            this.fetchDataSets(orderByValue);
+        }
     };
 
     getAccessToPosition = (navigator) => {
@@ -258,21 +262,21 @@ class FirstPage extends React.Component {
             getPosition()
                 .then((position) => {
                     console.log("Position: " + position.coords.latitude, position.coords.longitude);
+                    var orderByValue = "location";
                     this.setState({
-                        orderByValue: "location",
                         latitude: position.coords.latitude,
                         longitude: position.coords.longitude
                     })
-                    this.fetchDataSets();
+                    this.fetchDataSets(orderByValue);
                 })
                 .catch((err) => {
                     console.log(err.message);
                     if (err.message === "User denied Geolocation") {
+                        var orderByValue = "relevance";
                         this.setState({
-                            orderByValue: "relevance",
                             isLocationAccessDenied: true
                         })
-                        this.fetchDataSets();
+                        this.fetchDataSets(orderByValue);
                     }
                 });
         }
@@ -280,6 +284,10 @@ class FirstPage extends React.Component {
 
     componentWillUnmount() {
         window.removeEventListener('resize', this.handleWindowSizeChange);
+    }
+
+    getOrderByValue = (orderByValue) => {
+        this.fetchDataSets(orderByValue);
     }
 
     render() {
@@ -321,6 +329,7 @@ class FirstPage extends React.Component {
                         loadingFiltersError={this.state.loadingFiltersError}
                         getSelectedSearchIn={() => this.getSelectedSearchIn()}
                         isLocationAccessDenied={this.state.isLocationAccessDenied}
+                        callBackForOrderByValue={(orderByValue) => this.getOrderByValue(orderByValue)}
                     />
                 </Row>
             </Container>

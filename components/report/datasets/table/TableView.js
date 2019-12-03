@@ -47,12 +47,13 @@ class TableView extends React.Component {
         });
     };
 
-    orderByChanged = (idx) => {
+    orderByChanged = (orderByValue, idx) => {
+        console.log("Order by value from Table View(child): " + orderByValue);
         this.setState({
             selectedOrder: idx,
             selectedOrderMobile: idx
         })
-        this.props.fetchDataSets();
+        this.props.callBackForOrderByValue(orderByValue)
 
     };
 
@@ -211,7 +212,7 @@ class TableView extends React.Component {
                                                     <DropdownMenu>
                                                         {
                                                             this.state.listOrderByValues.map((orderByValue, idx) => {
-                                                                return <DropdownItem onClick={() => this.orderByChanged(idx)}
+                                                                return <DropdownItem onClick={() => this.orderByChanged(orderByValue, idx)}
                                                                     active={idx === this.state.selectedOrderMobile}
                                                                     key={idx}>{orderByValue}</DropdownItem>
                                                             })
@@ -227,7 +228,7 @@ class TableView extends React.Component {
                                                     <DropdownMenu>
                                                         {
                                                             this.state.listOrderByValues.map((orderByValue, idx) => {
-                                                                return <DropdownItem onClick={() => this.orderByChanged(idx)}
+                                                                return <DropdownItem onClick={() => this.orderByChanged(orderByValue, idx)}
                                                                     active={idx === this.state.selectedOrder}
                                                                     key={idx}>{orderByValue}</DropdownItem>
                                                             })
