@@ -7,23 +7,19 @@ import FiltersView from '../filter/FiltersView';
 import OrderBy from "../dataset/OrderBy";
 
 class TableView extends React.Component {
+    state = {
+        isLongView: true,
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            isLongView: true,
+        isTooltipNumberOfDataSetsOpen: false,
+        isTooltipDataSetsOpen: false,
 
-            isTooltipNumberOfDataSetsOpen: false,
-            isTooltipDataSetsOpen: false,
+        screenWidth: 0,
 
-            screenWidth: 0,
+        isFiltersOpen: false,
+        lastSelectedValues: []
+    };
 
-            isFiltersOpen: false,
-            lastSelectedValues: []
-        }
-
-    }
-    componentDidMount = () => {
+    componentDidMount() {
         this.props.fetchDataSets();
         this.props.getNumberOfDataSets();
         this.props.onFetchFilters();
@@ -42,13 +38,13 @@ class TableView extends React.Component {
     };
 
     largeViewChanged = () => {
-        let newState = { ...this.state };
+        let newState = {...this.state};
         newState.isLongView = !newState.isLongView;
         this.setState(newState);
     };
 
     applyFilters = () => {
-        this.setState({ lastSelectedValues: this.props.selectedFilters });
+        this.setState({lastSelectedValues: this.props.selectedFilters});
         this.props.fetchDataSets();
         this.props.getNumberOfDataSets();
     };
@@ -88,7 +84,7 @@ class TableView extends React.Component {
         if (this.state.isFiltersOpen) {
             this.props.onReplaceSelectedFilters(this.state.lastSelectedValues);
         }
-        this.setState({ isFiltersOpen: !this.state.isFiltersOpen });
+        this.setState({isFiltersOpen: !this.state.isFiltersOpen});
     };
 
     componentWillUnmount() {
@@ -96,7 +92,7 @@ class TableView extends React.Component {
     }
 
     handleWindowSizeChange = () => {
-        this.setState({ screenWidth: window.innerWidth });
+        this.setState({screenWidth: window.innerWidth});
 
     };
 
@@ -106,19 +102,19 @@ class TableView extends React.Component {
             numberOfResult =
                 <div>
                     <Button onClick={this.reloadNumberOfDataSets}><FaRedo
-                        id="TooltipNumberOfDataSetsFetchError" /></Button>
-                    <span style={{ marginLeft: '3px', fontSize: '8px', fontWeight: '500' }}>Error in Fetching number of datasets from the server</span>
+                        id="TooltipNumberOfDataSetsFetchError"/></Button>
+                    <span style={{marginLeft: '3px', fontSize: '8px', fontWeight: '500'}}>Error in Fetching number of datasets from the server</span>
                 </div>;
         else if (this.props.loadingNumberOfDataSets)
-            numberOfResult = <Spinner color="primary" />;
+            numberOfResult = <Spinner color="primary"/>;
         else if (this.props.numberOfDataSets !== null)
             if (this.props.numberOfDataSets === -1)
                 numberOfResult =
                     <div>
                         <Button onClick={this.reloadNumberOfDataSets}><FaRedo
-                            id="TooltipNumberOfDataSetsInternalServerError" /></Button>
+                            id="TooltipNumberOfDataSetsInternalServerError"/></Button>
                         <span
-                            style={{ marginLeft: '3px', fontSize: '8px', fontWeight: '500' }}>Internal Server Error</span>
+                            style={{marginLeft: '3px', fontSize: '8px', fontWeight: '500'}}>Internal Server Error</span>
                     </div>;
             else
                 numberOfResult = this.props.numberOfDataSets;
@@ -127,29 +123,29 @@ class TableView extends React.Component {
         if (this.props.loadingDataSetsError)
             dataSets =
                 <div>
-                    <Button onClick={this.reloadDataSets}><FaRedo id="ToolTipDataSets" /></Button>
-                    <span style={{ marginLeft: '3px', fontSize: '8px', fontWeight: '500' }}>Error in Fetching dataSets from the server</span>
+                    <Button onClick={this.reloadDataSets}><FaRedo id="ToolTipDataSets"/></Button>
+                    <span style={{marginLeft: '3px', fontSize: '8px', fontWeight: '500'}}>Error in Fetching dataSets from the server</span>
                 </div>;
         else if (this.props.loadingDataSets)
-            dataSets = <Spinner type="grow" color="primary" />;
+            dataSets = <Spinner type="grow" color="primary"/>;
         else if (this.props.dataSets !== null)
             dataSets = this.props.dataSets.map(
                 dataSet => (
-                    <Col md={{ size: 12 }} key={dataSet.uri}>
-                        {this.state.isLongView ? <LongView dataSet={dataSet} /> : <ShortView dataSet={dataSet} />}
+                    <Col md={{size: 12}} key={dataSet.uri}>
+                        {this.state.isLongView ? <LongView dataSet={dataSet}/> : <ShortView dataSet={dataSet}/>}
                     </Col>
                 )
             );
 
         const filtersView =
             this.props.loadingFilters ?
-                <Spinner color="primary" /> :
+                <Spinner color="primary"/> :
                 this.props.loadingFiltersError ?
                     <div>
                         <Button onClick={this.reloadFilters}><FaRedo
-                            id="TooltipFiltersInternalServerError" /></Button>
+                            id="TooltipFiltersInternalServerError"/></Button>
                         <span
-                            style={{ marginLeft: '3px', fontSize: '8px', fontWeight: '500' }}>Internal Server Error</span>
+                            style={{marginLeft: '3px', fontSize: '8px', fontWeight: '500'}}>Internal Server Error</span>
                     </div>
                     :
                     <FiltersView
@@ -160,7 +156,7 @@ class TableView extends React.Component {
                         getSelectedSearchIn={this.props.getSelectedSearchIn}
                         applyFilters={this.applyFilters}
                     />
-            ;
+        ;
 
         const isMobile = this.state.screenWidth <= 700;
 
@@ -181,7 +177,7 @@ class TableView extends React.Component {
                                         </Button>
 
                                         <OrderBy
-                                            orderByChanged ={(orderByValue, idx) => this.orderByChanged(orderByValue, idx)}
+                                            orderByChanged={(orderByValue, idx) => this.orderByChanged(orderByValue, idx)}
                                         />
 
                                         {isMobile ? <Button style={{marginLeft: '2px'}}
