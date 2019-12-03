@@ -1,22 +1,16 @@
 import React from 'react';
-import {Button, ButtonDropdown, Col, DropdownItem, DropdownMenu, DropdownToggle, Row, Spinner, Table} from "reactstrap";
+import {Button, Col, Row, Spinner, Table} from "reactstrap";
 import {FaRedo, FaThLarge, FaThList} from "react-icons/fa";
 import ShortView from "../dataset/ShortView";
 import LongView from "../dataset/LongView";
 import FiltersView from '../filter/FiltersView';
+import OrderBy from "../dataset/OrderBy";
 
 class TableView extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            dropdownOpen: false,
-
-            listOrderByValues: ['relevance', 'location', 'title', 'issueDate', 'description', 'Theme'],
-            selectedOrder: 0,
-            selectedOrderMobile: 1,
-            selectedOrderLabel: '',
-
             isLongView: true,
 
             isTooltipNumberOfDataSetsOpen: false,
@@ -36,11 +30,6 @@ class TableView extends React.Component {
         this.handleWindowSizeChange();
         window.addEventListener('resize', this.handleWindowSizeChange);
     }
-    toggle = () => {
-        this.setState({
-            dropdownOpen: !this.state.dropdownOpen
-        });
-    };
 
     orderByChanged = (orderByValue, idx) => {
         console.log("Order by value from Table View(child): " + orderByValue);
@@ -178,93 +167,58 @@ class TableView extends React.Component {
         return (
             <Col md='12'>
                 <Row>
-                    <Col xs={isMobile ? { size: 12 } : { size: 9 }} style={{ 'marginTop': '1rem' }}>
+                    <Col xs={isMobile ? {size: 12} : {size: 9}} style={{'marginTop': '1rem'}}>
 
-                        <Table hover bordered responsive striped style={{ display: 'block' }}>
+                        <Table hover bordered responsive striped style={{display: 'block'}}>
                             <thead>
-                                <tr>
-                                    <th style={{ width: '1%' }}>
-                                        <div style={{ display: 'flex', flexFlow: 'row wrap' }}>
-                                            <span> {numberOfResult} </span>
-                                            <div style={{ flexGrow: 1 }} />
-                                            <Button style={{ marginLeft: '2px' }} onClick={this.largeViewChanged}>
-                                                {this.state.isLongView ? <FaThLarge /> : <FaThList />}
-                                            </Button>
+                            <tr>
+                                <th style={{width: '1%'}}>
+                                    <div style={{display: 'flex', flexFlow: 'row wrap'}}>
+                                        <span> {numberOfResult} </span>
+                                        <div style={{flexGrow: 1}}/>
+                                        <Button style={{marginLeft: '2px'}} onClick={this.largeViewChanged}>
+                                            {this.state.isLongView ? <FaThLarge/> : <FaThList/>}
+                                        </Button>
 
-                                            {isMobile ?
-                                                <ButtonDropdown style={{ marginLeft: '2px' }} isOpen={this.state.dropdownOpen}
-                                                    toggle={this.toggle}>
-                                                    <DropdownToggle caret>
-                                                        {
-                                                            this.props.isLocationAccessDenied ?
-                                                                this.state.listOrderByValues[this.state.selectedOrder]
-                                                                :
-                                                                this.state.listOrderByValues[this.state.selectedOrderMobile]
-                                                        }
+                                        <OrderBy
+                                            orderByChanged ={(orderByValue, idx) => this.orderByChanged(orderByValue, idx)}
+                                        />
 
-                                                    </DropdownToggle>
-                                                    <DropdownMenu>
-                                                        {
-                                                            this.state.listOrderByValues.map((orderByValue, idx) => {
-                                                                return <DropdownItem onClick={() => this.orderByChanged(orderByValue, idx)}
-                                                                    active={idx === this.state.selectedOrderMobile}
-                                                                    key={idx}>{orderByValue}</DropdownItem>
-                                                            })
-                                                        }
-                                                    </DropdownMenu>
-                                                </ButtonDropdown>
-                                                :
-                                                <ButtonDropdown style={{ marginLeft: '2px' }} isOpen={this.state.dropdownOpen}
-                                                    toggle={this.toggle}>
-                                                    <DropdownToggle caret>
-                                                        {this.state.listOrderByValues[this.state.selectedOrder]}
-                                                    </DropdownToggle>
-                                                    <DropdownMenu>
-                                                        {
-                                                            this.state.listOrderByValues.map((orderByValue, idx) => {
-                                                                return <DropdownItem onClick={() => this.orderByChanged(orderByValue, idx)}
-                                                                    active={idx === this.state.selectedOrder}
-                                                                    key={idx}>{orderByValue}</DropdownItem>
-                                                            })
-                                                        }
-                                                    </DropdownMenu>
-                                                </ButtonDropdown>}
+                                        {isMobile ? <Button style={{marginLeft: '2px'}}
+                                                            onClick={this.toggleFilters}>Filters</Button> : ''}
+                                        {
+                                            this.state.isFiltersOpen && isMobile ? filtersView : ''}
+                                    </div>
 
-                                            {isMobile ? <Button style={{ marginLeft: '2px' }}
-                                                onClick={this.toggleFilters}>Filters</Button> : ''}
-                                            {
-                                                this.state.isFiltersOpen && isMobile ? filtersView : ''}
-                                        </div>
-
-                                    </th>
-                                </tr>
+                                </th>
+                            </tr>
                             </thead>
                             <tbody style={isMobile ? {
-                                display: 'block',
-                                height: '300px',
-                                'overflowX': 'hidden',
-                                width: '100%'
-                            } :
-                                { display: 'block', 'overflowX': 'hidden', width: '100%' }}>
-                                <tr style={{ display: 'block' }}>
-                                    <td style={{ display: 'block' }}>
-                                        {dataSets}
-                                        <Row style={{ 'paddingTop': '1rem' }}>
-                                            <Button className="mx-auto" style={{ marginBottom: '1rem' }}
+                                    display: 'block',
+                                    height: '300px',
+                                    'overflowX': 'hidden',
+                                    width: '100%'
+                                } :
+                                {display: 'block', 'overflowX': 'hidden', width: '100%'}}>
+                            <tr style={{display: 'block'}}>
+                                <td style={{display: 'block'}}>
+                                    {dataSets}
+                                    <Row style={{'paddingTop': '1rem'}}>
+                                        <Button className="mx-auto" style={{marginBottom: '1rem'}}
                                                 onClick={this.props.load10More}
                                                 disabled={this.props.dataSets === null}> Load
                                             10 more </Button>
-                                        </Row>
-                                    </td>
-                                </tr>
+                                    </Row>
+                                </td>
+                            </tr>
                             </tbody>
                         </Table>
 
                     </Col>
                     {
                         !isMobile &&
-                        <Col md={{ size: 3 }}>
-                            <div style={{ position: 'sticky', top: '2rem' }}>
+                        <Col md={{size: 3}}>
+                            <div style={{position: 'sticky', top: '2rem'}}>
                                 {filtersView}
                             </div>
                         </Col>

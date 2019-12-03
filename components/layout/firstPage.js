@@ -199,19 +199,6 @@ class FirstPage extends React.Component {
             loadingDataSetsError: false,
             dataSets: []
         });
-        if (orderByValue !== "location") {
-            this.setState({
-                latitude: null,
-                longitude: null
-            })
-        }
-        else {
-            //if orderByValue is location
-            this.getAccessToPosition(navigator);
-
-            //get the latitude and longitude
-            console.log(this.state.latitude + " " + this.state.longitude);
-        }
 
         /**TODO: API needs to be changed according to the value of OrderBy using 'orderByValue' */
         let url = `/dataSets/getSubList?searchKey=${this.state.searchKey}&searchIn=${this.state.selectedSearchIn}`;
@@ -243,44 +230,14 @@ class FirstPage extends React.Component {
     };
 
     handleWindowSizeChange = () => {
-        if (window.innerWidth <= 700) {
-            this.getAccessToPosition(navigator);
-        }
-        else {
-            const orderByValue = "relevance";
-            this.fetchDataSets(orderByValue);
-        }
+        // if (window.innerWidth <= 700) {
+        //     this.getAccessToPosition(navigator);
+        // }
+        // else {
+        //     const orderByValue = "relevance";
+        //     this.fetchDataSets(orderByValue);
+        // }
     };
-
-    getAccessToPosition = (navigator) => {
-        if (navigator && navigator.geolocation) {
-            var getPosition = function (options) {
-                return new Promise(function (resolve, reject) {
-                    navigator.geolocation.getCurrentPosition(resolve, reject, options);
-                });
-            }
-            getPosition()
-                .then((position) => {
-                    console.log("Position: " + position.coords.latitude, position.coords.longitude);
-                    var orderByValue = "location";
-                    this.setState({
-                        latitude: position.coords.latitude,
-                        longitude: position.coords.longitude
-                    })
-                    this.fetchDataSets(orderByValue);
-                })
-                .catch((err) => {
-                    console.log(err.message);
-                    if (err.message === "User denied Geolocation") {
-                        var orderByValue = "relevance";
-                        this.setState({
-                            isLocationAccessDenied: true
-                        })
-                        this.fetchDataSets(orderByValue);
-                    }
-                });
-        }
-    }
 
     componentWillUnmount() {
         window.removeEventListener('resize', this.handleWindowSizeChange);
