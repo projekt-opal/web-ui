@@ -12,13 +12,9 @@ class FirstPage extends React.Component {
         selectedSearchIn: [],
         lastSelectedSearchIn: [],
 
-        orderByValue: '',
-        isLocationAccessDenied: false,
-
-        latitude: 0,
-        longitude: 0,
-
         screenWidth: 0,
+
+        orderByValue: null,
 
         dataSets: [],
         loadingDataSets: true,
@@ -37,7 +33,7 @@ class FirstPage extends React.Component {
     componentDidMount = () => {
         this.handleWindowSizeChange();
         window.addEventListener('resize', this.handleWindowSizeChange);
-    }
+    };
 
     setLastSelectedSearchIn = () => {
         this.setState({ lastSelectedSearchIn: this.state.selectedSearchIn });
@@ -82,7 +78,7 @@ class FirstPage extends React.Component {
                             filterName.isTypeStatic = false;
                         }
                         return filterName;
-                    })
+                    });
                     this.setState(
                         {
                             filters: filters,
@@ -168,13 +164,16 @@ class FirstPage extends React.Component {
         }
     };
 
-    getNumberOfDataSets = (/*todo orderBy, */) => {
+    getNumberOfDataSets = () => {
         this.setState({
             loadingNumberOfDataSets: true,
             loadingNumberOfDataSetsError: false
         });
         let url = `/dataSets/getNumberOfDataSets?searchKey=${this.state.searchKey}&searchIn=${this.state.selectedSearchIn}`;
-        axios.post(url, this.state.selectedFilters)
+        axios.post(url, {
+            orderByDTO: this.state.orderByValue,
+            filterDTOS: this.state.selectedFilters
+        })
             .then(response => {
                 const numberOfDataSets = response.data;
                 this.setState({
@@ -193,7 +192,7 @@ class FirstPage extends React.Component {
             });
     };
 
-    fetchDataSets = (orderByValue) => {
+    fetchDataSets = () => {
         this.setState({
             loadingDataSets: true,
             loadingDataSetsError: false,
@@ -203,7 +202,10 @@ class FirstPage extends React.Component {
         /**TODO: API needs to be changed according to the value of OrderBy using 'orderByValue' */
         let url = `/dataSets/getSubList?searchKey=${this.state.searchKey}&searchIn=${this.state.selectedSearchIn}`;
         //let url = `/dataSets/getSubList?searchKey=${orderByValue}&searchIn=${this.state.selectedSearchIn}`
-        axios.post(url, this.state.selectedFilters)
+        axios.post(url, {
+            orderByDTO: this.state.orderByValue,
+            filterDTOS: this.state.selectedFilters
+        })
             .then(response => {
                 const dataSets = response.data;
                 console.log("Response: " + dataSets);
@@ -225,6 +227,16 @@ class FirstPage extends React.Component {
             });
     };
 
+    refreshDataSets = () => {
+        this.getNumberOfDataSets();
+        this.fetchDataSets();
+        // this.onFetchFilters();
+    };
+
+    orderByChanged = (orderByValue) => {
+        this.setState({orderByValue: orderByValue}, () => this.refreshDataSets())
+    };
+
     getSelectedSearchIn = () => {
         return this.state.selectedSearchIn;
     };
@@ -241,10 +253,6 @@ class FirstPage extends React.Component {
 
     componentWillUnmount() {
         window.removeEventListener('resize', this.handleWindowSizeChange);
-    }
-
-    getOrderByValue = (orderByValue) => {
-        this.fetchDataSets(orderByValue);
     }
 
     render() {
@@ -286,7 +294,7 @@ class FirstPage extends React.Component {
                         loadingFiltersError={this.state.loadingFiltersError}
                         getSelectedSearchIn={() => this.getSelectedSearchIn()}
                         isLocationAccessDenied={this.state.isLocationAccessDenied}
-                        callBackForOrderByValue={(orderByValue) => this.getOrderByValue(orderByValue)}
+                        orderByChanged={this.orderByChanged}
                     />
                 </Row>
             </Container>

@@ -27,16 +27,6 @@ class TableView extends React.Component {
         window.addEventListener('resize', this.handleWindowSizeChange);
     }
 
-    orderByChanged = (orderByValue, idx) => {
-        console.log("Order by value from Table View(child): " + orderByValue);
-        this.setState({
-            selectedOrder: idx,
-            selectedOrderMobile: idx
-        })
-        this.props.callBackForOrderByValue(orderByValue)
-
-    };
-
     largeViewChanged = () => {
         let newState = {...this.state};
         newState.isLongView = !newState.isLongView;
@@ -158,7 +148,7 @@ class TableView extends React.Component {
                     />
         ;
 
-        const isMobile = this.state.screenWidth <= 800;
+        const isMobile = this.state.screenWidth > 1 && this.state.screenWidth <= 800;
 
         return (
             <Col md='12'>
@@ -177,7 +167,7 @@ class TableView extends React.Component {
                                         </Button>
 
                                         <OrderBy
-                                            orderByChanged={(orderByValue, idx) => this.orderByChanged(orderByValue, idx)}
+                                            orderByChanged={this.props.orderByChanged}
                                             isMobile={isMobile}
                                         />
 
