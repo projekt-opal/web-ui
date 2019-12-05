@@ -1,10 +1,10 @@
 import React from 'react';
-import {Button, Col, Row, Spinner, Table} from "reactstrap";
-import {FaRedo, FaThLarge, FaThList} from "react-icons/fa";
-import FiltersView from '../filter/FiltersView';
+import {Button, Col, Row, Table} from "reactstrap";
+import {FaThLarge, FaThList} from "react-icons/fa";
 import OrderBy from "../dataset/OrderBy";
 import LoadingNumberOfResult from "./LoadingNumberOfResult";
 import LoadingDataSets from "./LoadingDataSets";
+import LoadingFiltersView from "./LoadingFiltersView";
 
 class TableView extends React.Component {
     state = {
@@ -86,42 +86,6 @@ class TableView extends React.Component {
     };
 
     render() {
-        let numberOfResult = <LoadingNumberOfResult
-            loadingNumberOfDataSetsError = {this.props.loadingNumberOfDataSetsError}
-            loadingNumberOfDataSets = {this.props.loadingNumberOfDataSets}
-            numberOfDataSets = {this.props.numberOfDataSets}
-            reloadNumberOfDataSets={this.reloadNumberOfDataSets}
-        />;
-
-        let dataSets = <LoadingDataSets
-            loadingDataSetsError = {this.props.loadingDataSetsError}
-            loadingDataSets = {this.props.loadingDataSets}
-            dataSets = {this.props.dataSets}
-            isLongView={this.state.isLongView}
-            reloadDataSets={this.reloadNumberOfDataSets}
-        />;
-
-        const filtersView =
-            this.props.loadingFilters ?
-                <Spinner color="primary"/> :
-                this.props.loadingFiltersError ?
-                    <div>
-                        <Button onClick={this.reloadFilters}><FaRedo
-                            id="TooltipFiltersInternalServerError"/></Button>
-                        <span
-                            style={{marginLeft: '3px', fontSize: '8px', fontWeight: '500'}}>Internal Server Error</span>
-                    </div>
-                    :
-                    <FiltersView
-                        filters={this.props.filters}
-                        selectedFilters={this.props.selectedFilters}
-                        onAppendSelectedValues={this.props.onAppendSelectedValues}
-                        onGetSearchKey={this.props.onGetSearchKey}
-                        getSelectedSearchIn={this.props.getSelectedSearchIn}
-                        applyFilters={this.applyFilters}
-                    />
-        ;
-
         const isMobile = this.state.screenWidth > 1 && this.state.screenWidth <= 800;
 
         return (
@@ -134,7 +98,12 @@ class TableView extends React.Component {
                             <tr>
                                 <th style={{width: '1%'}}>
                                     <div style={{display: 'flex', flexFlow: 'row wrap'}}>
-                                        <span> {numberOfResult} </span>
+                                        <span> {<LoadingNumberOfResult
+                                            loadingNumberOfDataSetsError={this.props.loadingNumberOfDataSetsError}
+                                            loadingNumberOfDataSets={this.props.loadingNumberOfDataSets}
+                                            numberOfDataSets={this.props.numberOfDataSets}
+                                            reloadNumberOfDataSets={this.reloadNumberOfDataSets}
+                                        />} </span>
                                         <div style={{flexGrow: 1}}/>
                                         <Button style={{marginLeft: '2px'}} onClick={this.largeViewChanged}>
                                             {this.state.isLongView ? <FaThLarge/> : <FaThList/>}
@@ -148,7 +117,18 @@ class TableView extends React.Component {
                                         {isMobile ? <Button style={{marginLeft: '2px'}}
                                                             onClick={this.toggleFilters}>Filters</Button> : ''}
                                         {
-                                            this.state.isFiltersOpen && isMobile ? filtersView : ''}
+                                            this.state.isFiltersOpen && isMobile ? <LoadingFiltersView
+                                                loadingFilters={this.props.loadingFilters}
+                                                loadingFiltersError={this.props.loadingFiltersError}
+
+                                                filters={this.props.filters}
+                                                selectedFilters={this.props.selectedFilters}
+                                                onAppendSelectedValues={this.props.onAppendSelectedValues}
+                                                onGetSearchKey={this.props.onGetSearchKey}
+                                                getSelectedSearchIn={this.props.getSelectedSearchIn}
+                                                reloadFilters={this.reloadFilters}
+                                                applyFilters={this.applyFilters}
+                                            /> : ''}
                                     </div>
 
                                 </th>
@@ -163,7 +143,13 @@ class TableView extends React.Component {
                                 {display: 'block', 'overflowX': 'hidden', width: '100%'}}>
                             <tr style={{display: 'block'}}>
                                 <td style={{display: 'block'}}>
-                                    {dataSets}
+                                    {<LoadingDataSets
+                                        loadingDataSetsError={this.props.loadingDataSetsError}
+                                        loadingDataSets={this.props.loadingDataSets}
+                                        dataSets={this.props.dataSets}
+                                        isLongView={this.state.isLongView}
+                                        reloadDataSets={this.reloadNumberOfDataSets}
+                                    />}
                                     <Row style={{'paddingTop': '1rem'}}>
                                         <Button className="mx-auto" style={{marginBottom: '1rem'}}
                                                 onClick={this.props.load10More}
@@ -180,7 +166,18 @@ class TableView extends React.Component {
                         !isMobile &&
                         <Col md={{size: 3}}>
                             <div style={{position: 'sticky', top: '2rem'}}>
-                                {filtersView}
+                                {<LoadingFiltersView
+                                    loadingFilters={this.props.loadingFilters}
+                                    loadingFiltersError={this.props.loadingFiltersError}
+
+                                    filters={this.props.filters}
+                                    selectedFilters={this.props.selectedFilters}
+                                    onAppendSelectedValues={this.props.onAppendSelectedValues}
+                                    onGetSearchKey={this.props.onGetSearchKey}
+                                    getSelectedSearchIn={this.props.getSelectedSearchIn}
+                                    reloadFilters={this.reloadFilters}
+                                    applyFilters={this.applyFilters}
+                                />}
                             </div>
                         </Col>
                     }
