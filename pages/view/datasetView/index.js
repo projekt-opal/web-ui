@@ -1,15 +1,10 @@
 import React from 'react'
 import Layout from "../../../components/layout/layout";
-import {
-    Container,
-    Row,
-    Col
-} from "reactstrap";
-import { withRouter } from 'next/router'
+import {Col, Container, Row} from "reactstrap";
+import {withRouter} from 'next/router'
 import axios from '../../../webservice/axios-dataSets';
 import DatasetViewLayout from '../../../components/layout/datasetViewLayout';
 import TableView from '../../../components/report/datasets/table/TableView';
-import FiltersView from '../../../components/report/datasets/filter/FiltersView';
 
 class DatasetView extends React.Component {
     state = {
@@ -18,6 +13,8 @@ class DatasetView extends React.Component {
         searchKey: '',
         selectedSearchIn: [],
         lastSelectedSearchIn: [],
+
+        orderByValue: null,
 
         loadingDataSets: true,
         loadingDataSetsError: false,
@@ -45,14 +42,17 @@ class DatasetView extends React.Component {
             .catch(err => console.log(err));
     }
 
-    fetchDataSets = (/*todo orderBy, */) => {
+    fetchDataSets = () => {
         this.setState({
             loadingDataSets: true,
             loadingDataSetsError: false,
             dataSets: []
         });
         let url = `/dataSets/getSubList?searchKey=${this.state.searchKey}&searchIn=${this.state.selectedSearchIn}`;
-        axios.post(url, this.state.selectedFilters)
+        axios.post(url, {
+            orderByDTO: this.state.orderByValue,
+            filterDTOS: this.state.selectedFilters
+        })
             .then(response => {
                 const dataSets = response.data;
                 console.log("Response: " + response.data);
@@ -77,13 +77,16 @@ class DatasetView extends React.Component {
 
     };
 
-    getNumberOfRelatedDataSets = (/*todo orderBy, */) => {
+    getNumberOfRelatedDataSets = () => {
         this.setState({
             loadingNumberOfRelatedDataSets: true,
             loadingNumberOfRelatedDataSetsError: false
         });
         let url = `/dataSets/getNumberOfDataSets?searchKey=${this.state.searchKey}&searchIn=${this.state.selectedSearchIn}`;
-        axios.post(url, this.state.selectedFilters)
+        axios.post(url, {
+            orderByDTO: this.state.orderByValue,
+            filterDTOS: this.state.selectedFilters
+        })
             .then(response => {
                 const numberOfRelatedDataSets = response.data;
                 this.setState({
@@ -106,7 +109,10 @@ class DatasetView extends React.Component {
     load10More = () => {
         if (this.state.relatedDatasets !== null && this.state.relatedDatasets.length > 0) {
             let url = `/dataSets/getSubList?searchKey=${this.state.searchKey}&searchIn=${this.state.selectedSearchIn}&low=${this.state.dataSets.length}`;
-            axios.post(url, this.state.selectedFilters)
+            axios.post(url, {
+                orderByDTO: this.state.orderByValue,
+                filterDTOS: this.state.selectedFilters
+            })
                 .then(response => {
                     const relatedDatasets = response.data;
                     let ds = [...this.state.relatedDatasets];
@@ -127,6 +133,17 @@ class DatasetView extends React.Component {
                 });
         }
     };
+
+    refreshDataSets = () => {
+        this.getNumberOfDataSets();
+        this.fetchDataSets();
+        // this.onFetchFilters();
+    };
+
+    orderByChanged = (orderByValue) => {
+        this.setState({orderByValue: orderByValue}, () => this.refreshDataSets())
+    };
+
 
     onAppendSelectedValues = (selectedFilter) => {
         let selectedFilters = [...this.state.selectedFilters];
@@ -248,6 +265,7 @@ class DatasetView extends React.Component {
                                 loadingFilters={this.state.loadingFilters}
                                 loadingFiltersError={this.state.loadingFiltersError}
                                 getSelectedSearchIn={() => this.getSelectedSearchIn()}
+                                orderByChanged={this.orderByChanged}
                             />
                         </Col>
                     </Row>

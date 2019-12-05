@@ -142,7 +142,10 @@ class FirstPage extends React.Component {
     load10More = () => {
         if (this.state.dataSets !== null && this.state.dataSets.length > 0) {
             let url = `/dataSets/getSubList?searchKey=${this.state.searchKey}&searchIn=${this.state.selectedSearchIn}&low=${this.state.dataSets.length}`;
-            axios.post(url, this.state.selectedFilters)
+            axios.post(url, {
+                orderByDTO: this.state.orderByValue,
+                filterDTOS: this.state.selectedFilters
+            })
                 .then(response => {
                     const dataSets = response.data;
                     let ds = [...this.state.dataSets];
@@ -199,9 +202,8 @@ class FirstPage extends React.Component {
             dataSets: []
         });
 
-        /**TODO: API needs to be changed according to the value of OrderBy using 'orderByValue' */
+
         let url = `/dataSets/getSubList?searchKey=${this.state.searchKey}&searchIn=${this.state.selectedSearchIn}`;
-        //let url = `/dataSets/getSubList?searchKey=${orderByValue}&searchIn=${this.state.selectedSearchIn}`
         axios.post(url, {
             orderByDTO: this.state.orderByValue,
             filterDTOS: this.state.selectedFilters

@@ -19,6 +19,8 @@ class View extends React.Component {
         selectedSearchIn: [],
         lastSelectedSearchIn: [],
 
+        orderByValue: null,
+
         loadingDataSets: true,
         loadingDataSetsError: false,
 
@@ -47,14 +49,17 @@ class View extends React.Component {
             .catch(err => console.log(err));
     }
 
-    fetchDataSets = (/*todo orderBy, */) => {
+    fetchDataSets = () => {
         this.setState({
             loadingDataSets: true,
             loadingDataSetsError: false,
             dataSets: []
         });
         let url = `/dataSets/getSubList?searchKey=${this.state.searchKey}&searchIn=${this.state.selectedSearchIn}`;
-        axios.post(url, this.state.selectedFilters)
+        axios.post(url, {
+            orderByDTO: this.state.orderByValue,
+            filterDTOS: this.state.selectedFilters
+        })
             .then(response => {
                 const dataSets = response.data;
                 console.log("Response: " + response.data);
@@ -74,18 +79,18 @@ class View extends React.Component {
                     dataSets: []
                 });
             });
-
-
-
     };
 
-    getNumberOfRelatedDataSets = (/*todo orderBy, */) => {
+    getNumberOfRelatedDataSets = () => {
         this.setState({
             loadingNumberOfRelatedDataSets: true,
             loadingNumberOfRelatedDataSetsError: false
         });
         let url = `/dataSets/getNumberOfDataSets?searchKey=${this.state.searchKey}&searchIn=${this.state.selectedSearchIn}`;
-        axios.post(url, this.state.selectedFilters)
+        axios.post(url, {
+            orderByDTO: this.state.orderByValue,
+            filterDTOS: this.state.selectedFilters
+        })
             .then(response => {
                 const numberOfRelatedDataSets = response.data;
                 this.setState({
@@ -108,7 +113,10 @@ class View extends React.Component {
     load10More = () => {
         if (this.state.relatedDatasets !== null && this.state.relatedDatasets.length > 0) {
             let url = `/dataSets/getSubList?searchKey=${this.state.searchKey}&searchIn=${this.state.selectedSearchIn}&low=${this.state.dataSets.length}`;
-            axios.post(url, this.state.selectedFilters)
+            axios.post(url, {
+                orderByDTO: this.state.orderByValue,
+                filterDTOS: this.state.selectedFilters
+            })
                 .then(response => {
                     const relatedDatasets = response.data;
                     let ds = [...this.state.relatedDatasets];
@@ -128,6 +136,16 @@ class View extends React.Component {
                     });
                 });
         }
+    };
+
+    refreshDataSets = () => {
+        this.getNumberOfRelatedDataSets();
+        this.fetchDataSets();
+        // this.onFetchFilters();
+    };
+
+    orderByChanged = (orderByValue) => {
+        this.setState({orderByValue: orderByValue}, () => this.refreshDataSets())
     };
 
     onAppendSelectedValues = (selectedFilter) => {
@@ -205,11 +223,6 @@ class View extends React.Component {
         return this.state.selectedSearchIn;
     };
 
-
-
-
-
-
     render() {
         const { router } = this.props;
         //console.log(router);
@@ -259,6 +272,7 @@ class View extends React.Component {
                                 loadingFilters={this.state.loadingFilters}
                                 loadingFiltersError={this.state.loadingFiltersError}
                                 getSelectedSearchIn={() => this.getSelectedSearchIn()}
+                                orderByChanged={this.orderByChanged}
                             />
                         </Col>
                     </Row>
