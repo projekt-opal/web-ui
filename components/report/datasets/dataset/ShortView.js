@@ -2,6 +2,7 @@ import React from 'react';
 import {Badge, Button, Input, Card, CardBody, CardHeader, CardSubtitle, CardTitle} from "reactstrap";
 import {FaExpandArrowsAlt, FaExternalLinkAlt, FaRegStar, FaStar, FaStarHalfAlt} from "react-icons/fa";
 import ModalDatasetView from "./ModalDatasetView";
+import Link from 'next/link';
 
 class ShortView extends React.Component {
 
@@ -41,6 +42,8 @@ class ShortView extends React.Component {
             }
         </span>);
 
+        const dataSetViewLink = "./view/datasetView?uri=" + this.props.dataSet.uri;
+
         return (
             <Card color="LightCard" style={{flexGrow: '1'}}>
                 {
@@ -69,10 +72,11 @@ class ShortView extends React.Component {
                         >
                             <FaExpandArrowsAlt/>
                         </Button>
-                        <Button size="sm"
-                                style={{background: 'transparent', border: 'none', color: 'gray'}}>
-                            <FaExternalLinkAlt/>
-                        </Button>
+                        <Link href={dataSetViewLink} target="_blank">
+                            <a target="_blank" style={{textDecoration: "none", color: 'gray'}}>
+                                <FaExternalLinkAlt/>
+                            </a>
+                        </Link>
                     </div>
                 </CardHeader>
                 <CardBody>

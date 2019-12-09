@@ -148,7 +148,7 @@ class TableView extends React.Component {
                                         loadingDataSets={this.props.loadingDataSets}
                                         dataSets={this.props.dataSets}
                                         isLongView={this.state.isLongView}
-                                        reloadDataSets={this.reloadNumberOfDataSets}
+                                        reloadDataSets={this.reloadDataSets}
                                     />}
                                     <Row style={{'paddingTop': '1rem'}}>
                                         <Button className="mx-auto" style={{marginBottom: '1rem'}}

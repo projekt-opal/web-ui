@@ -7,6 +7,12 @@ import DatasetViewLayout from '../../../components/layout/datasetViewLayout';
 import TableView from '../../../components/report/datasets/table/TableView';
 
 class DatasetView extends React.Component {
+
+    static getInitialProps({pathname, query}) {
+        console.log({query});
+        return {query};
+    }
+
     state = {
         dataSet: null,
         relatedDatasets: null,
@@ -30,16 +36,17 @@ class DatasetView extends React.Component {
     };
 
     componentDidMount() {
-        const datasetUri = window.localStorage.getItem("DATASET_URI");
-        axios.get("/dataSet?uri=" + datasetUri)
-            .then(response => {
-                console.log(response.data);
-                if (response.data != null) {
-                    this.setState({ dataSet: response.data })
+        if (this.props.query && this.props.query.uri) {
+            const datasetUri = this.props.query.uri;
+            axios.get("/dataSet?uri=" + datasetUri)
+                .then(response => {
+                    if (response.data != null) {
+                        this.setState({dataSet: response.data})
 
-                }
-            })
-            .catch(err => console.log(err));
+                    }
+                })
+                .catch(err => console.log(err));
+        }
     }
 
     fetchDataSets = () => {
@@ -72,9 +79,6 @@ class DatasetView extends React.Component {
                     dataSets: []
                 });
             });
-
-
-
     };
 
     getNumberOfRelatedDataSets = () => {
@@ -144,7 +148,6 @@ class DatasetView extends React.Component {
         this.setState({orderByValue: orderByValue}, () => this.refreshDataSets())
     };
 
-
     onAppendSelectedValues = (selectedFilter) => {
         let selectedFilters = [...this.state.selectedFilters];
 
@@ -157,7 +160,7 @@ class DatasetView extends React.Component {
         else
             selectedFilters.push(selectedFilter);
 
-        this.setState({ selectedFilters: selectedFilters });
+        this.setState({selectedFilters: selectedFilters});
     };
 
     onGetSearchKey = () => {
@@ -165,7 +168,7 @@ class DatasetView extends React.Component {
     };
 
     onReplaceSelectedFilters = (selectedFilters) => {
-        this.setState({ selectedFilters: selectedFilters });
+        this.setState({selectedFilters: selectedFilters});
     };
 
     onFetchFilters = () => {
@@ -176,24 +179,23 @@ class DatasetView extends React.Component {
         }, () => {
             axios.get(`/filters/list?searchKey=${this.state.searchKey}&searchIn=${this.state.selectedSearchIn}`)
                 .then(response => {
-                    const filters = response.data;
-                    this.setState(
-                        {
-                            filters: filters,
-                            loadingFilters: false,
-                            loadingFiltersError: false
-                        }, () => this.updateFilterValueCounts());
-                }
+                        const filters = response.data;
+                        this.setState(
+                            {
+                                filters: filters,
+                                loadingFilters: false,
+                                loadingFiltersError: false
+                            }, () => this.updateFilterValueCounts());
+                    }
                 ).catch(error => {
-                    this.setState({
-                        filters: [],
-                        loadingFilters: false,
-                        loadingFiltersError: true
-                    });
+                this.setState({
+                    filters: [],
+                    loadingFilters: false,
+                    loadingFiltersError: true
                 });
+            });
         });
     };
-
 
     updateFilterValueCounts = () => {
         const filters = [...this.state.filters];
@@ -212,39 +214,35 @@ class DatasetView extends React.Component {
                 }
             });
         });
-        this.setState({ filters: filters });
+        this.setState({filters: filters});
     };
 
     getSelectedSearchIn = () => {
         return this.state.selectedSearchIn;
     };
 
-
-
-
     render() {
-        const { router } = this.props;
         return (
             <Layout>
-                <Container fluid >
+                <Container fluid>
                     <Row>
-                        <Col md='1'></Col>
-                        <Col md='10' className="border" style={{ 'top': '2rem' }} center>
-                            {this.state.dataSet == null ? '' : <DatasetViewLayout dataset={this.state.dataSet} />}
+                        <Col md='1'/>
+                        <Col md='10' className="border" style={{marginTop: '2em'}}>
+                            {this.state.dataSet == null ? '' : <DatasetViewLayout dataset={this.state.dataSet}/>}
                         </Col>
-                        <Col md='1'></Col>
+                        <Col md='1'/>
                     </Row>
-                    <br />
-                    <Row style={{ position: 'relative', top: '2rem' }}>
-                        <Col md='1'></Col>
-                        <Col md='10' wrapper><h4>Related Datasets:</h4></Col>
-                        <Col md='1'></Col>
+                    <br/>
+                    <Row style={{position: 'relative', marginTop: '2em'}}>
+                        <Col md='1'/>
+                        <Col md='10'><h4>Related DataSets:</h4></Col>
+                        <Col md='1'/>
                     </Row>
 
 
                     <Row>
-                        <Col md={{ size: 1 }}></Col>
-                        <Col md={{ size: 10 }} className="border" style={{ 'margin-top': '2rem' }}>
+                        <Col md={{size: 1}}/>
+                        <Col md={{size: 10}} className="border" style={{marginTop: '2rem'}}>
                             {/* TODO: Below methods for fetching the Related Datasets */}
                             <TableView
                                 fetchDataSets={() => this.fetchDataSets()}
@@ -255,7 +253,8 @@ class DatasetView extends React.Component {
                                 loadingNumberOfDataSets={this.state.loadingNumberOfRelatedDataSets}
                                 loadingNumberOfDataSetsError={this.state.loadingNumberOfRelatedDataSetsError}
                                 loadingDataSets={this.state.loadingDataSets}
-                                loadingDataSetsError={this.state.loadingDataSetsError} selectedFilters={this.state.selectedFilters}
+                                loadingDataSetsError={this.state.loadingDataSetsError}
+                                selectedFilters={this.state.selectedFilters}
                                 onAppendSelectedValues={(selectedFilter) => this.onAppendSelectedValues(selectedFilter)}
                                 onGetSearchKey={() => this.onGetSearchKey()}
                                 onReplaceSelectedFilters={(selectedFilters) => this.onReplaceSelectedFilters(selectedFilters)}

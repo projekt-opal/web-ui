@@ -18,7 +18,9 @@ const LoadingDataSets = (props) => {
         dataSets = props.dataSets.map(
             dataSet => (
                 <Col md={{size: 12}} key={dataSet.uri}>
-                    {props.isLongView ? <LongView dataSet={dataSet}/> : <ShortView dataSet={dataSet}/>}
+                    {props.isLongView ?
+                        <LongView dataSet={dataSet} pathname={props.pathname}/> :
+                        <ShortView dataSet={dataSet} pathname={props.pathname}/>}
                 </Col>
             )
         );

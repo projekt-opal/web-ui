@@ -1,9 +1,9 @@
 import React from 'react';
-import { Button, Input, Card, CardBody, CardFooter, CardHeader, CardSubtitle, CardText, CardTitle } from "reactstrap";
+import {Button, Card, CardBody, CardFooter, CardHeader, CardSubtitle, CardText, CardTitle} from "reactstrap";
 import ModalDatasetView from './ModalDatasetView';
 import Link from 'next/link';
 
-import { FaExpandArrowsAlt, FaExternalLinkAlt, FaRegStar, FaStar, FaStarHalfAlt } from "react-icons/fa";
+import {FaExpandArrowsAlt, FaExternalLinkAlt, FaRegStar, FaStar, FaStarHalfAlt} from "react-icons/fa";
 
 class LongView extends React.Component {
 
@@ -16,19 +16,15 @@ class LongView extends React.Component {
 
     oneLineDescriptionClicked = (e) => {
         e.stopPropagation();
-        let newState = { ...this.state };
+        let newState = {...this.state};
         newState.isOneLineDescription = !newState.isOneLineDescription;
         this.setState(newState);
     };
 
     toggleModal = () => {
         const isModalOpen = !this.state.isModalOpen;
-        this.setState({ isModalOpen: isModalOpen });
+        this.setState({isModalOpen: isModalOpen});
     };
-
-    storeDatasetInfo = () => {
-        window.localStorage.setItem("DATASET_URI", this.props.dataSet.uri);
-    }
 
     render() {
 
@@ -50,10 +46,12 @@ class LongView extends React.Component {
             rating[Math.floor(overallRating)] = 1;
         let overallRatingStarts = (<span>
             {
-                rating.map((r, idx) => r === 0 ? <FaRegStar key={idx} /> : r === 1 ? <FaStarHalfAlt key={idx} /> :
-                    <FaStar key={idx} />)
+                rating.map((r, idx) => r === 0 ? <FaRegStar key={idx}/> : r === 1 ? <FaStarHalfAlt key={idx}/> :
+                    <FaStar key={idx}/>)
             }
         </span>);
+
+        const dataSetViewLink = "/view/datasetView?uri=" + this.props.dataSet.uri;
 
         return (
             <>
@@ -65,31 +63,30 @@ class LongView extends React.Component {
                         uri={this.props.dataSet.uri}
                     />
                 }
-                <Card color="LightCard" style={{ flexGrow: '1' }}>
+                <Card color="LightCard" style={{flexGrow: '1'}}>
                     <CardHeader>
-                        <div style={{ display: 'flex', flexFlow: 'row wrap' }}>
-                            <CardTitle style={{ display: 'inline', marginLeft: '0.5em' }}>
-                                    {title}
+                        <div style={{display: 'flex', flexFlow: 'row wrap'}}>
+                            <CardTitle style={{display: 'inline', marginLeft: '0.5em'}}>
+                                {title}
                             </CardTitle>
-                            <div style={{ flexGrow: '1' }} />
+                            <div style={{flexGrow: '1'}}/>
                             {overallRatingStarts}
                             <Button size="sm"
-                                style={{
-                                    background: 'transparent',
-                                    border: 'none',
-                                    color: 'gray',
-                                    marginLeft: '2px'
-                                }}
-                                onClick={() => this.toggleModal()}
+                                    style={{
+                                        background: 'transparent',
+                                        border: 'none',
+                                        color: 'gray',
+                                        marginLeft: '2px'
+                                    }}
+                                    onClick={() => this.toggleModal()}
                             >
-                                <FaExpandArrowsAlt />
+                                <FaExpandArrowsAlt/>
                             </Button>
-                            <Link><a href="./view/datasetView" target="_blank" >
-                                <Button size="sm"
-                                    style={{ background: 'transparent', border: 'none', color: 'gray' }} onClick={this.storeDatasetInfo}>
-
-                                    <FaExternalLinkAlt />
-                                </Button></a></Link>
+                            <Link href={dataSetViewLink} target="_blank">
+                                <a target="_blank" style={{textDecoration: "none", color: 'gray'}}>
+                                        <FaExternalLinkAlt/>
+                                </a>
+                            </Link>
                         </div>
                     </CardHeader>
                     <CardBody>
@@ -107,12 +104,12 @@ class LongView extends React.Component {
                         </CardText>
                         <CardFooter className="text-muted">
                             <div>
-                                <span style={{ marginLeft: '3rem' }}>{theme}</span>
-                                <br />
+                                <span style={{marginLeft: '3rem'}}>{theme}</span>
+                                <br/>
                                 {
                                     keywords.map((keyword, idx) => {
                                         return (
-                                            <span key={idx} style={{ marginLeft: '4px' }}>
+                                            <span key={idx} style={{marginLeft: '4px'}}>
                                                 {keyword}
                                             </span>
                                         );
