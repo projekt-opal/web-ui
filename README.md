@@ -16,6 +16,9 @@ The functionality was added using an integrated table sorting [OrderBy].
 * [Position] [OrderBy.js:96](components/report/datasets/dataset/OrderBy.js#L96)
 * [OrderBy] [OrderBy.js:79](components/report/datasets/dataset/OrderBy.js#L79)
 
+![Location selection](doc/location.png)
+
+
 
 ## Credits
 
