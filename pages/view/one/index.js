@@ -1,23 +1,19 @@
 import React from 'react'
 import Layout from "../../../components/layout/layout";
-import {
-    Container,
-    Row,
-    Col
-} from "reactstrap";
+import {Col, Container, Row} from "reactstrap";
 import axios from '../../../webservice/axios-dataSets';
 import TableView from '../../../components/report/datasets/table/TableView';
-import { withRouter } from 'next/router';
-import Link from 'next/link';
 
-class View extends React.Component {
+class ViewOne extends React.Component {
+
+    static getInitialProps({query}) {
+        return {query};
+    }
+
     state = {
         fieldName: null,
         dataSet: null,
-        relatedDatasets: null,
-        searchKey: '',
-        selectedSearchIn: [],
-        lastSelectedSearchIn: [],
+        relatedDataSets: null,
 
         orderByValue: null,
 
@@ -31,23 +27,10 @@ class View extends React.Component {
         filters: [],//[{title: t1, uri:"filter uri" values: [{label: l, value: v, uri: u},{...},...]
         loadingFilters: true,
         loadingFiltersError: false,
-        selectedFilters: [] //is like [{title: "t", uri: "uri", values: [{value: "v1", uti:"uri_v1"}, {value:"v2", uri:"uri_v2"}]}]
+        selectedFilters: [], //is like [{title: "t", uri: "uri", values: [{value: "v1", uti:"uri_v1"}, {value:"v2", uri:"uri_v2"}]}]
+
+        firstLoad: true
     };
-
-    componentDidMount() {
-        this.setState({ fieldName: window.localStorage.getItem("LICENSE_NAME") })
-        window.localStorage.removeItem('LICENSE_NAME');
-        const datasetUri = window.localStorage.getItem("DATASET_URI");
-        axios.get("/dataSet?uri=" + datasetUri)
-            .then(response => {
-                console.log(response.data);
-                if (response.data != null) {
-                    this.setState({ dataSet: response.data })
-
-                }
-            })
-            .catch(err => console.log(err));
-    }
 
     fetchDataSets = () => {
         this.setState({
@@ -55,7 +38,8 @@ class View extends React.Component {
             loadingDataSetsError: false,
             dataSets: []
         });
-        let url = `/dataSets/getSubList?searchKey=${this.state.searchKey}&searchIn=${this.state.selectedSearchIn}`;
+        if (this.state.firstLoad) return;
+        let url = `/dataSets/getSubList`;
         axios.post(url, {
             orderByDTO: this.state.orderByValue,
             filterDTOS: this.state.selectedFilters
@@ -66,7 +50,7 @@ class View extends React.Component {
                 this.setState({
                     loadingDataSets: false,
                     loadingDataSetsError: false,
-                    relatedDatasets: dataSets
+                    relatedDataSets: dataSets
                 });
 
                 console.log("response not coming")
@@ -86,7 +70,8 @@ class View extends React.Component {
             loadingNumberOfRelatedDataSets: true,
             loadingNumberOfRelatedDataSetsError: false
         });
-        let url = `/dataSets/getNumberOfDataSets?searchKey=${this.state.searchKey}&searchIn=${this.state.selectedSearchIn}`;
+        if (this.state.firstLoad) return;
+        let url = `/dataSets/getNumberOfDataSets`;
         axios.post(url, {
             orderByDTO: this.state.orderByValue,
             filterDTOS: this.state.selectedFilters
@@ -109,22 +94,21 @@ class View extends React.Component {
             });
     };
 
-
     load10More = () => {
-        if (this.state.relatedDatasets !== null && this.state.relatedDatasets.length > 0) {
-            let url = `/dataSets/getSubList?searchKey=${this.state.searchKey}&searchIn=${this.state.selectedSearchIn}&low=${this.state.dataSets.length}`;
+        if (this.state.relatedDataSets !== null && this.state.relatedDataSets.length > 0) {
+            let url = `/dataSets/getSubList?low=${this.state.relatedDataSets.length}`;
             axios.post(url, {
                 orderByDTO: this.state.orderByValue,
                 filterDTOS: this.state.selectedFilters
             })
                 .then(response => {
-                    const relatedDatasets = response.data;
-                    let ds = [...this.state.relatedDatasets];
-                    ds = ds.concat(relatedDatasets);
+                    const relatedDataSets = response.data;
+                    let ds = [...this.state.relatedDataSets];
+                    ds = ds.concat(relatedDataSets);
                     this.setState({
                         loadingDataSets: false,
                         loadingDataSetsError: false,
-                        relatedDatasets: ds
+                        relatedDataSets: ds
                     });
                 })
                 .catch(err => {
@@ -132,7 +116,7 @@ class View extends React.Component {
                     this.setState({
                         loadingDataSets: false,
                         loadingDataSetsError: true,
-                        relatedDatasets: []
+                        relatedDataSets: []
                     });
                 });
         }
@@ -160,15 +144,11 @@ class View extends React.Component {
         else
             selectedFilters.push(selectedFilter);
 
-        this.setState({ selectedFilters: selectedFilters });
-    };
-
-    onGetSearchKey = () => {
-        return this.state.searchKey;
+        this.setState({selectedFilters: selectedFilters});
     };
 
     onReplaceSelectedFilters = (selectedFilters) => {
-        this.setState({ selectedFilters: selectedFilters });
+        this.setState({selectedFilters: selectedFilters});
     };
 
     /**TODO: The method has to be updated accordingly w.r.t licenses */
@@ -178,33 +158,63 @@ class View extends React.Component {
             loadingFilters: true,
             loadingFiltersError: false
         }, () => {
-            axios.get(`/filters/list?searchKey=${this.state.searchKey}&searchIn=${this.state.selectedSearchIn}`)
+            axios.get(`/filters/list`)
                 .then(response => {
-                    const filters = response.data;
-                    this.setState(
-                        {
-                            filters: filters,
-                            loadingFilters: false,
-                            loadingFiltersError: false
-                        }, () => this.updateFilterValueCounts());
-                }
+                        const filters = response.data;
+                        const selectedFilter = this.getTheQueriedFilter(filters);
+                        this.setState({
+                            selectedFilters: [selectedFilter],
+                            firstLoad: false
+                        }, () => {
+                            this.setState(
+                                {
+                                    filters: filters,
+                                    loadingFilters: false,
+                                    loadingFiltersError: false
+                                }, () => this.updateFilterValueCounts());
+                            this.refreshDataSets();
+                        })
+                    }
                 ).catch(error => {
-                    this.setState({
-                        filters: [],
-                        loadingFilters: false,
-                        loadingFiltersError: true
-                    });
+                this.setState({
+                    filters: [],
+                    loadingFilters: false,
+                    loadingFiltersError: true
                 });
+            });
         });
     };
 
+    getTheQueriedFilter = (filters) => {
+        if (!this.props.query || !this.props.query.uri) return;
+        const uri = this.props.query.uri;
+
+
+        let selectedFilter = null;
+        for (let i = 0; i < filters.length; i++) {
+            const values = filters[i].values;
+            for (let j = 0; j < values.length; j++) {
+                if (values[j].uri === uri) {
+                    selectedFilter = {
+                        title: filters[i].title,
+                        uri: filters[i].uri,
+                        values: [values[j]]
+                    };
+                    break;
+                }
+            }
+        }
+        return selectedFilter;
+    };
 
     updateFilterValueCounts = () => {
         const filters = [...this.state.filters];
         filters.forEach(f => {
             f.values.forEach(v => {
                 if (v.count === -1) {
-                    axios.post(`/filter/count?searchKey=${this.state.searchKey}&searchIn=${this.state.selectedSearchIn}`,
+                    const searchKey="";
+                    const selectedSearchIn=[];
+                    axios.post(`/filter/count?searchKey=${searchKey}&searchIn=${selectedSearchIn}`,
                         {
                             filterUri: f.uri,
                             valueUri: v.uri
@@ -216,62 +226,53 @@ class View extends React.Component {
                 }
             });
         });
-        this.setState({ filters: filters });
-    };
-
-    getSelectedSearchIn = () => {
-        return this.state.selectedSearchIn;
+        this.setState({filters: filters});
     };
 
     render() {
-        const { router } = this.props;
-        //console.log(router);
         return (
             <Layout>
-                <Container fluid >
+                <Container fluid>
                     <Row>
                         <Col md='1'></Col>
-                        <Col md='10' className="border" style={{ 'top': '2rem' }} center>
+                        <Col md='10' className="border" style={{'top': '2rem'}} center>
                             <Row>
                                 <Col wrapper>
-                                    <h3 style={{ 'margin-top': '.5rem', 'margin-bottom': '0' }}>
-                                        Field Name: {this.state.fieldName}</h3>
+                                    <h3 style={{'margin-top': '.5rem', 'margin-bottom': '0'}}>
+                                        Field Name: {this.props.query.label}</h3>
                                 </Col>
                             </Row>
                         </Col>
                         <Col md='1'></Col>
                     </Row>
-                    <br />
-                    <Row style={{ position: 'relative', top: '2rem' }}>
+                    <br/>
+                    <Row style={{position: 'relative', top: '2rem'}}>
                         <Col md='1'></Col>
                         <Col md='10' wrapper><h4>Datasets:</h4></Col>
                         <Col md='1'></Col>
                     </Row>
 
-
                     <Row>
-                        <Col md={{ size: 1 }}></Col>
-                        <Col md={{ size: 10 }} className="border" style={{ 'margin-top': '2rem' }}>
+                        <Col md={{size: 1}}/>
+                        <Col md={{size: 10}} className="border" style={{'margin-top': '2rem'}}>
                             {/* TODO: Below methods for fetching the Related Datasets by licenses */}
                             <TableView
                                 fetchDataSets={() => this.fetchDataSets()}
                                 getNumberOfDataSets={() => this.getNumberOfRelatedDataSets()}
                                 load10More={() => this.load10More()}
-                                dataSets={this.state.relatedDatasets}
+                                dataSets={this.state.relatedDataSets}
                                 numberOfDataSets={this.state.numberOfRelatedDataSets}
                                 loadingNumberOfDataSets={this.state.loadingNumberOfRelatedDataSets}
                                 loadingNumberOfDataSetsError={this.state.loadingNumberOfRelatedDataSetsError}
                                 loadingDataSets={this.state.loadingDataSets}
-                                loadingDataSetsError={this.state.loadingDataSetsError} selectedFilters={this.state.selectedFilters}
+                                loadingDataSetsError={this.state.loadingDataSetsError}
+                                selectedFilters={this.state.selectedFilters}
                                 onAppendSelectedValues={(selectedFilter) => this.onAppendSelectedValues(selectedFilter)}
-                                onGetSearchKey={() => this.onGetSearchKey()}
                                 onReplaceSelectedFilters={(selectedFilters) => this.onReplaceSelectedFilters(selectedFilters)}
-                                selectedSearchIn={this.state.lastSelectedSearchIn}
                                 onFetchFilters={() => this.onFetchFilters()}
                                 filters={this.state.filters}
                                 loadingFilters={this.state.loadingFilters}
                                 loadingFiltersError={this.state.loadingFiltersError}
-                                getSelectedSearchIn={() => this.getSelectedSearchIn()}
                                 orderByChanged={this.orderByChanged}
                             />
                         </Col>
@@ -283,4 +284,4 @@ class View extends React.Component {
     }
 }
 
-export default withRouter(View);
+export default ViewOne;

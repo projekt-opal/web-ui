@@ -8,17 +8,14 @@ import TableView from '../../../components/report/datasets/table/TableView';
 
 class DatasetView extends React.Component {
 
-    static getInitialProps({pathname, query}) {
-        console.log({query});
+    static getInitialProps({query}) {
         return {query};
     }
 
     state = {
         dataSet: null,
         relatedDatasets: null,
-        searchKey: '',
-        selectedSearchIn: [],
-        lastSelectedSearchIn: [],
+
 
         orderByValue: null,
 
@@ -55,7 +52,7 @@ class DatasetView extends React.Component {
             loadingDataSetsError: false,
             dataSets: []
         });
-        let url = `/dataSets/getSubList?searchKey=${this.state.searchKey}&searchIn=${this.state.selectedSearchIn}`;
+        let url = `/dataSets/getSubList`;
         axios.post(url, {
             orderByDTO: this.state.orderByValue,
             filterDTOS: this.state.selectedFilters
@@ -86,7 +83,7 @@ class DatasetView extends React.Component {
             loadingNumberOfRelatedDataSets: true,
             loadingNumberOfRelatedDataSetsError: false
         });
-        let url = `/dataSets/getNumberOfDataSets?searchKey=${this.state.searchKey}&searchIn=${this.state.selectedSearchIn}`;
+        let url = `/dataSets/getNumberOfDataSets`;
         axios.post(url, {
             orderByDTO: this.state.orderByValue,
             filterDTOS: this.state.selectedFilters
@@ -109,10 +106,9 @@ class DatasetView extends React.Component {
             });
     };
 
-
     load10More = () => {
         if (this.state.relatedDatasets !== null && this.state.relatedDatasets.length > 0) {
-            let url = `/dataSets/getSubList?searchKey=${this.state.searchKey}&searchIn=${this.state.selectedSearchIn}&low=${this.state.dataSets.length}`;
+            let url = `/dataSets/getSubList?low=${this.state.relatedDatasets.length}`;
             axios.post(url, {
                 orderByDTO: this.state.orderByValue,
                 filterDTOS: this.state.selectedFilters
@@ -163,10 +159,6 @@ class DatasetView extends React.Component {
         this.setState({selectedFilters: selectedFilters});
     };
 
-    onGetSearchKey = () => {
-        return this.state.searchKey;
-    };
-
     onReplaceSelectedFilters = (selectedFilters) => {
         this.setState({selectedFilters: selectedFilters});
     };
@@ -177,7 +169,7 @@ class DatasetView extends React.Component {
             loadingFilters: true,
             loadingFiltersError: false
         }, () => {
-            axios.get(`/filters/list?searchKey=${this.state.searchKey}&searchIn=${this.state.selectedSearchIn}`)
+            axios.get(`/filters/list`)
                 .then(response => {
                         const filters = response.data;
                         this.setState(
@@ -202,7 +194,9 @@ class DatasetView extends React.Component {
         filters.forEach(f => {
             f.values.forEach(v => {
                 if (v.count === -1) {
-                    axios.post(`/filter/count?searchKey=${this.state.searchKey}&searchIn=${this.state.selectedSearchIn}`,
+                    const searchKey="";
+                    const selectedSearchIn=[];
+                    axios.post(`/filter/count?searchKey=${searchKey}&searchIn=${selectedSearchIn}`,
                         {
                             filterUri: f.uri,
                             valueUri: v.uri
@@ -215,10 +209,6 @@ class DatasetView extends React.Component {
             });
         });
         this.setState({filters: filters});
-    };
-
-    getSelectedSearchIn = () => {
-        return this.state.selectedSearchIn;
     };
 
     render() {
@@ -256,14 +246,11 @@ class DatasetView extends React.Component {
                                 loadingDataSetsError={this.state.loadingDataSetsError}
                                 selectedFilters={this.state.selectedFilters}
                                 onAppendSelectedValues={(selectedFilter) => this.onAppendSelectedValues(selectedFilter)}
-                                onGetSearchKey={() => this.onGetSearchKey()}
                                 onReplaceSelectedFilters={(selectedFilters) => this.onReplaceSelectedFilters(selectedFilters)}
-                                selectedSearchIn={this.state.lastSelectedSearchIn}
                                 onFetchFilters={() => this.onFetchFilters()}
                                 filters={this.state.filters}
                                 loadingFilters={this.state.loadingFilters}
                                 loadingFiltersError={this.state.loadingFiltersError}
-                                getSelectedSearchIn={() => this.getSelectedSearchIn()}
                                 orderByChanged={this.orderByChanged}
                             />
                         </Col>
@@ -272,7 +259,6 @@ class DatasetView extends React.Component {
             </Layout>
         )
     }
-
 }
 
 
