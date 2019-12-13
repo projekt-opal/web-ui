@@ -2,7 +2,7 @@ import React from 'react';
 import SearchBar from "../search/SearchBar";
 import TableView from "../report/datasets/table/TableView";
 import { Container, Row } from "reactstrap";
-import axios from "../../webservice/axios-dataSets";
+import axios from "../../../webservice/axios-dataSets";
 import CustomSelect from "../report/datasets/filter/customSelect";
 
 class FirstPage extends React.Component {
@@ -210,14 +210,11 @@ class FirstPage extends React.Component {
         })
             .then(response => {
                 const dataSets = response.data;
-                console.log("Response: " + dataSets);
                 this.setState({
                     loadingDataSets: false,
                     loadingDataSetsError: false,
                     dataSets: dataSets
                 });
-
-                console.log("response not coming")
             })
             .catch(err => {
                 console.log(err);

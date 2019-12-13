@@ -13,8 +13,8 @@ The required user geo information is requested via the `navigator.geolocation.ge
 The functionality was added using an integrated table sorting [OrderBy].
 
 * [GeoApi] [W3C Geolocation API Specification](https://w3c.github.io/geolocation-api/)
-* [Position] [OrderBy.js:96](components/report/datasets/dataset/OrderBy.js#L96)
-* [OrderBy] [OrderBy.js:79](components/report/datasets/dataset/OrderBy.js#L79)
+* [Position] [OrderBy.js:96](src/components/report/datasets/dataset/OrderBy.js#L96)
+* [OrderBy] [OrderBy.js:79](src/components/report/datasets/dataset/OrderBy.js#L79)
 
 ![Location selection](doc/location.png)
 

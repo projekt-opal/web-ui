@@ -12,7 +12,7 @@ import {
 } from "reactstrap";
 import { FaRegStar, FaStar, FaStarHalfAlt } from "react-icons/fa";
 import ReactTooltip from 'react-tooltip';
-import axios from '../../../../webservice/axios-dataSets';
+import axios from '../../../../../webservice/axios-dataSets';
 
 class ModalDatasetView extends React.Component {
 
