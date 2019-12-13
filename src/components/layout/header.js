@@ -25,14 +25,12 @@ class Header extends React.Component {
                 <Collapse isOpen={this.state.isOpen} navbar>
                     <Nav className="mr-auto" navbar>
                         <NavItem> <NavLink href="/">Home</NavLink> </NavItem>
-                        <NavItem> <NavLink href="/">Report</NavLink> </NavItem>
-                        <NavItem> <NavLink href="/">SparQL endpoint</NavLink> </NavItem>
-                        <NavItem> <NavLink href="/">About US</NavLink> </NavItem>
-                        <NavItem> <NavLink href="/">Contact US</NavLink> </NavItem>
+                        <NavItem> <NavLink href="http://opaldata.cs.uni-paderborn.de:3030/">SparQL endpoint</NavLink> </NavItem>
+                        <NavItem> <NavLink href="/about">About US</NavLink> </NavItem>
                     </Nav>
-                    <Nav className="ml-auto" navbar>
-                        <NavItem> <NavLink href="/">En</NavLink> </NavItem>
-                    </Nav>
+                    {/*<Nav className="ml-auto" navbar>*/}
+                    {/*    <NavItem> <NavLink href="/">En</NavLink> </NavItem>*/}
+                    {/*</Nav>*/}
                 </Collapse>
             </Navbar>
         );
