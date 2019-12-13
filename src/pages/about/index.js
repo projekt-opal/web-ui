@@ -6,6 +6,7 @@ import {Container, Jumbotron} from "reactstrap";
 const Home = () => (
     <Layout>
         <Jumbotron>
+            <h2>Goals of the OPAL project</h2>
             Goals of the project Open Data Portal Germany (OPAL) are the conception and development of a holistic portal
             for open data . In particular, open data from mCLOUD and MDM are integrated. Unlike the majority of existing
             open data portals, OPAL will refine metadata and in 5-star linked open datatransform. The portal will thus
@@ -13,6 +14,11 @@ const Home = () => (
             other data portals, data-driven applications, etc.). In addition, OPAL will also enable the search via
             content-related (instead of just metadata) facets (such as automatically generated topics, location
             information and time restrictions).
+            <hr />
+            <h2>Credits</h2>
+            Data Science Group (DICE) at Paderborn University
+            This work has been supported by the German Federal Ministry of Transport and Digital Infrastructure (BMVI) in the project Open Data Portal Germany (OPAL) (funding code 19F2028A).
+
         </Jumbotron>
         <hr/>
         <Container>
