@@ -80,10 +80,10 @@ class View extends React.Component {
             <tr key={idx}>
                 <td>
                     <div style={{ display: 'flex', flexFlow: 'row wrap' }}>
-                        <Link><a href="./one" target="_blank" >
+                        {/*todo complete the link*/}
+                        <Link href={"/view/one/"}><a target="_blank" >
                             <Button
                                 style={{ background: 'transparent', border: 'none', color: 'black' }} onClick={() => this.storeRelatedLicenseInfo(f.info.title)}>
-
                                 <h5> {f.info.title}</h5>
                             </Button></a></Link>
 

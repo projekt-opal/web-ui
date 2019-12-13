@@ -235,27 +235,27 @@ class ViewOne extends React.Component {
                 <Container fluid>
                     <Row>
                         <Col md='1'></Col>
-                        <Col md='10' className="border" style={{'top': '2rem'}} center>
+                        <Col md='10' className="border" style={{'top': '2rem'}}>
                             <Row>
-                                <Col wrapper>
-                                    <h3 style={{'margin-top': '.5rem', 'margin-bottom': '0'}}>
+                                <Col>
+                                    <h3 style={{marginTop: '.5rem', marginBottom: '0'}}>
                                         Field Name: {this.props.query.label}</h3>
                                 </Col>
                             </Row>
                         </Col>
-                        <Col md='1'></Col>
+                        <Col md='1'/>
                     </Row>
                     <br/>
                     <Row style={{position: 'relative', top: '2rem'}}>
-                        <Col md='1'></Col>
-                        <Col md='10' wrapper><h4>Datasets:</h4></Col>
-                        <Col md='1'></Col>
+                        <Col md='1'/>
+                        <Col md='10'><h4>DataSets:</h4></Col>
+                        <Col md='1'/>
                     </Row>
 
                     <Row>
                         <Col md={{size: 1}}/>
-                        <Col md={{size: 10}} className="border" style={{'margin-top': '2rem'}}>
-                            {/* TODO: Below methods for fetching the Related Datasets by licenses */}
+                        <Col md={{size: 10}} className="border" style={{marginTop: '2rem'}}>
+                            {/* TODO: Below methods for fetching the Related DataSets by licenses */}
                             <TableView
                                 fetchDataSets={() => this.fetchDataSets()}
                                 getNumberOfDataSets={() => this.getNumberOfRelatedDataSets()}

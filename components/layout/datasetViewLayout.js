@@ -56,15 +56,15 @@ class DatasetViewLayout extends React.Component {
         return (
             <Container fluid>
                 <Row>
-                    <Col wrapper>
-                        <h3 style={{ 'margin-top': '.5rem', 'margin-bottom': '0' }}>
+                    <Col>
+                        <h3 style={{ marginTop: '.5rem', marginBottom: '0' }}>
                             {this.state.dataSet == null ? '' : this.state.dataSet.title}</h3></Col>
                 </Row>
                 <hr />
                 <Row>
                     {/* style={{ marginLeft: '3px', fontSize: '8px', fontWeight: '500' }} */}
                     {/* <Col md='2'></Col> */}
-                    <Col md='7' wrapper>
+                    <Col md='7'>
                         <h5>Description:</h5>
                         <p>{this.state.dataSet == null ? '' : this.state.dataSet.description}</p>
 
@@ -86,10 +86,10 @@ class DatasetViewLayout extends React.Component {
                             </div>
                         })}
                     </Col>
-                    <Col md='5' wrapper>
+                    <Col md='5'>
                         <h5>Metadata Info:</h5>
                         <div>
-                            <Table bordered style={{ 'table-layout': 'fixed', 'width': '100%', 'word-wrap': 'break-word' }}>
+                            <Table bordered style={{ tableLayout: 'fixed', width: '100%', wordWrap: 'break-word' }}>
                                 <tbody>
                                     {
                                         Object.keys(metaDataInfo).map((key, idx) => {
@@ -106,9 +106,9 @@ class DatasetViewLayout extends React.Component {
                 </Row>
                 <hr />
                 <Row>
-                    <Col md='7' wrapper>
+                    <Col md='7'>
                         <h5>Quality Metrics:</h5>
-                        <Table bordered style={{ 'table-layout': 'fixed', 'width': '100%', 'word-wrap': 'break-word' }}>
+                        <Table bordered style={{ tableLayout: 'fixed', width: '100%', wordWrap: 'break-word' }}>
                             <thead>
                                 <tr>
                                     <th>Overall score</th>

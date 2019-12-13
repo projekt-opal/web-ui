@@ -72,7 +72,7 @@ class ShortView extends React.Component {
                         >
                             <FaExpandArrowsAlt/>
                         </Button>
-                        <Link href={dataSetViewLink} target="_blank">
+                        <Link href={dataSetViewLink}>
                             <a target="_blank" style={{textDecoration: "none", color: 'gray'}}>
                                 <FaExternalLinkAlt/>
                             </a>
