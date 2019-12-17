@@ -1,17 +1,13 @@
 import React from 'react';
-import { Button, Col, Container, Row } from "reactstrap";
+import {Button, Col, Container, Row} from "reactstrap";
 
-import FilterView from './fileterView';
-import CustomSelect from "./customSelect";
-import TableView from "../table/TableView";
+import OneFilterView from './fileterView';
 
-
-class FiltersView extends React.Component {
+class FiltersList extends React.Component {
 
     applyFilters = () => {
         this.props.applyFilters();
     };
-
 
     render() {
         return (
@@ -33,7 +29,7 @@ class FiltersView extends React.Component {
                                     return (
                                         <Row key={idx} style={{ 'marginTop': '10px' }}>
                                             <Col md={{ size: 12 }}>
-                                                <FilterView
+                                                <OneFilterView
                                                     selectedFilterValues={selectedFilterValues.length > 0 ? selectedFilterValues[0].values : []}
                                                     onAppendSelectedValues={this.props.onAppendSelectedValues}
                                                     onGetSearchKey={this.props.onGetSearchKey}
@@ -53,4 +49,4 @@ class FiltersView extends React.Component {
     }
 }
 
-export default FiltersView;
+export default FiltersList;

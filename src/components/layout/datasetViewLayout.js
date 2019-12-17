@@ -1,19 +1,6 @@
 import React from 'react';
-import {
-    Badge,
-    Button,
-    Card,
-    CardHeader,
-    Container,
-    Row,
-    Col,
-    CardTitle,
-    Form,
-    FormGroup,
-    Label,
-    Table,
-} from "reactstrap";
-import { FaRegStar, FaStar, FaStarHalfAlt } from "react-icons/fa";
+import {Badge, Col, Container, Row, Table,} from "reactstrap";
+import {FaRegStar, FaStar, FaStarHalfAlt} from "react-icons/fa";
 import ReactTooltip from 'react-tooltip';
 
 class DatasetViewLayout extends React.Component {
@@ -22,7 +9,7 @@ class DatasetViewLayout extends React.Component {
         dataset: null
     };
 
-    componentDidMount = () => {
+    componentDidMount() {
         console.log(this.props.dataSet);
         this.setState({ dataSet: this.props.dataset })
     }
@@ -62,8 +49,6 @@ class DatasetViewLayout extends React.Component {
                 </Row>
                 <hr />
                 <Row>
-                    {/* style={{ marginLeft: '3px', fontSize: '8px', fontWeight: '500' }} */}
-                    {/* <Col md='2'></Col> */}
                     <Col md='7'>
                         <h5>Description:</h5>
                         <p>{this.state.dataSet == null ? '' : this.state.dataSet.description}</p>

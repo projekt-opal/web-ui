@@ -1,6 +1,6 @@
 import React from 'react';
 import {Button, Spinner} from "reactstrap";
-import FiltersView from "../filter/FiltersView";
+import FiltersList from "../filter/FiltersList";
 import {FaRedo} from "react-icons/fa";
 
 const LoadingFiltersView = (props) => {
@@ -13,7 +13,7 @@ const LoadingFiltersView = (props) => {
                     style={{marginLeft: '3px', fontSize: '8px', fontWeight: '500'}}>Internal Server Error</span>
             </div>
             :
-            <FiltersView
+            <FiltersList
                 filters={props.filters}
                 selectedFilters={props.selectedFilters}
                 onAppendSelectedValues={props.onAppendSelectedValues}

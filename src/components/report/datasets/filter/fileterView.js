@@ -1,11 +1,10 @@
 import React from 'react';
-import { Button } from "reactstrap";
+import {Button} from "reactstrap";
 import CustomSelect from './customSelect';
 
-import { FaAngleDown, FaAngleRight } from 'react-icons/fa'
-import TableView from "../table/TableView";
+import {FaAngleDown, FaAngleRight} from 'react-icons/fa'
 
-class FilterView extends React.Component {
+class OneFilterView extends React.Component {
 
     state = {
         isExpanded: false
@@ -43,4 +42,4 @@ class FilterView extends React.Component {
     }
 };
 
-export default FilterView;
+export default OneFilterView;
