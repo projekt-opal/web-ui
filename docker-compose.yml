@@ -1,0 +1,15 @@
+version: "2.4"
+
+services:
+  frontend:
+    container_name: frontend
+    ports:
+      - 3000:3000
+    build: .
+    volumes:
+      - modules:/usr/src/app/node_modules
+      - next:/usr/src/app/.next
+
+volumes:
+  modules:
+  next:
