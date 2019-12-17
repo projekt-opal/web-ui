@@ -58,7 +58,7 @@ class FirstPage extends React.Component {
         this.setState({ selectedSearchIn: newSelectedSearchIn });
     };
 
-    onFetchFilters = () => {
+    fetchFiltersList = () => {
         this.setState({
             filters: [],
             loadingFilters: true,
@@ -116,11 +116,11 @@ class FirstPage extends React.Component {
         this.setState({ filters: filters });
     };
 
-    onReplaceSelectedFilters = (selectedFilters) => {
+    replaceSelectedFilters = (selectedFilters) => {
         this.setState({ selectedFilters: selectedFilters });
     };
 
-    onAppendSelectedValues = (selectedFilter) => {
+    appendSelectedValues = (selectedFilter) => {
         let selectedFilters = [...this.state.selectedFilters];
 
         const prevSelectedFilter = selectedFilters.find(f => f.title === selectedFilter.title);
@@ -135,7 +135,7 @@ class FirstPage extends React.Component {
         this.setState({ selectedFilters: selectedFilters });
     };
 
-    onGetSearchKey = () => {
+    getSearchKey = () => {
         return this.state.searchKey;
     };
 
@@ -229,7 +229,7 @@ class FirstPage extends React.Component {
     refreshDataSets = () => {
         this.getNumberOfDataSets();
         this.fetchDataSets();
-        // this.onFetchFilters();
+        // this.fetchFiltersList();
     };
 
     orderByChanged = (orderByValue) => {
@@ -241,13 +241,6 @@ class FirstPage extends React.Component {
     };
 
     handleWindowSizeChange = () => {
-        // if (window.innerWidth <= 700) {
-        //     this.getAccessToPosition(navigator);
-        // }
-        // else {
-        //     const orderByValue = "relevance";
-        //     this.fetchDataSets(orderByValue);
-        // }
     };
 
     componentWillUnmount() {
@@ -267,7 +260,7 @@ class FirstPage extends React.Component {
                         onUpdateSearchKey={(searchKey) => this.onUpdateSearchKey(searchKey)}
                         selectedSearchIn={this.state.selectedSearchIn}
                         setLastSelectedSearchIn={() => this.setLastSelectedSearchIn()}
-                        onFetchFilters={() => this.onFetchFilters()}
+                        onFetchFilters={() => this.fetchFiltersList()}
                     />
                 </Row>
                 <br />
@@ -283,11 +276,11 @@ class FirstPage extends React.Component {
                         loadingDataSets={this.state.loadingDataSets}
                         loadingDataSetsError={this.state.loadingDataSetsError}
                         selectedFilters={this.state.selectedFilters}
-                        onAppendSelectedValues={(selectedFilter) => this.onAppendSelectedValues(selectedFilter)}
-                        onGetSearchKey={() => this.onGetSearchKey()}
-                        onReplaceSelectedFilters={(selectedFilters) => this.onReplaceSelectedFilters(selectedFilters)}
+                        appendSelectedValues={(selectedFilter) => this.appendSelectedValues(selectedFilter)}
+                        getSearchKey={() => this.getSearchKey()}
+                        replaceSelectedFilters={(selectedFilters) => this.replaceSelectedFilters(selectedFilters)}
                         selectedSearchIn={this.state.lastSelectedSearchIn}
-                        onFetchFilters={() => this.onFetchFilters()}
+                        fetchFiltersList={() => this.fetchFiltersList()}
                         filters={this.state.filters}
                         loadingFilters={this.state.loadingFilters}
                         loadingFiltersError={this.state.loadingFiltersError}

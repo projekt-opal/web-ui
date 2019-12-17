@@ -137,14 +137,14 @@ class DatasetView extends React.Component {
     refreshDataSets = () => {
         this.getNumberOfDataSets();
         this.fetchDataSets();
-        // this.onFetchFilters();
+        // this.fetchFiltersList();
     };
 
     orderByChanged = (orderByValue) => {
         this.setState({orderByValue: orderByValue}, () => this.refreshDataSets())
     };
 
-    onAppendSelectedValues = (selectedFilter) => {
+    appendSelectedValues = (selectedFilter) => {
         let selectedFilters = [...this.state.selectedFilters];
 
         const prevSelectedFilter = selectedFilters.find(f => f.title === selectedFilter.title);
@@ -159,11 +159,11 @@ class DatasetView extends React.Component {
         this.setState({selectedFilters: selectedFilters});
     };
 
-    onReplaceSelectedFilters = (selectedFilters) => {
+    replaceSelectedFilters = (selectedFilters) => {
         this.setState({selectedFilters: selectedFilters});
     };
 
-    onFetchFilters = () => {
+    fetchFiltersList = () => {
         this.setState({
             filters: [],
             loadingFilters: true,
@@ -245,9 +245,9 @@ class DatasetView extends React.Component {
                                 loadingDataSets={this.state.loadingDataSets}
                                 loadingDataSetsError={this.state.loadingDataSetsError}
                                 selectedFilters={this.state.selectedFilters}
-                                onAppendSelectedValues={(selectedFilter) => this.onAppendSelectedValues(selectedFilter)}
-                                onReplaceSelectedFilters={(selectedFilters) => this.onReplaceSelectedFilters(selectedFilters)}
-                                onFetchFilters={() => this.onFetchFilters()}
+                                appendSelectedValues={(selectedFilter) => this.appendSelectedValues(selectedFilter)}
+                                replaceSelectedFilters={(selectedFilters) => this.replaceSelectedFilters(selectedFilters)}
+                                fetchFiltersList={() => this.fetchFiltersList()}
                                 filters={this.state.filters}
                                 loadingFilters={this.state.loadingFilters}
                                 loadingFiltersError={this.state.loadingFiltersError}

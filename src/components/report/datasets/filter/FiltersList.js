@@ -31,8 +31,8 @@ class FiltersList extends React.Component {
                                             <Col md={{ size: 12 }}>
                                                 <OneFilterView
                                                     selectedFilterValues={selectedFilterValues.length > 0 ? selectedFilterValues[0].values : []}
-                                                    onAppendSelectedValues={this.props.onAppendSelectedValues}
-                                                    onGetSearchKey={this.props.onGetSearchKey}
+                                                    appendSelectedValues={this.props.appendSelectedValues}
+                                                    getSearchKey={this.props.getSearchKey}
                                                     filter={filter}
                                                     getSelectedSearchIn={this.props.getSelectedSearchIn}
                                                 />

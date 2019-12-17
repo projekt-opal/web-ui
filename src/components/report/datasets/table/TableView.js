@@ -16,13 +16,13 @@ class TableView extends React.Component {
         screenWidth: 0,
 
         isFiltersOpen: false,
-        lastSelectedValues: []
+        lastSelectedFilterValues: []
     };
 
     componentDidMount() {
         this.props.fetchDataSets();
         this.props.getNumberOfDataSets();
-        this.props.onFetchFilters();
+        this.props.fetchFiltersList();
         this.handleWindowSizeChange();
         window.addEventListener('resize', this.handleWindowSizeChange);
     }
@@ -34,13 +34,14 @@ class TableView extends React.Component {
     };
 
     applyFilters = () => {
-        this.setState({lastSelectedValues: this.props.selectedFilters});
-        this.props.fetchDataSets();
-        this.props.getNumberOfDataSets();
+        this.setState({lastSelectedFilterValues: this.props.selectedFilters}, () => {
+            this.props.fetchDataSets();
+            this.props.getNumberOfDataSets();
+        });
     };
 
     reloadFilters = () => {
-        this.props.onFetchFilters();
+        this.props.fetchFiltersList();
     };
 
     reloadNumberOfDataSets = () => {
@@ -71,7 +72,7 @@ class TableView extends React.Component {
 
     toggleFilters = () => {
         if (this.state.isFiltersOpen) {
-            this.props.onReplaceSelectedFilters(this.state.lastSelectedValues);
+            this.props.replaceSelectedFilters(this.state.lastSelectedFilterValues);
         }
         this.setState({isFiltersOpen: !this.state.isFiltersOpen});
     };
@@ -82,7 +83,6 @@ class TableView extends React.Component {
 
     handleWindowSizeChange = () => {
         this.setState({screenWidth: window.innerWidth});
-
     };
 
     render() {
@@ -91,7 +91,7 @@ class TableView extends React.Component {
         return (
             <Col md='12'>
                 <Row>
-                    <Col xs={isMobile ? {size: 12} : {size: 9}} style={{'marginTop': '1rem'}}>
+                    <Col xs={isMobile ? {size: 12} : {size: 9}} style={{marginTop: '1rem'}}>
 
                         <Table hover bordered responsive striped style={{display: 'block'}}>
                             <thead>
@@ -123,8 +123,8 @@ class TableView extends React.Component {
 
                                                 filters={this.props.filters}
                                                 selectedFilters={this.props.selectedFilters}
-                                                onAppendSelectedValues={this.props.onAppendSelectedValues}
-                                                onGetSearchKey={this.props.onGetSearchKey}
+                                                appendSelectedValues={this.props.appendSelectedValues}
+                                                getSearchKey={this.props.getSearchKey}
                                                 getSelectedSearchIn={this.props.getSelectedSearchIn}
                                                 reloadFilters={this.reloadFilters}
                                                 applyFilters={this.applyFilters}
@@ -160,7 +160,6 @@ class TableView extends React.Component {
                             </tr>
                             </tbody>
                         </Table>
-
                     </Col>
                     {
                         !isMobile &&
@@ -169,11 +168,10 @@ class TableView extends React.Component {
                                 {<LoadingFiltersView
                                     loadingFilters={this.props.loadingFilters}
                                     loadingFiltersError={this.props.loadingFiltersError}
-
                                     filters={this.props.filters}
                                     selectedFilters={this.props.selectedFilters}
-                                    onAppendSelectedValues={this.props.onAppendSelectedValues}
-                                    onGetSearchKey={this.props.onGetSearchKey}
+                                    appendSelectedValues={this.props.appendSelectedValues}
+                                    getSearchKey={this.props.getSearchKey}
                                     getSelectedSearchIn={this.props.getSelectedSearchIn}
                                     reloadFilters={this.reloadFilters}
                                     applyFilters={this.applyFilters}

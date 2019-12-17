@@ -62,7 +62,7 @@ class CustomSelect extends React.Component {
     getOptions = (inputValue) => {
         this.setState({prevInputValue: inputValue}, () => {
             let searchKey = '';
-            if (this.props.onGetSearchKey) searchKey = this.props.onGetSearchKey();
+            if (this.props.getSearchKey) searchKey = this.props.getSearchKey();
             let selectedSearchIn = [];
             if (this.props.getSelectedSearchIn) selectedSearchIn = this.props.getSelectedSearchIn();
             if (!this.props.filter.isTypeStatic) {
@@ -98,9 +98,9 @@ class CustomSelect extends React.Component {
                 uri: this.props.uri,
                 values: values
             };
-            this.props.onAppendSelectedValues(selectedFilter);
+            this.props.appendSelectedValues(selectedFilter);
         } else {
-            this.props.onAppendSelectedValues({
+            this.props.appendSelectedValues({
                     title: this.props.filter.title,
                     uri: this.props.uri,
                     values: []

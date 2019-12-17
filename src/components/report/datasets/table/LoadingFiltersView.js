@@ -16,8 +16,8 @@ const LoadingFiltersView = (props) => {
             <FiltersList
                 filters={props.filters}
                 selectedFilters={props.selectedFilters}
-                onAppendSelectedValues={props.onAppendSelectedValues}
-                onGetSearchKey={props.onGetSearchKey}
+                appendSelectedValues={props.appendSelectedValues}
+                getSearchKey={props.getSearchKey}
                 getSelectedSearchIn={props.getSelectedSearchIn}
                 applyFilters={props.applyFilters}
             />

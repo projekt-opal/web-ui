@@ -33,8 +33,8 @@ class OneFilterView extends React.Component {
                         values={this.props.filter.values}
                         getSelectedSearchIn={this.props.getSelectedSearchIn}
                         selectedValues={this.props.selectedFilterValues}
-                        onAppendSelectedValues={this.props.onAppendSelectedValues}
-                        onGetSearchKey={this.props.onGetSearchKey}
+                        appendSelectedValues={this.props.appendSelectedValues}
+                        getSearchKey={this.props.getSearchKey}
                     />
                 }
             </div>
