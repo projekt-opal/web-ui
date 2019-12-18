@@ -14,7 +14,7 @@ class DatasetView extends React.Component {
 
     state = {
         dataSet: null,
-        relatedDatasets: null,
+        relatedDataSets: null,
 
 
         orderByValue: null,
@@ -39,7 +39,6 @@ class DatasetView extends React.Component {
                 .then(response => {
                     if (response.data != null) {
                         this.setState({dataSet: response.data})
-
                     }
                 })
                 .catch(err => console.log(err));
@@ -59,14 +58,11 @@ class DatasetView extends React.Component {
         })
             .then(response => {
                 const dataSets = response.data;
-                console.log("Response: " + response.data);
                 this.setState({
                     loadingDataSets: false,
                     loadingDataSetsError: false,
-                    relatedDatasets: dataSets
+                    relatedDataSets: dataSets
                 });
-
-                console.log("response not coming")
             })
             .catch(err => {
                 console.log(err);
@@ -107,20 +103,20 @@ class DatasetView extends React.Component {
     };
 
     load10More = () => {
-        if (this.state.relatedDatasets !== null && this.state.relatedDatasets.length > 0) {
-            let url = `/dataSets/getSubList?low=${this.state.relatedDatasets.length}`;
+        if (this.state.relatedDataSets !== null && this.state.relatedDataSets.length > 0) {
+            let url = `/dataSets/getSubList?low=${this.state.relatedDataSets.length}`;
             axios.post(url, {
                 orderByDTO: this.state.orderByValue,
                 filterDTOS: this.state.selectedFilters
             })
                 .then(response => {
-                    const relatedDatasets = response.data;
-                    let ds = [...this.state.relatedDatasets];
-                    ds = ds.concat(relatedDatasets);
+                    const relatedDataSets = response.data;
+                    let ds = [...this.state.relatedDataSets];
+                    ds = ds.concat(relatedDataSets);
                     this.setState({
                         loadingDataSets: false,
                         loadingDataSetsError: false,
-                        relatedDatasets: ds
+                        relatedDataSets: ds
                     });
                 })
                 .catch(err => {
@@ -128,7 +124,7 @@ class DatasetView extends React.Component {
                     this.setState({
                         loadingDataSets: false,
                         loadingDataSetsError: true,
-                        relatedDatasets: []
+                        relatedDataSets: []
                     });
                 });
         }
@@ -238,7 +234,7 @@ class DatasetView extends React.Component {
                                 fetchDataSets={() => this.fetchDataSets()}
                                 getNumberOfDataSets={() => this.getNumberOfRelatedDataSets()}
                                 load10More={() => this.load10More()}
-                                dataSets={this.state.relatedDatasets}
+                                dataSets={this.state.relatedDataSets}
                                 numberOfDataSets={this.state.numberOfRelatedDataSets}
                                 loadingNumberOfDataSets={this.state.loadingNumberOfRelatedDataSets}
                                 loadingNumberOfDataSetsError={this.state.loadingNumberOfRelatedDataSetsError}

@@ -10,8 +10,7 @@ class DatasetViewLayout extends React.Component {
     };
 
     componentDidMount() {
-        console.log(this.props.dataSet);
-        this.setState({ dataSet: this.props.dataset })
+        this.setState({dataSet: this.props.dataset})
     }
 
     countRating = (overallRating) => {
@@ -22,15 +21,15 @@ class DatasetViewLayout extends React.Component {
             rating[Math.floor(overallRating)] = 1;
         return (<span>
             {
-                rating.map((r, idx) => r === 0 ? <FaRegStar key={idx} /> : r === 1 ? <FaStarHalfAlt key={idx} /> :
-                    <FaStar key={idx} />)
+                rating.map((r, idx) => r === 0 ? <FaRegStar key={idx}/> : r === 1 ? <FaStarHalfAlt key={idx}/> :
+                    <FaStar key={idx}/>)
             }
         </span>);
     };
 
     render() {
         const metaDataInfo = [];
-        let overallRatingMain = <span />;
+        let overallRatingMain = <span/>;
         if (this.state.dataSet) {
             if (this.state.dataSet.issueDate) metaDataInfo["issueDate"] = this.state.dataSet.issueDate;
             if (this.state.dataSet.theme) metaDataInfo["theme"] = this.state.dataSet.theme;
@@ -44,10 +43,10 @@ class DatasetViewLayout extends React.Component {
             <Container fluid>
                 <Row>
                     <Col>
-                        <h3 style={{ marginTop: '.5rem', marginBottom: '0' }}>
+                        <h3 style={{marginTop: '.5rem', marginBottom: '0'}}>
                             {this.state.dataSet == null ? '' : this.state.dataSet.title}</h3></Col>
                 </Row>
-                <hr />
+                <hr/>
                 <Row>
                     <Col md='7'>
                         <h5>Description:</h5>
@@ -56,65 +55,71 @@ class DatasetViewLayout extends React.Component {
                         <h5>Data File(s):</h5>
                         <div>
                             {
-                                <div>{this.state.dataSet == null ? '' : this.state.dataSet.publisher.name}</div>
+                                <div>{this.state.dataSet !== null && this.state.dataSet.publisher ?
+                                    this.state.dataSet.publisher.name : ""}</div>
                             }
-                            <div>{this.state.dataSet == null ? '' : this.state.dataSet.publisher.publisher}</div>
+                            <div>{this.state.dataSet !== null && this.state.dataSet.publisher ?
+                                this.state.dataSet.publisher.publisher : ""}</div>
                         </div>
 
-                        {this.state.dataSet == null ? '' : this.state.dataSet.distributions.map((distribution, idx) => {
-                            return <div key={idx}>
-                                <Badge>{distribution.fileType}</Badge>&nbsp;
+                        {
+                            this.state.dataSet !== null && this.state.dataSet.distributions ?
+                                this.state.dataSet.distributions.map((distribution, idx) => {
+                                    return <div key={idx}>
+                                        <Badge>{distribution.fileType}</Badge>&nbsp;
 
-                                <a href={distribution.url}>{distribution.url}</a>
+                                        <a href={distribution.url}>{distribution.url}</a>
 
 
-                            </div>
-                        })}
+                                    </div>
+                                })
+                                : ""
+                        }
                     </Col>
                     <Col md='5'>
                         <h5>Metadata Info:</h5>
                         <div>
-                            <Table bordered style={{ tableLayout: 'fixed', width: '100%', wordWrap: 'break-word' }}>
+                            <Table bordered style={{tableLayout: 'fixed', width: '100%', wordWrap: 'break-word'}}>
                                 <tbody>
-                                    {
-                                        Object.keys(metaDataInfo).map((key, idx) => {
-                                            return <tr key={idx}>
-                                                <td>{key}</td>
-                                                <td>{metaDataInfo[key]}</td>
-                                            </tr>
-                                        })
-                                    }
+                                {
+                                    Object.keys(metaDataInfo).map((key, idx) => {
+                                        return <tr key={idx}>
+                                            <td>{key}</td>
+                                            <td>{metaDataInfo[key]}</td>
+                                        </tr>
+                                    })
+                                }
                                 </tbody>
                             </Table>
                         </div>
                     </Col>
                 </Row>
-                <hr />
+                <hr/>
                 <Row>
                     <Col md='7'>
                         <h5>Quality Metrics:</h5>
-                        <Table bordered style={{ tableLayout: 'fixed', width: '100%', wordWrap: 'break-word' }}>
+                        <Table bordered style={{tableLayout: 'fixed', width: '100%', wordWrap: 'break-word'}}>
                             <thead>
-                                <tr>
-                                    <th>Overall score</th>
-                                    <th>
-                                        {overallRatingMain}
-                                    </th>
-                                </tr>
+                            <tr>
+                                <th>Overall score</th>
+                                <th>
+                                    {overallRatingMain}
+                                </th>
+                            </tr>
                             </thead>
                             <tbody>
-                                {
-                                    this.state.dataSet.qualityMetrics.map((metric, idx) => {
-                                        return (
-                                            <tr key={idx}>
-                                                <td><span data-tip="some text">{metric.quality}</span>
-                                                    <ReactTooltip place="bottom" />
-                                                </td>
-                                                <td>{metric.value}</td>
-                                            </tr>
-                                        );
-                                    })
-                                }
+                            {
+                                this.state.dataSet.qualityMetrics.map((metric, idx) => {
+                                    return (
+                                        <tr key={idx}>
+                                            <td><span data-tip="some text">{metric.quality}</span>
+                                                <ReactTooltip place="bottom"/>
+                                            </td>
+                                            <td>{metric.value}</td>
+                                        </tr>
+                                    );
+                                })
+                            }
                             </tbody>
                         </Table>
                     </Col>
