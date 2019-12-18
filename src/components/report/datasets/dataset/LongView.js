@@ -5,6 +5,14 @@ import Link from 'next/link';
 
 import {FaExpandArrowsAlt, FaExternalLinkAlt, FaRegStar, FaStar, FaStarHalfAlt} from "react-icons/fa";
 
+// private String uri;
+// private String title;
+// private String description;
+// private String issueDate;
+// private List<String> theme;
+// private String publisherName;
+// private List<String> license;
+
 class LongView extends React.Component {
 
     state = {
@@ -28,28 +36,38 @@ class LongView extends React.Component {
 
     render() {
 
-        let description = this.props.dataSet.description;
-        if (this.state.isOneLineDescription)
-            description = description.substr(0, 100);
+        const title = this.props.dataSet.title ? this.props.dataSet.title : "";
 
-        let title = this.props.dataSet.title;
+        let description = this.props.dataSet.description ? this.props.dataSet.description: "";
+        if (this.state.isOneLineDescription) description = description.substr(0, 100);
 
-        const keywords = this.props.dataSet.keywords;
-        const theme = this.props.dataSet.theme;
-        let harvestingDate = this.props.dataSet.issueDate;
+        const theme = this.props.dataSet.theme && this.props.dataSet.theme.length > 0 ? <><br /><span>Theme: </span>
+                <span style={{marginLeft: '2rem'}}>{this.props.dataSet.theme.join(', ')}</span>
+            </>
+        : null;
 
-        let overallRating = this.props.dataSet.overallRating;
-        const rating = [0, 0, 0, 0, 0];
-        for (let i = 1; i <= overallRating; i++)
-            rating[i - 1] = 2;
-        if (overallRating - Math.floor(overallRating) >= 0.5)
-            rating[Math.floor(overallRating)] = 1;
-        let overallRatingStarts = (<span>
-            {
-                rating.map((r, idx) => r === 0 ? <FaRegStar key={idx}/> : r === 1 ? <FaStarHalfAlt key={idx}/> :
-                    <FaStar key={idx}/>)
-            }
-        </span>);
+        const issueDate = this.props.dataSet.issueDate ? <><br /><span> Issue Date: </span>
+            <span style={{marginLeft: '2rem'}}>{this.props.dataSet.issueDate}</span>
+        </> : null;
+
+        const license = this.props.dataSet.license && this.props.dataSet.license.length > 0 ? <><br /><span>License: </span>
+                <span style={{marginLeft: '2rem'}}>{this.props.dataSet.license.join(', ')}</span></>
+            : null;
+
+        // todo uncomment me when overall rating is available
+        let overallRatingStarts = <span />;
+        // let overallRating = this.props.dataSet.overallRating;
+        // const rating = [0, 0, 0, 0, 0];
+        // for (let i = 1; i <= overallRating; i++)
+        //     rating[i - 1] = 2;
+        // if (overallRating - Math.floor(overallRating) >= 0.5)
+        //     rating[Math.floor(overallRating)] = 1;
+        // let overallRatingStarts = (<span>
+        //     {
+        //         rating.map((r, idx) => r === 0 ? <FaRegStar key={idx}/> : r === 1 ? <FaStarHalfAlt key={idx}/> :
+        //             <FaStar key={idx}/>)
+        //     }
+        // </span>);
 
         const dataSetViewLink = "/view/datasetView?uri=" + this.props.dataSet.uri;
 
@@ -63,10 +81,10 @@ class LongView extends React.Component {
                         uri={this.props.dataSet.uri}
                     />
                 }
-                <Card color="LightCard" style={{flexGrow: '1'}}>
+                <Card color="LightCard" style={{flexGrow: '1', marginTop:'1em'}}>
                     <CardHeader>
                         <div style={{display: 'flex', flexFlow: 'row wrap'}}>
-                            <CardTitle style={{display: 'inline', marginLeft: '0.5em'}}>
+                            <CardTitle style={{display: 'inline', marginLeft: '0.5em', fontWeight:'bold'}}>
                                 {title}
                             </CardTitle>
                             <div style={{flexGrow: '1'}}/>
@@ -99,24 +117,11 @@ class LongView extends React.Component {
                             }
                         </CardSubtitle>
                         <CardText>
-                            <span> harvesting Date: </span>
-                            <span>{harvestingDate}</span>
+                            {issueDate}
+                            {theme}
+                            {license}
+                            <br />
                         </CardText>
-                        <CardFooter className="text-muted">
-                            <div>
-                                <span style={{marginLeft: '3rem'}}>{theme}</span>
-                                <br/>
-                                {
-                                    keywords.map((keyword, idx) => {
-                                        return (
-                                            <span key={idx} style={{marginLeft: '4px'}}>
-                                                {keyword}
-                                            </span>
-                                        );
-                                    })
-                                }
-                            </div>
-                        </CardFooter>
                     </CardBody>
                 </Card>
             </>

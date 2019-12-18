@@ -24,28 +24,30 @@ class ShortView extends React.Component {
 
     render() {
 
-        let description = this.props.dataSet.description;
-        if (this.state.isOneLineDescription)
-            description = description.substr(0, 100);
-        let title = this.props.dataSet.title;
-        let dataSetFileType = this.props.dataSet.fileType;
-        let overallRating = this.props.dataSet.overallRating;
-        const rating = [0, 0, 0, 0, 0];
-        for (let i = 1; i <= overallRating; i++)
-            rating[i - 1] = 2;
-        if (overallRating - Math.floor(overallRating) >= 0.5)
-            rating[Math.floor(overallRating)] = 1;
-        let overallRatingStarts = (<span>
-            {
-                rating.map((r, idx) => r === 0 ? <FaRegStar key={idx}/> : r === 1 ? <FaStarHalfAlt key={idx}/> :
-                    <FaStar key={idx}/>)
-            }
-        </span>);
+        const title = this.props.dataSet.title ? this.props.dataSet.title : "";
+
+        let description = this.props.dataSet.description ? this.props.dataSet.description: "";
+        if (this.state.isOneLineDescription) description = description.substr(0, 100);
+
+        // todo uncomment me when overall rating is available
+        let overallRatingStarts = <span />;
+        // let overallRating = this.props.dataSet.overallRating;
+        // const rating = [0, 0, 0, 0, 0];
+        // for (let i = 1; i <= overallRating; i++)
+        //     rating[i - 1] = 2;
+        // if (overallRating - Math.floor(overallRating) >= 0.5)
+        //     rating[Math.floor(overallRating)] = 1;
+        // let overallRatingStarts = (<span>
+        //     {
+        //         rating.map((r, idx) => r === 0 ? <FaRegStar key={idx}/> : r === 1 ? <FaStarHalfAlt key={idx}/> :
+        //             <FaStar key={idx}/>)
+        //     }
+        // </span>);
 
         const dataSetViewLink = "./view/datasetView?uri=" + this.props.dataSet.uri;
 
         return (
-            <Card color="LightCard" style={{flexGrow: '1'}}>
+            <Card color="LightCard" style={{flexGrow: '1', marginTop:'1em'}}>
                 {
                     this.state.isModalOpen &&
                     <ModalDatasetView
@@ -56,7 +58,7 @@ class ShortView extends React.Component {
                 }
                 <CardHeader>
                     <div style={{display: 'flex', flexFlow: 'row wrap'}}>
-                        <CardTitle style={{display: 'inline', marginLeft: '0.5em'}}>
+                        <CardTitle style={{display: 'inline', marginLeft: '0.5em', fontWeight: 'bold'}}>
                             {title}
                         </CardTitle>
                         <div style={{flexGrow: '1'}}/>
@@ -88,7 +90,6 @@ class ShortView extends React.Component {
                             </Button>
                         }
                     </CardSubtitle>
-                    <Badge>{dataSetFileType}</Badge>
                 </CardBody>
             </Card>
         );
