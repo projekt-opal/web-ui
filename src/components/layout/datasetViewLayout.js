@@ -5,14 +5,6 @@ import ReactTooltip from 'react-tooltip';
 
 class DatasetViewLayout extends React.Component {
 
-    state = {
-        dataset: null
-    };
-
-    componentDidMount() {
-        this.setState({dataSet: this.props.dataset})
-    }
-
     countRating = (overallRating) => {
         const rating = [0, 0, 0, 0, 0];
         for (let i = 1; i <= overallRating; i++)
@@ -30,13 +22,13 @@ class DatasetViewLayout extends React.Component {
     render() {
         const metaDataInfo = [];
         let overallRatingMain = <span/>;
-        if (this.state.dataSet) {
-            if (this.state.dataSet.issueDate) metaDataInfo["issueDate"] = this.state.dataSet.issueDate;
-            if (this.state.dataSet.theme) metaDataInfo["theme"] = this.state.dataSet.theme;
-            // if(dataset.keywords) metaDataInfo.push({keywords: dataset.keywords});
-            // if(dataset.issueDate) metaDataInfo.push({issueDate: dataset.issueDate});
-            if (this.state.dataSet.overallRating)
-                overallRatingMain = this.countRating(this.state.dataSet.overallRating);
+        if (this.props.dataSet) {
+            if (this.props.dataSet.issueDate) metaDataInfo["issueDate"] = this.props.dataSet.issueDate;
+            if (this.props.dataSet.theme) metaDataInfo["theme"] = this.props.dataSet.theme;
+            if (this.props.dataSet.keywords) metaDataInfo["keywords"] = this.props.dataSet.keywords.join(", ");
+            if (this.props.dataSet.issueDate) metaDataInfo["issueDate"] = this.props.dataSet.issueDate;
+            if (this.props.dataSet.overallRating)
+                overallRatingMain = this.countRating(this.props.dataSet.overallRating);
         } else return '';
 
         return (
@@ -44,27 +36,27 @@ class DatasetViewLayout extends React.Component {
                 <Row>
                     <Col>
                         <h3 style={{marginTop: '.5rem', marginBottom: '0'}}>
-                            {this.state.dataSet == null ? '' : this.state.dataSet.title}</h3></Col>
+                            {this.props.dataSet == null ? '' : this.props.dataSet.title}</h3></Col>
                 </Row>
                 <hr/>
                 <Row>
                     <Col md='7'>
                         <h5>Description:</h5>
-                        <p>{this.state.dataSet == null ? '' : this.state.dataSet.description}</p>
+                        <p>{this.props.dataSet == null ? '' : this.props.dataSet.description}</p>
 
                         <h5>Data File(s):</h5>
                         <div>
                             {
-                                <div>{this.state.dataSet !== null && this.state.dataSet.publisher ?
-                                    this.state.dataSet.publisher.name : ""}</div>
+                                <div>{this.props.dataSet !== null && this.props.dataSet.publisher ?
+                                    this.props.dataSet.publisher.name : ""}</div>
                             }
-                            <div>{this.state.dataSet !== null && this.state.dataSet.publisher ?
-                                this.state.dataSet.publisher.publisher : ""}</div>
+                            <div>{this.props.dataSet !== null && this.props.dataSet.publisher ?
+                                this.props.dataSet.publisher.publisher : ""}</div>
                         </div>
 
                         {
-                            this.state.dataSet !== null && this.state.dataSet.distributions ?
-                                this.state.dataSet.distributions.map((distribution, idx) => {
+                            this.props.dataSet !== null && this.props.dataSet.distributions ?
+                                this.props.dataSet.distributions.map((distribution, idx) => {
                                     return <div key={idx}>
                                         <Badge>{distribution.fileType}</Badge>&nbsp;
 
@@ -109,7 +101,7 @@ class DatasetViewLayout extends React.Component {
                             </thead>
                             <tbody>
                             {
-                                this.state.dataSet.qualityMetrics.map((metric, idx) => {
+                                this.props.dataSet.qualityMetrics.map((metric, idx) => {
                                     return (
                                         <tr key={idx}>
                                             <td><span data-tip="some text">{metric.quality}</span>

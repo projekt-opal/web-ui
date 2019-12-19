@@ -1,7 +1,6 @@
 import React from 'react'
 import Layout from "../../../components/layout/layout";
 import {Col, Container, Row} from "reactstrap";
-import {withRouter} from 'next/router'
 import axios from '../../../../webservice/axios-dataSets';
 import DatasetViewLayout from '../../../components/layout/datasetViewLayout';
 import TableView from '../../../components/report/datasets/table/TableView';
@@ -217,7 +216,7 @@ class DatasetView extends React.Component {
                     <Row>
                         <Col md='1'/>
                         <Col md='10' className="border" style={{marginTop: '2em'}}>
-                            {this.state.dataSet == null ? '' : <DatasetViewLayout dataset={this.state.dataSet}/>}
+                            {this.state.dataSet === null ? '' : <DatasetViewLayout dataSet={this.state.dataSet}/>}
                         </Col>
                         <Col md='1'/>
                     </Row>
@@ -260,4 +259,4 @@ class DatasetView extends React.Component {
 }
 
 
-export default withRouter(DatasetView);
+export default DatasetView;

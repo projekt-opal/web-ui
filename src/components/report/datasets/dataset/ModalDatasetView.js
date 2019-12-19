@@ -10,7 +10,7 @@ import {
     ModalHeader,
     Table,
 } from "reactstrap";
-import { FaRegStar, FaStar, FaStarHalfAlt } from "react-icons/fa";
+import {FaRegStar, FaStar, FaStarHalfAlt} from "react-icons/fa";
 import ReactTooltip from 'react-tooltip';
 import axios from '../../../../../webservice/axios-dataSets';
 
@@ -33,8 +33,8 @@ class ModalDatasetView extends React.Component {
             rating[Math.floor(overallRating)] = 1;
         return (<span>
             {
-                rating.map((r, idx) => r === 0 ? <FaRegStar key={idx} /> : r === 1 ? <FaStarHalfAlt key={idx} /> :
-                    <FaStar key={idx} />)
+                rating.map((r, idx) => r === 0 ? <FaRegStar key={idx}/> : r === 1 ? <FaStarHalfAlt key={idx}/> :
+                    <FaStar key={idx}/>)
             }
         </span>);
     };
@@ -42,39 +42,41 @@ class ModalDatasetView extends React.Component {
     componentDidMount() {
         axios.get("/dataSet?uri=" + this.props.uri)
             .then(response => {
-                this.setState({ dataSet: response.data })
+                this.setState({dataSet: response.data})
             })
             .catch(err => console.log(err));
     }
 
     render() {
         const metaDataInfo = [];
-        let overallRatingMain = <span />;
+        let overallRatingMain = <span/>;
 
-        if (this.state.dataSet) {
+        if (this.state.dataSet !== null) {
             if (this.state.dataSet.issueDate) metaDataInfo["issueDate"] = this.state.dataSet.issueDate;
             if (this.state.dataSet.theme) metaDataInfo["theme"] = this.state.dataSet.theme;
-            // if(dataset.keywords) metaDataInfo.push({keywords: dataset.keywords});
-            // if(dataset.issueDate) metaDataInfo.push({issueDate: dataset.issueDate});
+            if (this.state.dataSet.keywords) metaDataInfo["keywords"] = this.state.dataSet.keywords.join(", ");
+            if (this.state.dataSet.issueDate) metaDataInfo["issueDate"] = this.state.dataSet.issueDate;
             if (this.state.dataSet.overallRating)
                 overallRatingMain = this.countRating(this.state.dataSet.overallRating);
         } else return '';
 
         return (
             <Modal isOpen={this.props.isModalOpen} size='lg'
-                toggle={this.showDatasetView}>
-                <ModalHeader toggle={this.showDatasetView}>{this.state.dataSet.title}</ModalHeader>
+                   toggle={this.showDatasetView}>
+                <ModalHeader toggle={this.showDatasetView} style={{fontWeight: 'bold'}}>{this.state.dataSet.title}</ModalHeader>
                 <ModalBody>
                     <p>Description: {this.state.dataSet.description}</p>
-                    <p style={{ 'float': 'left', 'marginRight': '15px', 'marginTop': '10px' }}>Data
+                    <p style={{'float': 'left', 'marginRight': '15px', 'marginTop': '10px'}}>Data
                         file(s)</p>
-                    <Card style={{ 'marginBottom': '15px', 'padding': '10px' }}>
-                        <div style={{ 'display': 'flex' }}>
-                            {
-                                <div style={{ 'flex': '50%' }}>{this.state.dataSet.publisher.name}</div>
-                            }
-                            <div style={{ 'flex': '50%' }}>{this.state.dataSet.publisher.publisher}</div>
-                        </div>
+                    <Card style={{'marginBottom': '15px', 'padding': '10px'}}>
+                        {
+                            this.state.dataSet.publisher &&
+                            <div style={{'display': 'flex'}}>
+                                {
+                                    <div style={{'flex': '50%'}}>{this.state.dataSet.publisher.name}</div>
+                                }
+                            </div>
+                        }
 
                         {this.state.dataSet.distributions.map((distribution, idx) => {
                             return <div key={idx}>
@@ -88,55 +90,55 @@ class ModalDatasetView extends React.Component {
 
                     </Card>
 
-                    <Card style={{ 'padding': '10px', 'marginBottom': '15px' }}>
-                        <CardTitle style={{ display: 'inline', marginLeft: '0.5em' }}>Metadata
+                    <Card style={{'padding': '10px', 'marginBottom': '15px'}}>
+                        <CardTitle style={{display: 'inline', marginLeft: '0.5em'}}>Metadata
                             info</CardTitle>
                         <Table bordered>
                             <tbody>
-                                {
-                                    Object.keys(metaDataInfo).map((key, idx) => {
-                                        return <tr key={idx}>
-                                            <td>{key}</td>
-                                            <td>{metaDataInfo[key]}</td>
-                                        </tr>
-                                    })
-                                }
+                            {
+                                Object.keys(metaDataInfo).map((key, idx) => {
+                                    return <tr key={idx}>
+                                        <td>{key}</td>
+                                        <td>{metaDataInfo[key]}</td>
+                                    </tr>
+                                })
+                            }
                             </tbody>
                         </Table>
                     </Card>
 
-                    <Card style={{ 'padding': '10px' }}>
-                        <CardTitle style={{ display: 'inline', marginLeft: '0.5em' }}>Quality
+                    <Card style={{'padding': '10px'}}>
+                        <CardTitle style={{display: 'inline', marginLeft: '0.5em'}}>Quality
                             metrics</CardTitle>
                         <Table bordered>
                             <thead>
-                                <tr>
-                                    <th>Overall score</th>
-                                    <th>
-                                        {overallRatingMain}
-                                    </th>
-                                </tr>
+                            <tr>
+                                <th>Overall score</th>
+                                <th>
+                                    {overallRatingMain}
+                                </th>
+                            </tr>
                             </thead>
                             <tbody>
-                                {
-                                    this.state.dataSet.qualityMetrics.map((metric, idx) => {
-                                        return (
-                                            <tr key={idx}>
-                                                <td><span data-tip="some text">{metric.quality}</span>
-                                                    <ReactTooltip place="bottom" />
-                                                </td>
-                                                <td>{metric.value}</td>
-                                            </tr>
-                                        );
-                                    })
-                                }
+                            {
+                                this.state.dataSet.qualityMetrics.map((metric, idx) => {
+                                    return (
+                                        <tr key={idx}>
+                                            <td><span data-tip="some text">{metric.quality}</span>
+                                                <ReactTooltip place="bottom"/>
+                                            </td>
+                                            <td>{metric.value}</td>
+                                        </tr>
+                                    );
+                                })
+                            }
                             </tbody>
                         </Table>
                     </Card>
 
                 </ModalBody>
                 <ModalFooter>
-                    <Button color="secondary" onClick={this.showDatasetView}>Cancel</Button>
+                    <Button color="secondary" onClick={this.showDatasetView}>Close</Button>
                 </ModalFooter>
             </Modal>
         );
