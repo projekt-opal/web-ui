@@ -101,14 +101,14 @@ const Home = () => (
                 <h2>Addresses</h2>
                 <div className="key-val">
                     <div className="key-row">
-                        <div className="key">For Visitors</div>
+                        <div className="key" style={{fontWeight: 'bold'}}>For Visitors</div>
                         <div className="val">
                             Technologiepark Paderborn <br/> Office: TP6.3.106 <br/>
                             Technologiepark 6 <br/> 33100 Paderborn
                         </div>
                     </div>
                     <div className="key-row">
-                        <div className="key">Postal Address</div>
+                        <div className="key" style={{fontWeight: 'bold'}}>Postal Address</div>
                         <div className="val">Universität Paderborn <br/> Fakultät EIM-Informatik <br/> Warburger Str.
                             100 <br/> 33098 Paderborn
                         </div>
