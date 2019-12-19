@@ -151,7 +151,6 @@ class ViewOne extends React.Component {
         this.setState({selectedFilters: selectedFilters});
     };
 
-    /**TODO: The method has to be updated accordingly w.r.t licenses */
     fetchFiltersList = () => {
         this.setState({
             filters: [],

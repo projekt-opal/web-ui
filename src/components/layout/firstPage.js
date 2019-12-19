@@ -71,7 +71,6 @@ class FirstPage extends React.Component {
                         if (filterName.title === "Theme") {
                             filterName.externalLink = false;
                             filterName.isTypeStatic = true;
-
                         }
                         else {
                             filterName.externalLink = true;

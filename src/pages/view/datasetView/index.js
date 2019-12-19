@@ -51,7 +51,8 @@ class DatasetView extends React.Component {
             loadingDataSetsError: false,
             dataSets: []
         });
-        let url = `/dataSets/getSubList`;
+        const uri = (this.props.query && this.props.query.uri) ? this.props.query.uri : "";
+        let url = `/dataSets/getRelatedSubList?uri=${uri}`;
         axios.post(url, {
             orderByDTO: this.state.orderByValue,
             filterDTOS: this.state.selectedFilters
@@ -79,7 +80,8 @@ class DatasetView extends React.Component {
             loadingNumberOfRelatedDataSets: true,
             loadingNumberOfRelatedDataSetsError: false
         });
-        let url = `/dataSets/getNumberOfDataSets`;
+        const uri = (this.props.query && this.props.query.uri) ? this.props.query.uri : "";
+        let url = `/dataSets/getNumberOfRelatedDataSets?uri=${uri}`;
         axios.post(url, {
             orderByDTO: this.state.orderByValue,
             filterDTOS: this.state.selectedFilters
@@ -103,8 +105,9 @@ class DatasetView extends React.Component {
     };
 
     load10More = () => {
+        const uri = (this.props.query && this.props.query.uri) ? this.props.query.uri : "";
         if (this.state.relatedDataSets !== null && this.state.relatedDataSets.length > 0) {
-            let url = `/dataSets/getSubList?low=${this.state.relatedDataSets.length}`;
+            let url = `/dataSets/getRelatedSubList?uri=${uri}&low=${this.state.relatedDataSets.length}`;
             axios.post(url, {
                 orderByDTO: this.state.orderByValue,
                 filterDTOS: this.state.selectedFilters
@@ -229,7 +232,6 @@ class DatasetView extends React.Component {
                     <Row>
                         <Col md={{size: 1}}/>
                         <Col md={{size: 10}} className="border" style={{marginTop: '2rem'}}>
-                            {/* TODO: Below methods for fetching the Related Datasets */}
                             <TableView
                                 fetchDataSets={() => this.fetchDataSets()}
                                 getNumberOfDataSets={() => this.getNumberOfRelatedDataSets()}
