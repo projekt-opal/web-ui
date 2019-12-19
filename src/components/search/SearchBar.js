@@ -34,6 +34,12 @@ class SearchBar extends React.Component {
         this.props.onUpdateSearchKey(searchKey);
     };
 
+    onSearchKeyPressed = (event) => {
+        if (event.key === 'Enter') {
+            this.searchClicked();
+        }
+    };
+
     render() {
         let searchDomainButtons = (
             <>
@@ -65,27 +71,26 @@ class SearchBar extends React.Component {
 
         return (
             <Col md={{size: 12}}>
-                <Form>
-                    <InputGroup size="lg">
-                        <Input placeholder="Search ..." onChange={this.searchKeyChanged}
-                               value={this.props.searchKey}/>
+                <InputGroup size="lg">
+                    <Input placeholder="Search ..." onChange={this.searchKeyChanged}
+                           onKeyPress={this.onSearchKeyPressed}
+                           value={this.props.searchKey}/>
+                    <InputGroupAddon addonType="prepend">
                         <InputGroupAddon addonType="prepend">
-                            <InputGroupAddon addonType="prepend">
-                                <Button onClick={this.searchClicked}>Search</Button>
-                            </InputGroupAddon>
+                            <Button onClick={this.searchClicked}>Search</Button>
                         </InputGroupAddon>
-                    </InputGroup>
-                    <InputGroup style={{marginTop: '5px'}}>
-                        <Button color="link" size="sm" onClick={this.toggleMoreOptions}>
-                            <span>Search in : </span>
-                            <FaAngleRight/>
-                        </Button>
-                        <Collapse isOpen={!this.state.collapse}>
-                            {searchDomainButtons}
-                        </Collapse>
-                        {searchDomains}
-                    </InputGroup>
-                </Form>
+                    </InputGroupAddon>
+                </InputGroup>
+                <InputGroup style={{marginTop: '5px'}}>
+                    <Button color="link" size="sm" onClick={this.toggleMoreOptions}>
+                        <span>Search in : </span>
+                        <FaAngleRight/>
+                    </Button>
+                    <Collapse isOpen={!this.state.collapse}>
+                        {searchDomainButtons}
+                    </Collapse>
+                    {searchDomains}
+                </InputGroup>
             </Col>
         );
     }
