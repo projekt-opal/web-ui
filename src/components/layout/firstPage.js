@@ -66,18 +66,7 @@ class FirstPage extends React.Component {
         }, () => {
             axios.get(`/filters/list?searchKey=${this.state.searchKey}&searchIn=${this.state.selectedSearchIn}`)
                 .then(response => {
-                    /**TODO: Fields for filters (externalLink and isTypeStatic) should be fetched from the backend. */
-                    const filters = response.data.map(filterName => {
-                        if (filterName.title === "Theme") {
-                            filterName.externalLink = false;
-                            filterName.isTypeStatic = true;
-                        }
-                        else {
-                            filterName.externalLink = true;
-                            filterName.isTypeStatic = false;
-                        }
-                        return filterName;
-                    });
+                    const filters = response.data;
                     this.setState(
                         {
                             filters: filters,

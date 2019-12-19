@@ -1,7 +1,7 @@
 import React from 'react';
 import {Button, Col, Container, Row} from "reactstrap";
 
-import OneFilterView from './fileterView';
+import OneFilterView from './oneFilterView';
 
 class FiltersList extends React.Component {
 

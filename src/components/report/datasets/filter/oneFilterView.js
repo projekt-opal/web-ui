@@ -17,6 +17,12 @@ class OneFilterView extends React.Component {
 
 
     render() {
+        const extendedFilter = this.props.filter;
+        extendedFilter.values = extendedFilter.values.map(v => {
+            v.externalLink = extendedFilter.externalLink;
+            return v;
+        });
+
         return (
             <div>
                 <div style={{ display: 'flex', flexFlow: 'row' }}>
@@ -28,9 +34,7 @@ class OneFilterView extends React.Component {
                 {
                     this.state.isExpanded &&
                     <CustomSelect
-                        filter={this.props.filter}
-                        uri={this.props.filter.uri}
-                        values={this.props.filter.values}
+                        filter={extendedFilter}
                         getSelectedSearchIn={this.props.getSelectedSearchIn}
                         selectedValues={this.props.selectedFilterValues}
                         appendSelectedValues={this.props.appendSelectedValues}

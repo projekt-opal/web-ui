@@ -254,7 +254,6 @@ class ViewOne extends React.Component {
                     <Row>
                         <Col md={{size: 1}}/>
                         <Col md={{size: 10}} className="border" style={{marginTop: '2rem'}}>
-                            {/* TODO: Below methods for fetching the Related DataSets by licenses */}
                             <TableView
                                 fetchDataSets={() => this.fetchDataSets()}
                                 getNumberOfDataSets={() => this.getNumberOfRelatedDataSets()}

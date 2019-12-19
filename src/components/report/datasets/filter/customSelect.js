@@ -18,13 +18,15 @@ const Option = createClass({
                         onChange={e => null}
                     />{" "}
                     <label>{this.props.value} </label>
-                    <span>
+                    {
+                        this.props.data.externalLink &&
+                        <span>
                         <Link href={"/view/one?uri=" + this.props.data.uri + "&label=" + this.props.label}>
-                            <a target="_blank" style={{textDecoration: 'none', color:'gray'}}>
+                            <a target="_blank" style={{textDecoration: 'none', color: 'gray'}}>
                                     <FaExternalLinkAlt/>
                             </a>
                         </Link>
-                    </span>
+                    </span>}
                     {
                         this.props.data.count !== -1 ?
                             <Badge style={{marginLeft: '2px'}} pill>{this.props.data.count}</Badge>
@@ -61,12 +63,13 @@ class CustomSelect extends React.Component {
 
     getOptions = (inputValue) => {
         this.setState({prevInputValue: inputValue}, () => {
-            let searchKey = '';
-            if (this.props.getSearchKey) searchKey = this.props.getSearchKey();
-            let selectedSearchIn = [];
-            if (this.props.getSelectedSearchIn) selectedSearchIn = this.props.getSelectedSearchIn();
             if (!this.props.filter.isTypeStatic) {
-                axios.get(`/filteredOptions/?filterType=${this.props.filter.title}&searchKey=${searchKey}&searchIn=${selectedSearchIn}&filterText=${inputValue}`)
+                let searchKey = '';
+                if (this.props.getSearchKey) searchKey = this.props.getSearchKey();
+                let selectedSearchIn = [];
+                if (this.props.getSelectedSearchIn) selectedSearchIn = this.props.getSelectedSearchIn();
+                axios.get(
+                    `/filteredOptions/?filterType=${this.props.filter.title}&searchKey=${searchKey}&searchIn=${selectedSearchIn}&filterText=${inputValue}`)
                     .then(response => {
                         if (this.state.prevInputValue === inputValue) {
                             let options = response.data.values;
@@ -80,7 +83,7 @@ class CustomSelect extends React.Component {
                     });
             } else {
                 if (this.state.prevInputValue === inputValue) {
-                    const options = this.props.values.filter(v => v.label.toLowerCase().includes(inputValue.toLowerCase()));
+                    const options = this.props.filter.values.filter(v => v.label.toLowerCase().includes(inputValue.toLowerCase()));
                     this.selectAsync.state.loadedOptions = options;
                     this.setState({isButtonClicked: false});
                     return options;
@@ -95,14 +98,15 @@ class CustomSelect extends React.Component {
         if (values) {
             const selectedFilter = {
                 title: this.props.filter.title,
-                uri: this.props.uri,
+                uri: this.props.filter.uri,
                 values: values
             };
             this.props.appendSelectedValues(selectedFilter);
         } else {
             this.props.appendSelectedValues({
                     title: this.props.filter.title,
-                    uri: this.props.uri,
+                    externalLink: this.props.filter.externalLink,
+                    uri: this.props.filter.uri,
                     values: []
                 }
             );
@@ -132,6 +136,10 @@ class CustomSelect extends React.Component {
         }
     };
 
+    stopSearch = () => {
+        this.setState({isButtonClicked: false});
+    };
+
     render() {
         let optionsArr = [];
         if (this.props.selectedValues.length > 0) {
@@ -139,6 +147,7 @@ class CustomSelect extends React.Component {
                     return {
                         label: selectedValue.value,
                         value: selectedValue.value,
+                        externalLink: this.props.filter.externalLink,
                         uri: selectedValue.uri
                     }
                 }
@@ -157,7 +166,7 @@ class CustomSelect extends React.Component {
                         /*menuIsOpen*/
                         backspaceRemovesValue={false}
                         /*cacheOptions*/
-                        defaultOptions={this.props.values}
+                        defaultOptions={this.props.filter.values}
                         ref={selectAsync => this.selectAsync = selectAsync}
                         onChange={this.changeHandler.bind(this)}
                         onInputChange={this.handleInputChange}
@@ -167,10 +176,6 @@ class CustomSelect extends React.Component {
             </div>
         );
 
-    }
-
-    stopSearch = () => {
-        this.setState({isButtonClicked: false});
     }
 }
 
