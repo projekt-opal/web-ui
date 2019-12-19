@@ -153,7 +153,7 @@ class TableView extends React.Component {
                                     <Row style={{'paddingTop': '1rem'}}>
                                         <Button className="mx-auto" style={{marginBottom: '1rem'}}
                                                 onClick={this.props.load10More}
-                                                disabled={this.props.dataSets === null}> Load
+                                                disabled={this.props.dataSets === null || this.props.dataSets.length === this.props.numberOfDataSets}> Load
                                             10 more </Button>
                                     </Row>
                                 </td>
