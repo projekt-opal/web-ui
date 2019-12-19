@@ -1,18 +1,8 @@
 import React from 'react';
-import {
-    Badge,
-    Button,
-    Card,
-    CardTitle,
-    Modal,
-    ModalBody,
-    ModalFooter,
-    ModalHeader,
-    Table,
-} from "reactstrap";
+import {Button, Modal, ModalFooter,} from "reactstrap";
 import {FaRegStar, FaStar, FaStarHalfAlt} from "react-icons/fa";
-import ReactTooltip from 'react-tooltip';
 import axios from '../../../../../webservice/axios-dataSets';
+import DatasetViewLayout from "../../../layout/datasetViewLayout";
 
 class ModalDatasetView extends React.Component {
 
@@ -48,95 +38,10 @@ class ModalDatasetView extends React.Component {
     }
 
     render() {
-        const metaDataInfo = [];
-        let overallRatingMain = <span/>;
-
-        if (this.state.dataSet !== null) {
-            if (this.state.dataSet.issueDate) metaDataInfo["issueDate"] = this.state.dataSet.issueDate;
-            if (this.state.dataSet.theme) metaDataInfo["theme"] = this.state.dataSet.theme;
-            if (this.state.dataSet.keywords) metaDataInfo["keywords"] = this.state.dataSet.keywords.join(", ");
-            if (this.state.dataSet.issueDate) metaDataInfo["issueDate"] = this.state.dataSet.issueDate;
-            if (this.state.dataSet.overallRating)
-                overallRatingMain = this.countRating(this.state.dataSet.overallRating);
-        } else return '';
-
         return (
             <Modal isOpen={this.props.isModalOpen} size='lg'
                    toggle={this.showDatasetView}>
-                <ModalHeader toggle={this.showDatasetView} style={{fontWeight: 'bold'}}>{this.state.dataSet.title}</ModalHeader>
-                <ModalBody>
-                    <p>Description: {this.state.dataSet.description}</p>
-                    <p style={{'float': 'left', 'marginRight': '15px', 'marginTop': '10px'}}>Data
-                        file(s)</p>
-                    <Card style={{'marginBottom': '15px', 'padding': '10px'}}>
-                        {
-                            this.state.dataSet.publisher &&
-                            <div style={{'display': 'flex'}}>
-                                {
-                                    <div style={{'flex': '50%'}}>{this.state.dataSet.publisher.name}</div>
-                                }
-                            </div>
-                        }
-
-                        {this.state.dataSet.distributions.map((distribution, idx) => {
-                            return <div key={idx}>
-                                <Badge>{distribution.fileType}</Badge>
-                                <a href={distribution.url}>
-                                    {distribution.url}
-                                </a>
-                            </div>
-                        })}
-
-
-                    </Card>
-
-                    <Card style={{'padding': '10px', 'marginBottom': '15px'}}>
-                        <CardTitle style={{display: 'inline', marginLeft: '0.5em'}}>Metadata
-                            info</CardTitle>
-                        <Table bordered>
-                            <tbody>
-                            {
-                                Object.keys(metaDataInfo).map((key, idx) => {
-                                    return <tr key={idx}>
-                                        <td>{key}</td>
-                                        <td>{metaDataInfo[key]}</td>
-                                    </tr>
-                                })
-                            }
-                            </tbody>
-                        </Table>
-                    </Card>
-
-                    <Card style={{'padding': '10px'}}>
-                        <CardTitle style={{display: 'inline', marginLeft: '0.5em'}}>Quality
-                            metrics</CardTitle>
-                        <Table bordered>
-                            <thead>
-                            <tr>
-                                <th>Overall score</th>
-                                <th>
-                                    {overallRatingMain}
-                                </th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {
-                                this.state.dataSet.qualityMetrics.map((metric, idx) => {
-                                    return (
-                                        <tr key={idx}>
-                                            <td><span data-tip="some text">{metric.quality}</span>
-                                                <ReactTooltip place="bottom"/>
-                                            </td>
-                                            <td>{metric.value}</td>
-                                        </tr>
-                                    );
-                                })
-                            }
-                            </tbody>
-                        </Table>
-                    </Card>
-
-                </ModalBody>
+                {this.state.dataSet === null ? '' : <DatasetViewLayout dataSet={this.state.dataSet}/>}
                 <ModalFooter>
                     <Button color="secondary" onClick={this.showDatasetView}>Close</Button>
                 </ModalFooter>

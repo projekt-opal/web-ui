@@ -40,7 +40,7 @@ class DatasetViewLayout extends React.Component {
                 </Row>
                 <hr/>
                 <Row>
-                    <Col md='7'>
+                    <Col md='12'>
                         <h5>Description:</h5>
                         <p>{this.props.dataSet == null ? '' : this.props.dataSet.description}</p>
 
@@ -68,7 +68,9 @@ class DatasetViewLayout extends React.Component {
                                 : ""
                         }
                     </Col>
-                    <Col md='5'>
+                </Row>
+                <Row>
+                    <Col md='12'>
                         <h5>Metadata Info:</h5>
                         <div>
                             <Table bordered style={{tableLayout: 'fixed', width: '100%', wordWrap: 'break-word'}}>
@@ -87,8 +89,9 @@ class DatasetViewLayout extends React.Component {
                     </Col>
                 </Row>
                 <hr/>
+                {this.props.dataSet.qualityMetrics &&
                 <Row>
-                    <Col md='7'>
+                    <Col md='12'>
                         <h5>Quality Metrics:</h5>
                         <Table bordered style={{tableLayout: 'fixed', width: '100%', wordWrap: 'break-word'}}>
                             <thead>
@@ -104,7 +107,7 @@ class DatasetViewLayout extends React.Component {
                                 this.props.dataSet.qualityMetrics.map((metric, idx) => {
                                     return (
                                         <tr key={idx}>
-                                            <td><span data-tip="some text">{metric.quality}</span>
+                                            <td><span data-tip="">{metric.quality}</span>
                                                 <ReactTooltip place="bottom"/>
                                             </td>
                                             <td>{metric.value}</td>
@@ -116,6 +119,7 @@ class DatasetViewLayout extends React.Component {
                         </Table>
                     </Col>
                 </Row>
+                }
             </Container>
         );
     }
