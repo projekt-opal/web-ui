@@ -124,7 +124,8 @@ class CustomSelect extends React.Component {
                 (
                     <div>
                         <Spinner size="sm"/>
-                        <Button onClick={this.stopSearch} color="link" style={{background: 'transparent'}}>X</Button>
+                        <Button onClick={this.stopSearch}
+                                style={{background: 'transparent', color: 'gray', border: 'none'}}>X</Button>
                     </div>
                 ) : (
                     <button type="button"

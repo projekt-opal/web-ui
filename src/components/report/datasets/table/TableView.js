@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, Col, Row, Table} from "reactstrap";
+import {Button, Col, Modal, ModalFooter, Row, Table} from "reactstrap";
 import {FaThLarge, FaThList} from "react-icons/fa";
 import OrderBy from "../dataset/OrderBy";
 import LoadingNumberOfResult from "./LoadingNumberOfResult";
@@ -91,10 +91,31 @@ class TableView extends React.Component {
         return (
             <Col md='12'>
                 <Row>
+                    {
+                        isMobile ?
+                            <Modal isOpen={this.state.isFiltersOpen} toggle={this.toggleFilters}>
+                                <LoadingFiltersView
+                                    loadingFilters={this.props.loadingFilters}
+                                    loadingFiltersError={this.props.loadingFiltersError}
+
+                                    filters={this.props.filters}
+                                    selectedFilters={this.props.selectedFilters}
+                                    appendSelectedValues={this.props.appendSelectedValues}
+                                    getSearchKey={this.props.getSearchKey}
+                                    getSelectedSearchIn={this.props.getSelectedSearchIn}
+                                    reloadFilters={this.reloadFilters}
+                                    applyFilters={this.applyFilters}
+                                />
+                                <ModalFooter>
+                                    <Button color="secondary" onClick={this.toggleFilters}>Close</Button>
+                                </ModalFooter>
+                            </Modal>
+                            : ''}
+
                     <Col xs={isMobile ? {size: 12} : {size: 9}} style={{marginTop: '1rem'}}>
 
                         <Table hover bordered responsive striped style={{display: 'block'}}>
-                            <thead>
+                            <thead style={{zIndex: 2147483647}}>
                             <tr>
                                 <th style={{width: '1%'}}>
                                     <div style={{display: 'flex', flexFlow: 'row wrap'}}>
@@ -116,19 +137,7 @@ class TableView extends React.Component {
 
                                         {isMobile ? <Button style={{marginLeft: '2px'}}
                                                             onClick={this.toggleFilters}>Filters</Button> : ''}
-                                        {
-                                            this.state.isFiltersOpen && isMobile ? <LoadingFiltersView
-                                                loadingFilters={this.props.loadingFilters}
-                                                loadingFiltersError={this.props.loadingFiltersError}
 
-                                                filters={this.props.filters}
-                                                selectedFilters={this.props.selectedFilters}
-                                                appendSelectedValues={this.props.appendSelectedValues}
-                                                getSearchKey={this.props.getSearchKey}
-                                                getSelectedSearchIn={this.props.getSelectedSearchIn}
-                                                reloadFilters={this.reloadFilters}
-                                                applyFilters={this.applyFilters}
-                                            /> : ''}
                                     </div>
 
                                 </th>
