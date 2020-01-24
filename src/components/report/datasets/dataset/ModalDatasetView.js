@@ -32,7 +32,36 @@ class ModalDatasetView extends React.Component {
     componentDidMount() {
         axios.get("/dataSet?uri=" + this.props.uri)
             .then(response => {
-                this.setState({dataSet: response.data})
+                let currentData = response.data;
+                let addtionalDistributionsData = {
+                    issued: "issued",
+                    modified: "modified",
+                    license: "license",
+                    rights: "rights",
+                    accessUrl: "accessUrl",
+                    //downloadUrl: "downloadUrl",
+                    mediaType: "mediaType",
+                    //format: "format",
+                    byteSize: "byteSize",
+                };
+                const distributions = {...currentData.distributions[0], ...addtionalDistributionsData };
+                currentData.distributions[0] = distributions;
+
+                let additionalCurrentdata = {
+                    modified: "modified",
+                    identifier: "identifier",
+                    language: "language",
+                    contactPoint: "contactPoint",
+                    temporal: "temporal",
+                    spatial: "spatial",
+                    accrualPeriodicity: "accrualPeriodicity",
+                    landingPage: "landingPage",
+                };
+                currentData = {...currentData, ...additionalCurrentdata };
+
+                //console.log("currentData: ", currentData);
+
+                this.setState({dataSet: currentData})//response.data})
             })
             .catch(err => console.log(err));
     }
