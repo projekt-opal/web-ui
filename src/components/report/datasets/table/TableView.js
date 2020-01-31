@@ -16,7 +16,8 @@ class TableView extends React.Component {
         screenWidth: 0,
 
         isFiltersOpen: false,
-        lastSelectedFilterValues: []
+        lastSelectedFilterValues: [],
+        dateFilters: [{name: "Issue date", fromDate: "", toDate: ""}, {name: "Modified date", fromDate: "", toDate: ""}],
     };
 
     componentDidMount() {
@@ -85,6 +86,20 @@ class TableView extends React.Component {
         this.setState({screenWidth: window.innerWidth});
     };
 
+    appendDate = (dates) => {
+        let dateFilters = [...this.state.dateFilters];
+
+        const prevSelectedFilter = dateFilters.find(f => f.name === dates.name);
+        if (prevSelectedFilter){
+            prevSelectedFilter.fromDate = dates.fromDate || "";
+            prevSelectedFilter.toDate = dates.toDate || "";
+        } else {
+            dateFilters.push(dates);
+        }
+
+        this.setState({ dateFilters: dateFilters });
+    }
+
     render() {
         const isMobile = this.state.screenWidth > 1 && this.state.screenWidth <= 800;
 
@@ -105,6 +120,8 @@ class TableView extends React.Component {
                                     getSelectedSearchIn={this.props.getSelectedSearchIn}
                                     reloadFilters={this.reloadFilters}
                                     applyFilters={this.applyFilters}
+                                    dateFilters={this.state.dateFilters}
+                                    appendDate={this.appendDate}
                                 />
                                 <ModalFooter>
                                     <Button color="secondary" onClick={this.toggleFilters}>Close</Button>
@@ -184,6 +201,8 @@ class TableView extends React.Component {
                                     getSelectedSearchIn={this.props.getSelectedSearchIn}
                                     reloadFilters={this.reloadFilters}
                                     applyFilters={this.applyFilters}
+                                    dateFilters={this.state.dateFilters}
+                                    appendDate={this.appendDate}
                                 />}
                             </div>
                         </Col>

@@ -1,7 +1,8 @@
 import React from 'react';
-import {Button, Col, Container, Row} from "reactstrap";
+import {Button, Col, Container, Row, FormGroup, Label, Input, ListGroup, ListGroupItem} from "reactstrap";
 
 import OneFilterView from './oneFilterView';
+import DatePickerComponent from './datePickerComponent';
 
 class FiltersList extends React.Component {
 
@@ -43,6 +44,7 @@ class FiltersList extends React.Component {
                                 }
                             )
                         }
+                        <DatePickerComponent dateFilters={this.props.dateFilters} appendDate={this.props.appendDate}></DatePickerComponent>
                     </div>
                 </Container>
         );
