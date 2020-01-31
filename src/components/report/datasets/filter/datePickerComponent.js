@@ -58,7 +58,7 @@ class DatePickerComponent extends React.Component {
                         />   
                     </span></div>
                     <div><span>To
-                        <Input style={{width: 'auto', display: 'inline', margin: '10px', marginLeft: '31px'}}
+                        <Input style={{width: 'auto', display: 'inline', margin: '10px'}}
                               type="date"
                               name="date"
                               id="toDate"

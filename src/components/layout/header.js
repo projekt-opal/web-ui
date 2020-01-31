@@ -26,6 +26,7 @@ class Header extends React.Component {
                     <Nav className="mr-auto" navbar>
                         <NavItem> <NavLink href="/">Home</NavLink> </NavItem>
                         <NavItem> <NavLink href="/catalogs">Catalogs</NavLink> </NavItem>
+                        <NavItem> <NavLink href="/publisher">Publisher</NavLink> </NavItem>
                         <NavItem> <NavLink href="http://opaldata.cs.uni-paderborn.de:3030/">SparQL endpoint</NavLink> </NavItem>
                         <NavItem> <NavLink href="/about">About US</NavLink> </NavItem>
                     </Nav>
