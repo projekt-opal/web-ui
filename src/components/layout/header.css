@@ -8,3 +8,9 @@
     background-size: 36px auto;
     box-size: border-box;
 }
+
+a{
+	padding-right: .5rem;
+	padding-left: .5rem;
+	text-decoration: unset;
+}

@@ -17,8 +17,9 @@ import {
     Row
 } from "reactstrap";
 import {FaSearchLocation} from 'react-icons/fa'
+import { withTranslation } from 'react-i18next';
 
-export default class OrderBy extends React.Component {
+class OrderBy extends React.Component {
 
     state = {
         dropdownOpen: false,
@@ -138,6 +139,7 @@ export default class OrderBy extends React.Component {
     };
 
     render() {
+        const { t } = this.props;
         const modal = this.state.showLocationMenu ? <Modal size="lg"
                                                            centered={true} autoFocus={true}
                                                            isOpen={this.state.showLocationMenu}
@@ -174,14 +176,14 @@ export default class OrderBy extends React.Component {
                 {modal}
                 <ButtonDropdown style={{marginLeft: '2px'}} isOpen={this.state.dropdownOpen} toggle={this.toggle}>
                     <DropdownToggle caret>
-                        {this.state.listOrderByValues[this.state.selectedOrderByIndex]}
+                        {t(this.state.listOrderByValues[this.state.selectedOrderByIndex])}
                     </DropdownToggle>
                     <DropdownMenu>
                         {
                             this.state.listOrderByValues.map((orderByValue, idx) => {
                                 return <DropdownItem onClick={() => this.orderByChanged(idx)}
                                                      active={idx === this.state.selectedOrderByIndex}
-                                                     key={idx}>{orderByValue}
+                                                     key={idx}>{t(orderByValue)}
                                 </DropdownItem>
                             })
                         }
@@ -191,3 +193,5 @@ export default class OrderBy extends React.Component {
         )
     }
 }
+
+export default withTranslation()(OrderBy);

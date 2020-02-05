@@ -4,6 +4,7 @@ import App from 'next/app'
 import Head from 'next/head'
 import withRedux from 'next-redux-wrapper'
 import {initStore} from '../../store/store'
+import '../i18n';
 
 export default withRedux(initStore)(class MyApp extends App {
     static async getInitialProps({Component, ctx}) {

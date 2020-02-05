@@ -3,6 +3,7 @@ import {Button} from "reactstrap";
 import CustomSelect from './customSelect';
 
 import {FaAngleDown, FaAngleRight} from 'react-icons/fa'
+import { withTranslation } from 'react-i18next';
 
 class OneFilterView extends React.Component {
 
@@ -17,6 +18,7 @@ class OneFilterView extends React.Component {
 
 
     render() {
+        const { t } = this.props;
         const extendedFilter = this.props.filter;
         extendedFilter.values = extendedFilter.values.map(v => {
             v.externalLink = extendedFilter.externalLink;
@@ -28,7 +30,7 @@ class OneFilterView extends React.Component {
                 <div style={{ display: 'flex', flexFlow: 'row' }}>
                     <Button onClick={this.toggleFilterExpanded} style={{ flexGrow: 1, textAlign: 'left' }}>
                         {this.state.isExpanded ? <FaAngleDown /> : <FaAngleRight />}
-                        {this.props.filter.title}
+                        {t(this.props.filter.title)}
                     </Button>
                 </div>
                 {
@@ -46,4 +48,4 @@ class OneFilterView extends React.Component {
     }
 };
 
-export default OneFilterView;
+export default withTranslation()(OneFilterView);

@@ -2,6 +2,7 @@ import React from 'react';
 import {Badge, Button, Col, Collapse, Form, Input, InputGroup, InputGroupAddon} from 'reactstrap';
 
 import {FaAngleRight} from 'react-icons/fa';
+import { withTranslation } from 'react-i18next';
 
 class SearchBar extends React.Component {
     state = {
@@ -41,6 +42,7 @@ class SearchBar extends React.Component {
     };
 
     render() {
+        const { t } = this.props;
         let searchDomainButtons = (
             <>
                 {
@@ -77,7 +79,7 @@ class SearchBar extends React.Component {
                            value={this.props.searchKey}/>
                     <InputGroupAddon addonType="prepend">
                         <InputGroupAddon addonType="prepend">
-                            <Button onClick={this.searchClicked}>Search</Button>
+                            <Button onClick={this.searchClicked}>{t('Search')}</Button>
                         </InputGroupAddon>
                     </InputGroupAddon>
                 </InputGroup>
@@ -96,4 +98,4 @@ class SearchBar extends React.Component {
     }
 }
 
-export default SearchBar;
+export default withTranslation()(SearchBar);

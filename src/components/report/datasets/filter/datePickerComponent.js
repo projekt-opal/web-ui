@@ -1,5 +1,6 @@
 import React from 'react';
 import {FormGroup, Label, Input, ListGroup, ListGroupItem, Dropdown, DropdownToggle, DropdownMenu, DropdownItem} from "reactstrap";
+import { withTranslation } from 'react-i18next';
 
 class DatePickerComponent extends React.Component {
 
@@ -32,12 +33,13 @@ class DatePickerComponent extends React.Component {
     }
 
     render() {
+      const { t } = this.props;
         return (   
             <ListGroup style={{marginTop: '10px'}}>
                 <ListGroupItem>
                     <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
                       <DropdownToggle caret>
-                        {this.state.name}
+                        {t(this.state.name)}
                         </DropdownToggle>
                       <DropdownMenu>
                       {this.props.dateFilters.map((f,idx) => {
@@ -47,7 +49,7 @@ class DatePickerComponent extends React.Component {
                       })}
                       </DropdownMenu>
                     </Dropdown>
-                    <div><span>From 
+                    <div><span>{t('From')} 
                         <Input style={{width: 'auto', display: 'inline', margin: '10px'}}
                           type="date"
                           name="date"
@@ -57,7 +59,7 @@ class DatePickerComponent extends React.Component {
                           placeholder="date placeholder"
                         />   
                     </span></div>
-                    <div><span>To
+                    <div><span>{t('To')}
                         <Input style={{width: 'auto', display: 'inline', margin: '10px'}}
                               type="date"
                               name="date"
@@ -73,4 +75,4 @@ class DatePickerComponent extends React.Component {
     }
 }
 
-export default DatePickerComponent;
+export default withTranslation()(DatePickerComponent);
