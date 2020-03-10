@@ -1,7 +1,9 @@
 import React from 'react';
-import {Button, Col, Container, Row} from "reactstrap";
+import {Button, Col, Container, Row, FormGroup, Label, Input, ListGroup, ListGroupItem} from "reactstrap";
 
 import OneFilterView from './oneFilterView';
+import DatePickerComponent from './datePickerComponent';
+import { withTranslation } from 'react-i18next';
 
 class FiltersList extends React.Component {
 
@@ -10,6 +12,7 @@ class FiltersList extends React.Component {
     };
 
     render() {
+        const { t } = this.props;
         return (
             !this.props.filters ? '' :
                 <Container fluid style={{ 'marginTop': '1rem' }}>
@@ -18,7 +21,7 @@ class FiltersList extends React.Component {
                             <Col md={{ size: 12 }}>
                                 <div style={{ display: 'flex', flexFlow: 'row' }}>
                                     <Button color="primary" onClick={this.applyFilters}
-                                        style={{ flexGrow: 1, textAlign: 'left' }}> Apply </Button>
+                                        style={{ flexGrow: 1, textAlign: 'left' }}> {t('Apply')}</Button>
                                 </div>
                             </Col>
                         </Row>
@@ -43,10 +46,11 @@ class FiltersList extends React.Component {
                                 }
                             )
                         }
+                        <DatePickerComponent dateFilters={this.props.dateFilters} appendDate={this.props.appendDate}></DatePickerComponent>
                     </div>
                 </Container>
         );
     }
 }
 
-export default FiltersList;
+export default withTranslation()(FiltersList);
