@@ -21,15 +21,15 @@ const Option = createClass({
                     {
                         this.props.data.externalLink &&
                         <span>
-                        <Link href={"/view/one?uri=" + this.props.data.uri + "&label=" + this.props.label}>
+                        <Link href={"/view/one?uri=" + this.props.data.uri + "&label=" + this.props.value}>
                             <a target="_blank" style={{textDecoration: 'none', color: 'gray'}}>
                                     <FaExternalLinkAlt/>
                             </a>
                         </Link>
                     </span>}
                     {
-                        this.props.data.count !== -1 ?
-                            <Badge style={{marginLeft: '2px'}} pill>{this.props.data.count}</Badge>
+                        this.props.data.count.absolute !== -1 ?
+                            <Badge style={{marginLeft: '2px'}} pill>{this.props.data.count.absolute}</Badge>
                             :
                             <Spinner size="sm"/>
                     }
@@ -42,7 +42,7 @@ const Option = createClass({
 const MultiValue = props => {
     return (
         <components.MultiValue {...props}>
-            <span>{props.data.label}</span>
+            <span>{props.data.value}</span>
         </components.MultiValue>
     );
 };
@@ -63,7 +63,7 @@ class CustomSelect extends React.Component {
 
     getOptions = (inputValue) => {
         this.setState({prevInputValue: inputValue}, () => {
-            if (!this.props.filter.isTypeStatic) {
+            if (!this.props.filter.hasStaticValues) {
                 let searchKey = '';
                 if (this.props.getSearchKey) searchKey = this.props.getSearchKey();
                 let selectedSearchIn = [];
@@ -97,16 +97,14 @@ class CustomSelect extends React.Component {
     changeHandler(values) {
         if (values) {
             const selectedFilter = {
-                title: this.props.filter.title,
-                uri: this.props.filter.uri,
+                filterGroupTitle: this.props.filter.filterGroupTitle,
                 values: values
             };
             this.props.appendSelectedValues(selectedFilter);
         } else {
             this.props.appendSelectedValues({
-                    title: this.props.filter.title,
+                    filterGroupTitle: this.props.filter.filterGroupTitle,
                     externalLink: this.props.filter.externalLink,
-                    uri: this.props.filter.uri,
                     values: []
                 }
             );
@@ -143,17 +141,17 @@ class CustomSelect extends React.Component {
 
     render() {
         let optionsArr = [];
-        if (this.props.selectedValues.length > 0) {
-            optionsArr = this.props.selectedValues.map(selectedValue => {
-                    return {
-                        label: selectedValue.value,
-                        value: selectedValue.value,
-                        externalLink: this.props.filter.externalLink,
-                        uri: selectedValue.uri
-                    }
-                }
-            );
-        }
+        this.props.filter.values.forEach(v => {
+            if (v.selected) {
+                optionsArr.push({
+                    label: v.value,
+                    value: v.value,
+                    externalLink: this.props.filter.externalLink,
+                    uri: v.uri
+                });
+            }
+        });
+
         return (
             <div>
                 <div>

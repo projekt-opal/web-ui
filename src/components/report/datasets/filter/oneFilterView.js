@@ -3,7 +3,7 @@ import {Button} from "reactstrap";
 import CustomSelect from './customSelect';
 
 import {FaAngleDown, FaAngleRight} from 'react-icons/fa'
-import { withTranslation } from 'react-i18next';
+import {withTranslation} from 'react-i18next';
 
 class OneFilterView extends React.Component {
 
@@ -13,24 +13,24 @@ class OneFilterView extends React.Component {
 
     toggleFilterExpanded = () => {
         const isExpanded = !this.state.isExpanded;
-        this.setState({ isExpanded: isExpanded });
+        this.setState({isExpanded: isExpanded});
     };
 
-
     render() {
-        const { t } = this.props;
+        const {t} = this.props;
         const extendedFilter = this.props.filter;
         extendedFilter.values = extendedFilter.values.map(v => {
             v.externalLink = extendedFilter.externalLink;
+            v.label = v.value;
             return v;
         });
 
         return (
             <div>
-                <div style={{ display: 'flex', flexFlow: 'row' }}>
-                    <Button onClick={this.toggleFilterExpanded} style={{ flexGrow: 1, textAlign: 'left' }}>
-                        {this.state.isExpanded ? <FaAngleDown /> : <FaAngleRight />}
-                        {t(this.props.filter.title)}
+                <div style={{display: 'flex', flexFlow: 'row'}}>
+                    <Button onClick={this.toggleFilterExpanded} style={{flexGrow: 1, textAlign: 'left'}}>
+                        {this.state.isExpanded ? <FaAngleDown/> : <FaAngleRight/>}
+                        {t(extendedFilter.filterGroupTitle)}
                     </Button>
                 </div>
                 {
@@ -38,7 +38,7 @@ class OneFilterView extends React.Component {
                     <CustomSelect
                         filter={extendedFilter}
                         getSelectedSearchIn={this.props.getSelectedSearchIn}
-                        selectedValues={this.props.selectedFilterValues}
+                        // selectedValues={this.props.selectedFilterValues}
                         appendSelectedValues={this.props.appendSelectedValues}
                         getSearchKey={this.props.getSearchKey}
                     />

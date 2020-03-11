@@ -1,13 +1,20 @@
 import React from 'react';
 import SearchBar from "../search/SearchBar";
 import TableView from "../report/datasets/table/TableView";
-import { Container, Row } from "reactstrap";
+import {Container, Row} from "reactstrap";
 import axios from "../../../webservice/axios-dataSets";
-import CustomSelect from "../report/datasets/filter/customSelect";
 
 class FirstPage extends React.Component {
 
     state = {
+        searchDTO: {
+            searchKey: "",
+            searchIn: [],
+            orderBy: {
+                selectedOrderValue: "relevance"
+            },
+            filters: []
+        },
         searchKey: '',
         selectedSearchIn: [],
         lastSelectedSearchIn: [],
@@ -36,11 +43,11 @@ class FirstPage extends React.Component {
     };
 
     setLastSelectedSearchIn = () => {
-        this.setState({ lastSelectedSearchIn: this.state.selectedSearchIn });
+        this.setState({lastSelectedSearchIn: this.state.selectedSearchIn});
     };
 
     onUpdateSearchKey = (searchKey) => {
-        this.setState({ searchKey: searchKey })
+        this.setState({searchKey: searchKey})
     };
 
     onSearchInChanged = (searchDomain) => {
@@ -49,78 +56,66 @@ class FirstPage extends React.Component {
             newSelectedSearchIn = newSelectedSearchIn.filter(x => x !== searchDomain);
         else
             newSelectedSearchIn = newSelectedSearchIn.concat(searchDomain);
-        this.setState({ selectedSearchIn: newSelectedSearchIn });
+        this.setState({selectedSearchIn: newSelectedSearchIn});
     };
 
     onUpdatedSearchInRemoved = (searchDomain) => {
         let newSelectedSearchIn = [...this.state.selectedSearchIn];
         newSelectedSearchIn = newSelectedSearchIn.filter(x => x !== searchDomain);
-        this.setState({ selectedSearchIn: newSelectedSearchIn });
+        this.setState({selectedSearchIn: newSelectedSearchIn});
     };
 
     fetchFiltersList = () => {
         this.setState({
-            filters: [],
+            /*searchDTO: {
+                filters: []
+            },*/
             loadingFilters: true,
             loadingFiltersError: false
         }, () => {
-            axios.get(`/filters/list?searchKey=${this.state.searchKey}&searchIn=${this.state.selectedSearchIn}`)
+            axios.post(`/filters/list`, this.state.searchDTO)
                 .then(response => {
-                    const filters = response.data;
-                    this.setState(
-                        {
-                            filters: filters,
-                            loadingFilters: false,
-                            loadingFiltersError: false
-                        }, () => this.updateFilterValueCounts());
-                }
+                        const filters = response.data;
+                        this.setState(
+                            {
+                                searchDTO: {
+                                    filters: filters
+                                },
+                                loadingFilters: false,
+                                loadingFiltersError: false
+                            });
+                    }
                 ).catch(error => {
-                    this.setState({
-                        filters: [],
-                        loadingFilters: false,
-                        loadingFiltersError: true
-                    });
+                this.setState({
+                    searchDTO: {
+                        filters: []
+                    },
+                    loadingFilters: false,
+                    loadingFiltersError: true
                 });
-        });
-    };
-
-    updateFilterValueCounts = () => {
-        const filters = [...this.state.filters];
-        filters.forEach(f => {
-            f.values.forEach(v => {
-                if (v.count === -1) {
-                    axios.post(`/filter/count?searchKey=${this.state.searchKey}&searchIn=${this.state.selectedSearchIn}`,
-                        {
-                            filterUri: f.uri,
-                            valueUri: v.uri
-                        })
-                        .then(response => {
-                            v.count = response.data;
-                        })
-                        .catch(err => console.log(err));
-                }
             });
         });
-        this.setState({ filters: filters });
     };
 
     replaceSelectedFilters = (selectedFilters) => {
-        this.setState({ selectedFilters: selectedFilters });
+        this.setState({selectedFilters: selectedFilters});
     };
 
     appendSelectedValues = (selectedFilter) => {
-        let selectedFilters = [...this.state.selectedFilters];
-
-        const prevSelectedFilter = selectedFilters.find(f => f.title === selectedFilter.title);
-        if (prevSelectedFilter)
-            if (selectedFilter.values.length === 0)
-                selectedFilters = selectedFilters.filter(f => f.title !== selectedFilter.title);
-            else
-                prevSelectedFilter.values = selectedFilter.values;
-        else
-            selectedFilters.push(selectedFilter);
-
-        this.setState({ selectedFilters: selectedFilters });
+        console.log(selectedFilter);
+        const filter = this.state.searchDTO.filters.find(f => f.filterGroupTitle === selectedFilter.filterGroupTitle);
+        if (filter) {
+            filter.values = filter.values.map(v => {
+                v.selected = !!selectedFilter.values.find(sv => sv.value === v.value);
+                return v;
+            });
+            const searchDTO = this.state.searchDTO;
+            searchDTO.filters = searchDTO.filters.map(f => {
+                if (f.filterGroupTitle === filter.filterGroupTitle) return filter;
+                return f;
+            });
+            this.setState({searchDTO: searchDTO});
+        }
     };
 
     getSearchKey = () => {
@@ -160,11 +155,9 @@ class FirstPage extends React.Component {
             loadingNumberOfDataSets: true,
             loadingNumberOfDataSetsError: false
         });
-        let url = `/dataSets/getNumberOfDataSets?searchKey=${this.state.searchKey}&searchIn=${this.state.selectedSearchIn}`;
-        axios.post(url, {
-            orderByDTO: this.state.orderByValue,
-            filterDTOS: this.state.selectedFilters
-        })
+        let url = `/dataSets/getNumberOfDataSets`;
+        // todo handle timeout https://stackoverflow.com/questions/36690451/timeout-feature-in-the-axios-library-is-not-working
+        axios.post(url, this.state.searchDTO)
             .then(response => {
                 const numberOfDataSets = response.data;
                 this.setState({
@@ -191,11 +184,8 @@ class FirstPage extends React.Component {
         });
 
 
-        let url = `/dataSets/getSubList?searchKey=${this.state.searchKey}&searchIn=${this.state.selectedSearchIn}`;
-        axios.post(url, {
-            orderByDTO: this.state.orderByValue,
-            filterDTOS: this.state.selectedFilters
-        })
+        let url = `/dataSets/getSubList`;
+        axios.post(url, this.state.searchDTO)
             .then(response => {
                 const dataSets = response.data;
                 this.setState({
@@ -238,7 +228,7 @@ class FirstPage extends React.Component {
     render() {
         return (
             <Container fluid>
-                <br />
+                <br/>
                 <Row>
                     <SearchBar
                         onFetchingDataSets={() => this.fetchDataSets()}
@@ -251,7 +241,7 @@ class FirstPage extends React.Component {
                         onFetchFilters={() => this.fetchFiltersList()}
                     />
                 </Row>
-                <br />
+                <br/>
                 <Row>
                     <TableView
                         fetchDataSets={() => this.fetchDataSets()}
@@ -269,7 +259,7 @@ class FirstPage extends React.Component {
                         replaceSelectedFilters={(selectedFilters) => this.replaceSelectedFilters(selectedFilters)}
                         selectedSearchIn={this.state.lastSelectedSearchIn}
                         fetchFiltersList={() => this.fetchFiltersList()}
-                        filters={this.state.filters}
+                        filters={this.state.searchDTO.filters}
                         loadingFilters={this.state.loadingFilters}
                         loadingFiltersError={this.state.loadingFiltersError}
                         getSelectedSearchIn={() => this.getSelectedSearchIn()}
