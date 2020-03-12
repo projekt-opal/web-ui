@@ -6,6 +6,8 @@ import createClass from "create-react-class";
 import axios from '../../../../../webservice/axios-dataSets';
 import {FaExternalLinkAlt} from 'react-icons/fa';
 import Link from 'next/link';
+import chroma from 'chroma-js';
+
 
 const Option = createClass({
     render() {
@@ -47,6 +49,26 @@ const MultiValue = props => {
     );
 };
 
+const customStyles = {
+    menu: (provided, state) => ({
+        ...provided,
+        width: state.selectProps.width,
+        borderBottom: '1px dotted pink',
+        color: state.selectProps.menuColor,
+        padding: 20,
+    }),
+    control: (_, {selectProps: {width}}) => ({
+        width: width
+    }),
+    singleValue: (provided, state) => {
+        const opacity = state.isDisabled ? 0.5 : 1;
+        const transition = 'opacity 300ms';
+
+        return {...provided, opacity, transition};
+    }
+};
+
+
 class CustomSelect extends React.Component {
 
     state = {
@@ -87,11 +109,9 @@ class CustomSelect extends React.Component {
                     this.selectAsync.state.loadedOptions = options;
                     this.setState({isButtonClicked: false});
                     return options;
-
                 }
             }
         })
-
     };
 
     changeHandler(values) {
@@ -139,15 +159,70 @@ class CustomSelect extends React.Component {
         this.setState({isButtonClicked: false});
     };
 
+
+
     render() {
+
+        const colourStyles = {
+            control: styles => ({ ...styles, backgroundColor: 'white' }),
+            option: (styles, { data, isDisabled, isFocused, isSelected }) => {
+                const color = chroma('blue');
+                return {
+                    ...styles,
+                    backgroundColor: isDisabled
+                        ? null
+                        : isSelected
+                            ? /*'red'*/
+                             color.alpha(0.5).css()
+                            : isFocused
+                                ? color.alpha(0.1).css()
+                                : null,
+                    color: isDisabled
+                        ? '#ccc'
+                        : 'black'/*isSelected
+                            ? chroma.contrast(color, 'white') > 2
+                                ? 'blue'
+                                : 'black'
+                            : 'khaki'*/,
+                    cursor: isDisabled ? 'not-allowed' : 'default',
+
+                    ':active': {
+                        ...styles[':active'],
+                        backgroundColor: !isDisabled && (isSelected ? 'gray' : color.alpha(0.3).css()),
+                    },
+                };
+            },
+            multiValue: (styles, { data }) => {
+                console.log(data);
+                const color = chroma('brown');
+                const alpha = data.selected.permanent ? 0.3 : 0.1;
+                return {
+                    ...styles,
+                    backgroundColor: color.alpha(alpha).css(),
+                };
+            },
+            multiValueLabel: (styles, { data }) => ({
+                ...styles,
+                // color: 'green',
+            }),
+            multiValueRemove: (styles, { data }) => ({
+                ...styles,
+                color: 'black',
+                // ':hover': {
+                //     backgroundColor: 'lightblue',
+                //     color: 'blue',
+                // },
+            }),
+        };
+
         let optionsArr = [];
         this.props.filter.values.forEach(v => {
-            if (v.selected) {
+            if (v.selected.temporary) {
                 optionsArr.push({
                     label: v.value,
                     value: v.value,
                     externalLink: this.props.filter.externalLink,
-                    uri: v.uri
+                    selected: v.selected
                 });
             }
         });
@@ -170,6 +245,7 @@ class CustomSelect extends React.Component {
                         onChange={this.changeHandler.bind(this)}
                         onInputChange={this.handleInputChange}
                         noOptionsMessage={this.noOptionsMessage}
+                        styles={colourStyles}
                     />
                 </div>
             </div>

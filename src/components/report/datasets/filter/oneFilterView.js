@@ -17,8 +17,11 @@ class OneFilterView extends React.Component {
     };
 
     render() {
+        console.log(this.props.filter);
+
         const {t} = this.props;
         const extendedFilter = this.props.filter;
+        if(!extendedFilter) return null;
         extendedFilter.values = extendedFilter.values.map(v => {
             v.externalLink = extendedFilter.externalLink;
             v.label = v.value;
@@ -38,7 +41,6 @@ class OneFilterView extends React.Component {
                     <CustomSelect
                         filter={extendedFilter}
                         getSelectedSearchIn={this.props.getSelectedSearchIn}
-                        // selectedValues={this.props.selectedFilterValues}
                         appendSelectedValues={this.props.appendSelectedValues}
                         getSearchKey={this.props.getSearchKey}
                     />

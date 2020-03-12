@@ -34,12 +34,12 @@ class TableView extends React.Component {
         this.setState(newState);
     };
 
-    applyFilters = () => {
-        this.setState({lastSelectedFilterValues: this.props.selectedFilters}, () => {
-            this.props.fetchDataSets();
-            this.props.getNumberOfDataSets();
-        });
-    };
+    // applyFilters = () => {
+    //     this.setState({lastSelectedFilterValues: this.props.selectedFilters}, () => {
+    //         this.props.fetchDataSets();
+    //         this.props.getNumberOfDataSets();
+    //     });
+    // };
 
     reloadFilters = () => {
         this.props.fetchFiltersList();
@@ -102,7 +102,7 @@ class TableView extends React.Component {
 
     render() {
         const isMobile = this.state.screenWidth > 1 && this.state.screenWidth <= 800;
-
+        console.log(this.props.filters);
         return (
             <Col md='12'>
                 <Row>
@@ -119,7 +119,7 @@ class TableView extends React.Component {
                                     getSearchKey={this.props.getSearchKey}
                                     getSelectedSearchIn={this.props.getSelectedSearchIn}
                                     reloadFilters={this.reloadFilters}
-                                    applyFilters={this.applyFilters}
+                                    applyFilters={this.props.applyFilters}
                                     dateFilters={this.state.dateFilters}
                                     appendDate={this.appendDate}
                                 />
@@ -200,7 +200,7 @@ class TableView extends React.Component {
                                     getSearchKey={this.props.getSearchKey}
                                     getSelectedSearchIn={this.props.getSelectedSearchIn}
                                     reloadFilters={this.reloadFilters}
-                                    applyFilters={this.applyFilters}
+                                    applyFilters={this.props.applyFilters}
                                     dateFilters={this.state.dateFilters}
                                     appendDate={this.appendDate}
                                 />}

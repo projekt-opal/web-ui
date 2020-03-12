@@ -73,21 +73,33 @@ class FirstPage extends React.Component {
             loadingFilters: true,
             loadingFiltersError: false
         }, () => {
-            axios.post(`/filters/list`, this.state.searchDTO)
+            const searchDTO = this.prepareSearchDTO();
+            axios.post(`/filters/list`, searchDTO)
                 .then(response => {
-                        const filters = response.data;
+                        const filters = response.data.map(f => {
+                            f.values.forEach(v => {
+                                v.selected = {
+                                    permanent: !!v.selected,
+                                    temporary: !!v.selected
+                                };
+                            });
+                            return f;
+                        });
+                        console.log(filters);
                         this.setState(
                             {
                                 searchDTO: {
+                                    ...this.state.searchDTO,
                                     filters: filters
                                 },
                                 loadingFilters: false,
                                 loadingFiltersError: false
-                            });
+                            }, () => console.log(this.state.searchDTO));
                     }
                 ).catch(error => {
                 this.setState({
                     searchDTO: {
+                        ...this.state.searchDTO,
                         filters: []
                     },
                     loadingFilters: false,
@@ -96,6 +108,15 @@ class FirstPage extends React.Component {
             });
         });
     };
+
+    prepareSearchDTO() {
+        const searchDTO = {...this.state.searchDTO};
+        searchDTO.filters = searchDTO.filters.map(f => {
+            f.selected = f.selected.permanent;
+            return f;
+        });
+        return searchDTO;
+    }
 
     replaceSelectedFilters = (selectedFilters) => {
         this.setState({selectedFilters: selectedFilters});
@@ -106,7 +127,7 @@ class FirstPage extends React.Component {
         const filter = this.state.searchDTO.filters.find(f => f.filterGroupTitle === selectedFilter.filterGroupTitle);
         if (filter) {
             filter.values = filter.values.map(v => {
-                v.selected = !!selectedFilter.values.find(sv => sv.value === v.value);
+                v.selected.temporary = !!selectedFilter.values.find(sv => sv.value === v.value);
                 return v;
             });
             const searchDTO = this.state.searchDTO;
@@ -122,6 +143,7 @@ class FirstPage extends React.Component {
         return this.state.searchKey;
     };
 
+    // todo change post opbject
     load10More = () => {
         if (this.state.dataSets !== null && this.state.dataSets.length > 0) {
             let url = `/dataSets/getSubList?searchKey=${this.state.searchKey}&searchIn=${this.state.selectedSearchIn}&low=${this.state.dataSets.length}`;
@@ -157,7 +179,8 @@ class FirstPage extends React.Component {
         });
         let url = `/dataSets/getNumberOfDataSets`;
         // todo handle timeout https://stackoverflow.com/questions/36690451/timeout-feature-in-the-axios-library-is-not-working
-        axios.post(url, this.state.searchDTO)
+        const searchDTO = this.prepareSearchDTO();
+        axios.post(url, searchDTO)
             .then(response => {
                 const numberOfDataSets = response.data;
                 this.setState({
@@ -185,7 +208,8 @@ class FirstPage extends React.Component {
 
 
         let url = `/dataSets/getSubList`;
-        axios.post(url, this.state.searchDTO)
+        const searchDTO = this.prepareSearchDTO();
+        axios.post(url, searchDTO)
             .then(response => {
                 const dataSets = response.data;
                 this.setState({
@@ -224,6 +248,19 @@ class FirstPage extends React.Component {
     componentWillUnmount() {
         window.removeEventListener('resize', this.handleWindowSizeChange);
     }
+
+    applyFilters = () => {
+        const {filters} = {...this.state.searchDTO};
+        filters.forEach(filter => {
+            filter.values.forEach(v => v.selected.permanent = v.selected.temporary)
+        });
+        this.setState({
+            searchDTO: {
+                ...this.state.searchDTO,
+                filters: filters
+            }
+        });
+    };
 
     render() {
         return (
@@ -265,6 +302,7 @@ class FirstPage extends React.Component {
                         getSelectedSearchIn={() => this.getSelectedSearchIn()}
                         isLocationAccessDenied={this.state.isLocationAccessDenied}
                         orderByChanged={this.orderByChanged}
+                        applyFilters ={this.applyFilters}
                     />
                 </Row>
             </Container>
