@@ -109,14 +109,15 @@ class FirstPage extends React.Component {
         });
     };
 
-    prepareSearchDTO() {
-        const searchDTO = {...this.state.searchDTO};
-        searchDTO.filters = searchDTO.filters.map(f => {
-            f.selected = f.selected.permanent;
-            return f;
+    prepareSearchDTO = () => {
+        const searchDTO = JSON.parse(JSON.stringify(this.state.searchDTO));
+        searchDTO.filters.forEach(filter => {
+            filter.values.forEach(v => {
+                v.selected = v.selected.permanent;
+            });
         });
         return searchDTO;
-    }
+    };
 
     replaceSelectedFilters = (selectedFilters) => {
         this.setState({selectedFilters: selectedFilters});
@@ -231,7 +232,7 @@ class FirstPage extends React.Component {
     refreshDataSets = () => {
         this.getNumberOfDataSets();
         this.fetchDataSets();
-        // this.fetchFiltersList();
+        this.fetchFiltersList();
     };
 
     orderByChanged = (orderByValue) => {
@@ -250,16 +251,11 @@ class FirstPage extends React.Component {
     }
 
     applyFilters = () => {
-        const {filters} = {...this.state.searchDTO};
-        filters.forEach(filter => {
+        const searchDTO = JSON.parse(JSON.stringify(this.state.searchDTO));
+        searchDTO.filters.forEach(filter => {
             filter.values.forEach(v => v.selected.permanent = v.selected.temporary)
         });
-        this.setState({
-            searchDTO: {
-                ...this.state.searchDTO,
-                filters: filters
-            }
-        });
+        this.setState({searchDTO: searchDTO}, this.refreshDataSets);
     };
 
     render() {
@@ -302,7 +298,7 @@ class FirstPage extends React.Component {
                         getSelectedSearchIn={() => this.getSelectedSearchIn()}
                         isLocationAccessDenied={this.state.isLocationAccessDenied}
                         orderByChanged={this.orderByChanged}
-                        applyFilters ={this.applyFilters}
+                        applyFilters={this.applyFilters}
                     />
                 </Row>
             </Container>

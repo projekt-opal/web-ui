@@ -217,13 +217,14 @@ class CustomSelect extends React.Component {
 
         let optionsArr = [];
         this.props.filter.values.forEach(v => {
-            if (v.selected.temporary) {
-                optionsArr.push({
-                    label: v.value,
-                    value: v.value,
-                    externalLink: this.props.filter.externalLink,
-                    selected: v.selected
-                });
+            if(v.selected) {
+                if (v.selected.temporary) {
+                    optionsArr.push({
+                        label: v.value,
+                        value: v.value,
+                        selected: v.selected
+                    });
+                }
             }
         });
 
