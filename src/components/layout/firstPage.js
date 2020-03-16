@@ -147,11 +147,9 @@ class FirstPage extends React.Component {
     // todo change post opbject
     load10More = () => {
         if (this.state.dataSets !== null && this.state.dataSets.length > 0) {
-            let url = `/dataSets/getSubList?searchKey=${this.state.searchKey}&searchIn=${this.state.selectedSearchIn}&low=${this.state.dataSets.length}`;
-            axios.post(url, {
-                orderByDTO: this.state.orderByValue,
-                filterDTOS: this.state.selectedFilters
-            })
+            let url = `/dataSets/getSubList?low=${this.state.dataSets.length}`;
+            const searchDTO = this.prepareSearchDTO();
+            axios.post(url, searchDTO)
                 .then(response => {
                     const dataSets = response.data;
                     let ds = [...this.state.dataSets];
