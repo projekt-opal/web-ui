@@ -21,7 +21,7 @@ const Option = createClass({
                     />{" "}
                     <label>{this.props.value} </label>
                     {
-                        this.props.data.externalLink &&
+                        this.props.data.hasExternalLink &&
                         <span>
                         <Link href={"/view/one?uri=" + this.props.data.uri + "&label=" + this.props.value}>
                             <a target="_blank" style={{textDecoration: 'none', color: 'gray'}}>
@@ -121,7 +121,7 @@ class CustomSelect extends React.Component {
         } else {
             this.props.appendSelectedValues({
                     filterGroupTitle: this.props.filter.filterGroupTitle,
-                    externalLink: this.props.filter.externalLink,
+                    hasExternalLink: this.props.filter.hasExternalLink,
                     values: []
                 }
             );
@@ -157,12 +157,11 @@ class CustomSelect extends React.Component {
     };
 
 
-
     render() {
 
         const colourStyles = {
-            control: styles => ({ ...styles, backgroundColor: 'white' }),
-            option: (styles, { data, isDisabled, isFocused, isSelected }) => {
+            control: styles => ({...styles, backgroundColor: 'white'}),
+            option: (styles, {data, isDisabled, isFocused, isSelected}) => {
                 const color = chroma('blue');
                 return {
                     ...styles,
@@ -170,7 +169,7 @@ class CustomSelect extends React.Component {
                         ? null
                         : isSelected
                             ? /*'red'*/
-                             color.alpha(0.5).css()
+                            color.alpha(0.5).css()
                             : isFocused
                                 ? color.alpha(0.1).css()
                                 : null,
@@ -189,7 +188,7 @@ class CustomSelect extends React.Component {
                     },
                 };
             },
-            multiValue: (styles, { data }) => {
+            multiValue: (styles, {data}) => {
                 console.log(data);
                 const color = chroma('brown');
                 const alpha = data.selected.permanent ? 0.3 : 0.1;
@@ -198,11 +197,11 @@ class CustomSelect extends React.Component {
                     backgroundColor: color.alpha(alpha).css(),
                 };
             },
-            multiValueLabel: (styles, { data }) => ({
+            multiValueLabel: (styles, {data}) => ({
                 ...styles,
                 // color: 'green',
             }),
-            multiValueRemove: (styles, { data }) => ({
+            multiValueRemove: (styles, {data}) => ({
                 ...styles,
                 color: 'black',
                 // ':hover': {
@@ -214,7 +213,7 @@ class CustomSelect extends React.Component {
 
         let optionsArr = [];
         this.props.filter.values.forEach(v => {
-            if(v.selected) {
+            if (v.selected) {
                 if (v.selected.temporary) {
                     optionsArr.push({
                         label: v.value,

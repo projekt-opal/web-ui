@@ -23,7 +23,7 @@ class OneFilterView extends React.Component {
         const extendedFilter = this.props.filter;
         if(!extendedFilter) return null;
         extendedFilter.values = extendedFilter.values.map(v => {
-            v.externalLink = extendedFilter.externalLink;
+            v.hasExternalLink = extendedFilter.hasExternalLink;
             v.label = v.value;
             return v;
         });
