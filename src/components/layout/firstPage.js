@@ -15,13 +15,8 @@ class FirstPage extends React.Component {
             },
             filters: []
         },
-        searchKey: '',
-        selectedSearchIn: [],
-        lastSelectedSearchIn: [],
 
         screenWidth: 0,
-
-        orderByValue: null,
 
         dataSets: [],
         loadingDataSets: true,
@@ -31,10 +26,8 @@ class FirstPage extends React.Component {
         loadingNumberOfDataSets: true,
         loadingNumberOfDataSetsError: false,
 
-        filters: [],//[{title: t1, uri:"filter uri" values: [{label: l, value: v, uri: u},{...},...]
         loadingFilters: true,
         loadingFiltersError: false,
-        selectedFilters: [] //is like [{title: "t", uri: "uri", values: [{value: "v1", uti:"uri_v1"}, {value:"v2", uri:"uri_v2"}]}]
     };
 
     componentDidMount = () => {
@@ -42,27 +35,36 @@ class FirstPage extends React.Component {
         window.addEventListener('resize', this.handleWindowSizeChange);
     };
 
-    setLastSelectedSearchIn = () => {
-        this.setState({lastSelectedSearchIn: this.state.selectedSearchIn});
-    };
-
     onUpdateSearchKey = (searchKey) => {
-        this.setState({searchKey: searchKey})
+        this.setState({searchDTO: {
+                ...this.state.searchDTO,
+                searchKey: searchKey
+            }})
     };
 
     onSearchInChanged = (searchDomain) => {
-        let newSelectedSearchIn = [...this.state.selectedSearchIn];
+        let newSelectedSearchIn = [...this.state.searchDTO.searchIn];
         if (newSelectedSearchIn.includes(searchDomain))
             newSelectedSearchIn = newSelectedSearchIn.filter(x => x !== searchDomain);
         else
             newSelectedSearchIn = newSelectedSearchIn.concat(searchDomain);
-        this.setState({selectedSearchIn: newSelectedSearchIn});
+        this.setState({
+            searchDTO: {
+                ...this.state.searchDTO,
+                searchIn: newSelectedSearchIn
+            }
+        });
     };
 
     onUpdatedSearchInRemoved = (searchDomain) => {
-        let newSelectedSearchIn = [...this.state.selectedSearchIn];
+        let newSelectedSearchIn = [...this.state.searchDTO.searchIn];
         newSelectedSearchIn = newSelectedSearchIn.filter(x => x !== searchDomain);
-        this.setState({selectedSearchIn: newSelectedSearchIn});
+        this.setState({
+            searchDTO: {
+                ...this.state.searchDTO,
+                searchIn: newSelectedSearchIn
+            }
+        });
     };
 
     fetchFiltersList = () => {
@@ -263,8 +265,7 @@ class FirstPage extends React.Component {
                         onUpdatedSearchInRemoved={(domain) => this.onUpdatedSearchInRemoved(domain)}
                         onSearchInChanged={(domain) => this.onSearchInChanged(domain)}
                         onUpdateSearchKey={(searchKey) => this.onUpdateSearchKey(searchKey)}
-                        selectedSearchIn={this.state.selectedSearchIn}
-                        setLastSelectedSearchIn={() => this.setLastSelectedSearchIn()}
+                        selectedSearchIn={this.state.searchDTO.searchIn}
                         onFetchFilters={() => this.fetchFiltersList()}
                     />
                 </Row>
@@ -280,7 +281,6 @@ class FirstPage extends React.Component {
                         loadingNumberOfDataSetsError={this.state.loadingNumberOfDataSetsError}
                         loadingDataSets={this.state.loadingDataSets}
                         loadingDataSetsError={this.state.loadingDataSetsError}
-                        selectedFilters={this.state.selectedFilters}
                         appendSelectedValues={(selectedFilter) => this.appendSelectedValues(selectedFilter)}
                         getSearchDTO={() => this.getSearchDTO()}
                         replaceSelectedFilters={(selectedFilters) => this.replaceSelectedFilters(selectedFilters)}

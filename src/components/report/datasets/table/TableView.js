@@ -16,7 +16,6 @@ class TableView extends React.Component {
         screenWidth: 0,
 
         isFiltersOpen: false,
-        lastSelectedFilterValues: [],
         dateFilters: [{name: "Issue date", fromDate: "", toDate: ""}, {name: "Modified date", fromDate: "", toDate: ""}],
     };
 
@@ -33,13 +32,6 @@ class TableView extends React.Component {
         newState.isLongView = !newState.isLongView;
         this.setState(newState);
     };
-
-    // applyFilters = () => {
-    //     this.setState({lastSelectedFilterValues: this.props.selectedFilters}, () => {
-    //         this.props.fetchDataSets();
-    //         this.props.getNumberOfDataSets();
-    //     });
-    // };
 
     reloadFilters = () => {
         this.props.fetchFiltersList();
@@ -72,9 +64,6 @@ class TableView extends React.Component {
     };
 
     toggleFilters = () => {
-        if (this.state.isFiltersOpen) {
-            this.props.replaceSelectedFilters(this.state.lastSelectedFilterValues);
-        }
         this.setState({isFiltersOpen: !this.state.isFiltersOpen});
     };
 
@@ -114,7 +103,6 @@ class TableView extends React.Component {
                                     loadingFiltersError={this.props.loadingFiltersError}
 
                                     filters={this.props.filters}
-                                    selectedFilters={this.props.selectedFilters}
                                     appendSelectedValues={this.props.appendSelectedValues}
                                     getSearchDTO={this.props.getSearchDTO}
                                     reloadFilters={this.reloadFilters}
@@ -194,7 +182,6 @@ class TableView extends React.Component {
                                     loadingFilters={this.props.loadingFilters}
                                     loadingFiltersError={this.props.loadingFiltersError}
                                     filters={this.props.filters}
-                                    selectedFilters={this.props.selectedFilters}
                                     appendSelectedValues={this.props.appendSelectedValues}
                                     getSearchDTO={this.props.getSearchDTO}
                                     reloadFilters={this.reloadFilters}
