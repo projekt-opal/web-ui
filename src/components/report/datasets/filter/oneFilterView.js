@@ -40,9 +40,8 @@ class OneFilterView extends React.Component {
                     this.state.isExpanded &&
                     <CustomSelect
                         filter={extendedFilter}
-                        getSelectedSearchIn={this.props.getSelectedSearchIn}
                         appendSelectedValues={this.props.appendSelectedValues}
-                        getSearchKey={this.props.getSearchKey}
+                        getSearchDTO={this.props.getSearchDTO}
                     />
                 }
             </div>

@@ -116,8 +116,7 @@ class TableView extends React.Component {
                                     filters={this.props.filters}
                                     selectedFilters={this.props.selectedFilters}
                                     appendSelectedValues={this.props.appendSelectedValues}
-                                    getSearchKey={this.props.getSearchKey}
-                                    getSelectedSearchIn={this.props.getSelectedSearchIn}
+                                    getSearchDTO={this.props.getSearchDTO}
                                     reloadFilters={this.reloadFilters}
                                     applyFilters={this.props.applyFilters}
                                     dateFilters={this.state.dateFilters}
@@ -197,8 +196,7 @@ class TableView extends React.Component {
                                     filters={this.props.filters}
                                     selectedFilters={this.props.selectedFilters}
                                     appendSelectedValues={this.props.appendSelectedValues}
-                                    getSearchKey={this.props.getSearchKey}
-                                    getSelectedSearchIn={this.props.getSelectedSearchIn}
+                                    getSearchDTO={this.props.getSearchDTO}
                                     reloadFilters={this.reloadFilters}
                                     applyFilters={this.props.applyFilters}
                                     dateFilters={this.state.dateFilters}

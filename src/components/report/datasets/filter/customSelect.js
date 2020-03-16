@@ -86,12 +86,9 @@ class CustomSelect extends React.Component {
     getOptions = (inputValue) => {
         this.setState({prevInputValue: inputValue}, () => {
             if (!this.props.filter.hasStaticValues) {
-                let searchKey = '';
-                if (this.props.getSearchKey) searchKey = this.props.getSearchKey();
-                let selectedSearchIn = [];
-                if (this.props.getSelectedSearchIn) selectedSearchIn = this.props.getSelectedSearchIn();
-                axios.get(
-                    `/filteredOptions/?filterType=${this.props.filter.title}&searchKey=${searchKey}&searchIn=${selectedSearchIn}&filterText=${inputValue}`)
+                let searchDTO = null;
+                if (this.props.getSearchDTO) searchDTO = this.props.getSearchDTO();
+                axios.post(`/filteredOptions/?filterGroupTitle=${this.props.filter.filterGroupTitle}&containsText=${inputValue}`, searchDTO)
                     .then(response => {
                         if (this.state.prevInputValue === inputValue) {
                             let options = response.data.values;

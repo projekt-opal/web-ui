@@ -140,8 +140,8 @@ class FirstPage extends React.Component {
         }
     };
 
-    getSearchKey = () => {
-        return this.state.searchKey;
+    getSearchDTO = () => {
+        return this.prepareSearchDTO();
     };
 
     // todo change post opbject
@@ -239,10 +239,6 @@ class FirstPage extends React.Component {
         this.setState({orderByValue: orderByValue}, () => this.refreshDataSets())
     };
 
-    getSelectedSearchIn = () => {
-        return this.state.selectedSearchIn;
-    };
-
     handleWindowSizeChange = () => {
     };
 
@@ -288,9 +284,8 @@ class FirstPage extends React.Component {
                         loadingDataSetsError={this.state.loadingDataSetsError}
                         selectedFilters={this.state.selectedFilters}
                         appendSelectedValues={(selectedFilter) => this.appendSelectedValues(selectedFilter)}
-                        getSearchKey={() => this.getSearchKey()}
+                        getSearchDTO={() => this.getSearchDTO()}
                         replaceSelectedFilters={(selectedFilters) => this.replaceSelectedFilters(selectedFilters)}
-                        selectedSearchIn={this.state.lastSelectedSearchIn}
                         fetchFiltersList={() => this.fetchFiltersList()}
                         filters={this.state.searchDTO.filters}
                         loadingFilters={this.state.loadingFilters}

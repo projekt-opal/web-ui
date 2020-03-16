@@ -34,9 +34,8 @@ class FiltersList extends React.Component {
                                             <Col md={{size: 12}}>
                                                 <OneFilterView
                                                     appendSelectedValues={this.props.appendSelectedValues}
-                                                    getSearchKey={this.props.getSearchKey}
+                                                    getSearchDTO={this.props.getSearchDTO}
                                                     filter={filter}
-                                                    getSelectedSearchIn={this.props.getSelectedSearchIn}
                                                 />
                                             </Col>
                                         </Row>
