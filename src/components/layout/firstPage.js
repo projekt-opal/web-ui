@@ -287,7 +287,7 @@ class FirstPage extends React.Component {
                         loadingDataSets={this.state.loadingDataSets}
                         loadingDataSetsError={this.state.loadingDataSetsError}
                         appendSelectedValues={(selectedFilter) => this.appendSelectedValues(selectedFilter)}
-                        getSearchDTO={() => this.getSearchDTO()}
+                        getSearchDTO={this.getSearchDTO}
                         fetchFiltersList={() => this.fetchFiltersList()}
                         filters={this.state.searchDTO.filters}
                         loadingFilters={this.state.loadingFilters}

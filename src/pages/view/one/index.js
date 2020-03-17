@@ -11,11 +11,17 @@ class ViewOne extends React.Component {
     }
 
     state = {
-        fieldName: null,
-        dataSet: null,
-        relatedDataSets: null,
+        searchDTO: {
+            searchKey: "",
+            searchIn: [],
+            orderBy: {
+                selectedOrderValue: "relevance"
+            },
+            filters: []
+        },
 
-        orderByValue: null,
+        fieldName: null,
+        relatedDataSets: null,
 
         loadingDataSets: true,
         loadingDataSetsError: false,
@@ -24,10 +30,8 @@ class ViewOne extends React.Component {
         loadingNumberOfRelatedDataSets: true,
         loadingNumberOfRelatedDataSetsError: false,
 
-        filters: [],//[{title: t1, uri:"filter uri" values: [{label: l, value: v, uri: u},{...},...]
         loadingFilters: true,
         loadingFiltersError: false,
-        selectedFilters: [], //is like [{title: "t", uri: "uri", values: [{value: "v1", uti:"uri_v1"}, {value:"v2", uri:"uri_v2"}]}]
 
         firstLoad: true
     };
@@ -40,10 +44,8 @@ class ViewOne extends React.Component {
         });
         if (this.state.firstLoad) return;
         let url = `/dataSets/getSubList`;
-        axios.post(url, {
-            orderByDTO: this.state.orderByValue,
-            filterDTOS: this.state.selectedFilters
-        })
+        const searchDTO = this.prepareSearchDTO();
+        axios.post(url, searchDTO)
             .then(response => {
                 const dataSets = response.data;
                 console.log("Response: " + response.data);
@@ -52,8 +54,6 @@ class ViewOne extends React.Component {
                     loadingDataSetsError: false,
                     relatedDataSets: dataSets
                 });
-
-                console.log("response not coming")
             })
             .catch(err => {
                 console.log(err);
@@ -65,6 +65,16 @@ class ViewOne extends React.Component {
             });
     };
 
+    prepareSearchDTO = () => {
+        const searchDTO = JSON.parse(JSON.stringify(this.state.searchDTO));
+        searchDTO.filters.forEach(filter => {
+            filter.values.forEach(v => {
+                v.selected = v.selected.permanent;
+            });
+        });
+        return searchDTO;
+    };
+
     getNumberOfRelatedDataSets = () => {
         this.setState({
             loadingNumberOfRelatedDataSets: true,
@@ -72,10 +82,8 @@ class ViewOne extends React.Component {
         });
         if (this.state.firstLoad) return;
         let url = `/dataSets/getNumberOfDataSets`;
-        axios.post(url, {
-            orderByDTO: this.state.orderByValue,
-            filterDTOS: this.state.selectedFilters
-        })
+        const searchDTO = this.prepareSearchDTO();
+        axios.post(url, searchDTO)
             .then(response => {
                 const numberOfRelatedDataSets = response.data;
                 this.setState({
@@ -97,10 +105,8 @@ class ViewOne extends React.Component {
     load10More = () => {
         if (this.state.relatedDataSets !== null && this.state.relatedDataSets.length > 0) {
             let url = `/dataSets/getSubList?low=${this.state.relatedDataSets.length}`;
-            axios.post(url, {
-                orderByDTO: this.state.orderByValue,
-                filterDTOS: this.state.selectedFilters
-            })
+            const searchDTO = this.prepareSearchDTO();
+            axios.post(url, searchDTO)
                 .then(response => {
                     const relatedDataSets = response.data;
                     let ds = [...this.state.relatedDataSets];
@@ -125,58 +131,80 @@ class ViewOne extends React.Component {
     refreshDataSets = () => {
         this.getNumberOfRelatedDataSets();
         this.fetchDataSets();
-        // this.fetchFiltersList();
+        this.fetchFiltersList();
     };
 
     orderByChanged = (orderByValue) => {
-        this.setState({orderByValue: orderByValue}, () => this.refreshDataSets())
+        // todo complete and test
+        this.setState({
+            searchDTO: {
+                ...this.state.searchDTO,
+                orderBy: {
+                    selectedOrderValue: orderByValue
+                },
+            }
+        }, () => this.refreshDataSets())
     };
 
     appendSelectedValues = (selectedFilter) => {
-        let selectedFilters = [...this.state.selectedFilters];
-
-        const prevSelectedFilter = selectedFilters.find(f => f.title === selectedFilter.title);
-        if (prevSelectedFilter)
-            if (selectedFilter.values.length === 0)
-                selectedFilters = selectedFilters.filter(f => f.title !== selectedFilter.title);
-            else
-                prevSelectedFilter.values = selectedFilter.values;
-        else
-            selectedFilters.push(selectedFilter);
-
-        this.setState({selectedFilters: selectedFilters});
-    };
-
-    replaceSelectedFilters = (selectedFilters) => {
-        this.setState({selectedFilters: selectedFilters});
+        console.log(selectedFilter);
+        const filter = this.state.searchDTO.filters.find(f => f.filterGroupTitle === selectedFilter.filterGroupTitle);
+        if (filter) {
+            filter.values = filter.values.map(v => {
+                v.selected.temporary = !!selectedFilter.values.find(sv => sv.value === v.value);
+                return v;
+            });
+            const searchDTO = this.state.searchDTO;
+            searchDTO.filters = searchDTO.filters.map(f => {
+                if (f.filterGroupTitle === filter.filterGroupTitle) return filter;
+                return f;
+            });
+            this.setState({searchDTO: searchDTO});
+        }
     };
 
     fetchFiltersList = () => {
         this.setState({
-            filters: [],
             loadingFilters: true,
             loadingFiltersError: false
         }, () => {
-            axios.get(`/filters/list`)
+            const searchDTO = this.prepareSearchDTO();
+            axios.post(`/filters/list`, searchDTO)
                 .then(response => {
-                        const filters = response.data;
-                        const selectedFilter = this.getTheQueriedFilter(filters);
-                        this.setState({
-                            selectedFilters: [selectedFilter],
-                            firstLoad: false
-                        }, () => {
-                            this.setState(
-                                {
-                                    filters: filters,
-                                    loadingFilters: false,
-                                    loadingFiltersError: false
-                                }, () => this.updateFilterValueCounts());
-                            this.refreshDataSets();
-                        })
+                        const label = !this.props.query || !this.props.query.label ? '' : this.props.query.label;
+                        const filters = response.data.map(f => {
+                            f.values.forEach(v => {
+                                v.selected = {
+                                    permanent: !!v.selected,
+                                    temporary: !!v.selected
+                                };
+                                if (v.value === label)
+                                    v.selected.permanent = true;
+                            });
+                            return f;
+                        });
+                        console.log(filters);
+                        const firstLoad = this.state.firstLoad;
+                        this.setState(
+                            {
+                                searchDTO: {
+                                    ...this.state.searchDTO,
+                                    filters: filters
+                                },
+                                loadingFilters: false,
+                                loadingFiltersError: false,
+                                firstLoad: false
+                            }, () => {
+                                if(firstLoad)
+                                    this.refreshDataSets();
+                            });
                     }
                 ).catch(error => {
                 this.setState({
-                    filters: [],
+                    searchDTO: {
+                        ...this.state.searchDTO,
+                        filters: []
+                    },
                     loadingFilters: false,
                     loadingFiltersError: true
                 });
@@ -184,48 +212,16 @@ class ViewOne extends React.Component {
         });
     };
 
-    getTheQueriedFilter = (filters) => {
-        if (!this.props.query || !this.props.query.uri) return;
-        const uri = this.props.query.uri;
-
-
-        let selectedFilter = null;
-        for (let i = 0; i < filters.length; i++) {
-            const values = filters[i].values;
-            for (let j = 0; j < values.length; j++) {
-                if (values[j].uri === uri) {
-                    selectedFilter = {
-                        title: filters[i].title,
-                        uri: filters[i].uri,
-                        values: [values[j]]
-                    };
-                    break;
-                }
-            }
-        }
-        return selectedFilter;
+    applyFilters = () => {
+        const searchDTO = JSON.parse(JSON.stringify(this.state.searchDTO));
+        searchDTO.filters.forEach(filter => {
+            filter.values.forEach(v => v.selected.permanent = v.selected.temporary)
+        });
+        this.setState({searchDTO: searchDTO}, this.refreshDataSets);
     };
 
-    updateFilterValueCounts = () => {
-        const filters = [...this.state.filters];
-        filters.forEach(f => {
-            f.values.forEach(v => {
-                if (v.count === -1) {
-                    const searchKey="";
-                    const selectedSearchIn=[];
-                    axios.post(`/filter/count?searchKey=${searchKey}&searchIn=${selectedSearchIn}`,
-                        {
-                            filterUri: f.uri,
-                            valueUri: v.uri
-                        })
-                        .then(response => {
-                            v.count = response.data;
-                        })
-                        .catch(err => console.log(err));
-                }
-            });
-        });
-        this.setState({filters: filters});
+    getSearchDTO = () => {
+        return this.prepareSearchDTO();
     };
 
     render() {
@@ -264,14 +260,14 @@ class ViewOne extends React.Component {
                                 loadingNumberOfDataSetsError={this.state.loadingNumberOfRelatedDataSetsError}
                                 loadingDataSets={this.state.loadingDataSets}
                                 loadingDataSetsError={this.state.loadingDataSetsError}
-                                selectedFilters={this.state.selectedFilters}
                                 appendSelectedValues={(selectedFilter) => this.appendSelectedValues(selectedFilter)}
-                                replaceSelectedFilters={(selectedFilters) => this.replaceSelectedFilters(selectedFilters)}
+                                getSearchDTO={this.getSearchDTO}
                                 fetchFiltersList={() => this.fetchFiltersList()}
-                                filters={this.state.filters}
+                                filters={this.state.searchDTO.filters}
                                 loadingFilters={this.state.loadingFilters}
                                 loadingFiltersError={this.state.loadingFiltersError}
                                 orderByChanged={this.orderByChanged}
+                                applyFilters={this.applyFilters}
                             />
                         </Col>
                     </Row>
