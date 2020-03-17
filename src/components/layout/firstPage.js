@@ -96,7 +96,7 @@ class FirstPage extends React.Component {
                                 },
                                 loadingFilters: false,
                                 loadingFiltersError: false
-                            }, () => console.log(this.state.searchDTO));
+                            });
                     }
                 ).catch(error => {
                 this.setState({
@@ -121,9 +121,6 @@ class FirstPage extends React.Component {
         return searchDTO;
     };
 
-    replaceSelectedFilters = (selectedFilters) => {
-        this.setState({selectedFilters: selectedFilters});
-    };
 
     appendSelectedValues = (selectedFilter) => {
         console.log(selectedFilter);
@@ -236,7 +233,15 @@ class FirstPage extends React.Component {
     };
 
     orderByChanged = (orderByValue) => {
-        this.setState({orderByValue: orderByValue}, () => this.refreshDataSets())
+            // todo complete and test
+            this.setState({
+                searchDTO: {
+                    ...this.state.searchDTO,
+                    orderBy: {
+                        selectedOrderValue: orderByValue
+                    },
+                }
+            }, () => this.refreshDataSets())
     };
 
     handleWindowSizeChange = () => {
@@ -283,7 +288,6 @@ class FirstPage extends React.Component {
                         loadingDataSetsError={this.state.loadingDataSetsError}
                         appendSelectedValues={(selectedFilter) => this.appendSelectedValues(selectedFilter)}
                         getSearchDTO={() => this.getSearchDTO()}
-                        replaceSelectedFilters={(selectedFilters) => this.replaceSelectedFilters(selectedFilters)}
                         fetchFiltersList={() => this.fetchFiltersList()}
                         filters={this.state.searchDTO.filters}
                         loadingFilters={this.state.loadingFilters}

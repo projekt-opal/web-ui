@@ -30,6 +30,17 @@ class DatasetViewLayout extends React.Component {
         </span>);
     };
 
+
+    getTitle() {
+        return this.props.dataSet.title ? this.props.dataSet.title : this.props.dataSet.title_de;
+    }
+
+    getDescription() {
+        return this.props.dataSet.description ? this.props.dataSet.description : this.props.dataSet.description_de;
+    }
+
+
+
     render() {
         const metaDataInfo = [];
         let overallRatingMain = <span/>;
@@ -54,13 +65,13 @@ class DatasetViewLayout extends React.Component {
                 <Row>
                     <Col>
                         <h3 style={{marginTop: '.5rem', marginBottom: '0'}}>
-                            {this.props.dataSet == null ? '' : this.props.dataSet.title}</h3></Col>
+                            {this.props.dataSet == null ? '' : this.getTitle()}</h3></Col>
                 </Row>
                 <hr/>
                 <Row>
                     <Col md='12'>
                         <h5>Description:</h5>
-                        <p>{this.props.dataSet == null ? '' : this.props.dataSet.description}</p>
+                        <p>{this.props.dataSet == null ? '' : this.getDescription()}</p>
 
                         <h5>Distribution(s):<Button color="link" onClick={this.toggle}>{this.state.isOpenDistributions ? 'collapse' : 'expand'}</Button></h5>
                         <Collapse isOpen={this.state.isOpenDistributions}>
@@ -86,7 +97,7 @@ class DatasetViewLayout extends React.Component {
                                                                 <div className="col-5">
                                                                     <div>Issued: {distribution.issued}</div>
                                                                     <div>Modified: {distribution.modified}</div>
-                                                                    <div>License: {distribution.license}</div>
+                                                                    <div>License: {distribution.license && distribution.license.uri}</div>
                                                                     <div>Rights: {distribution.rights}</div>
                                                                 </div>
                                                                 <div className="col-5">                                                       
@@ -163,6 +174,7 @@ class DatasetViewLayout extends React.Component {
             </Container>
         );
     }
+
 }
 
 export default DatasetViewLayout;
