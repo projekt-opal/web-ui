@@ -148,16 +148,11 @@ class DatasetView extends React.Component {
     };
 
     orderByChanged = (orderByValue) => {
-        // todo complete and test
+        const searchDTO = JSON.parse(JSON.stringify(this.state.searchDTO));
+        searchDTO.orderBy = orderByValue;
         this.setState({
-            searchDTO: {
-                ...this.state.searchDTO,
-                orderBy: {
-                    selectedOrderValue: orderByValue
-                },
-            }
+            searchDTO: searchDTO
         }, () => this.refreshDataSets())
-
     };
 
     appendSelectedValues = (selectedFilter) => {
