@@ -181,7 +181,8 @@ class DatasetView extends React.Component {
             loadingFiltersError: false
         }, () => {
             const searchDTO = this.prepareSearchDTO();
-            axios.post(`/filters/list`, searchDTO)
+            const uri = (this.props.query && this.props.query.uri) ? this.props.query.uri : "";
+            axios.post(`/filters/listFoRelated?uri=${uri}`, searchDTO)
                 .then(response => {
                         const filters = response.data.map(f => {
                             f.values.forEach(v => {
