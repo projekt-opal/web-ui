@@ -22,13 +22,14 @@ const Option = createClass({
                     <label>{this.props.value} </label>
                     {
                         this.props.data.hasExternalLink &&
-                        <span>
-                        <Link href={"/view/one?uri=" + this.props.data.uri + "&label=" + this.props.value}>
-                            <a target="_blank" style={{textDecoration: 'none', color: 'gray'}}>
-                                    <FaExternalLinkAlt/>
-                            </a>
-                        </Link>
-                    </span>}
+                        <span onClick={e => e.stopPropagation()} >
+                            <Link href={"/view/one?label=" + this.props.value}>
+                                <a target="_blank" style={{textDecoration: 'none', color: 'gray'}}>
+                                        <FaExternalLinkAlt/>
+                                </a>
+                            </Link>
+                        </span>
+                    }
                     {
                         this.props.data.count.absolute !== -1 ?
                             <Badge style={{marginLeft: '2px'}} pill>{this.props.data.count.absolute}</Badge>
