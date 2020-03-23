@@ -23,7 +23,7 @@ class OrderBy extends React.Component {
 
     state = {
         dropdownOpen: false,
-        listOrderByValues: ['relevance', 'location', 'title', 'issueDate', 'description', 'Theme'],
+        listOrderByValues: ['relevance', 'location', 'title'],
         selectedOrderByIndex: 0,
 
         showLocationMenu: false,
@@ -70,8 +70,8 @@ class OrderBy extends React.Component {
             }, () => this.props.orderByChanged(
             {
                 selectedOrderValue: this.state.listOrderByValues[1],
-                latitude: this.state.latitude.selectedValue,
-                longitude: this.state.longitude.selectedValue
+                latitude: this.state.latitude.selectedValue * 1,
+                longitude: this.state.longitude.selectedValue * 1
             }
             )
         );
