@@ -22,7 +22,7 @@ const Option = createClass({
                     <label>{this.props.value} </label>
                     {
                         this.props.data.hasExternalLink &&
-                        <span onClick={e => e.stopPropagation()} >
+                        <span onClick={e => e.stopPropagation()}>
                             <Link href={"/view/one?label=" + this.props.value}>
                                 <a target="_blank" style={{textDecoration: 'none', color: 'gray'}}>
                                         <FaExternalLinkAlt/>

@@ -191,7 +191,7 @@ class ViewOne extends React.Component {
                                 loadingFiltersError: false,
                                 firstLoad: false
                             }, () => {
-                                if(firstLoad)
+                                if (firstLoad)
                                     this.refreshDataSets();
                             });
                     }

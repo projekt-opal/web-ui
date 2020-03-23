@@ -1,5 +1,5 @@
 import React from 'react';
-import {Badge, Col, Container, Row, Table, Collapse, Button} from "reactstrap";
+import {Badge, Button, Col, Collapse, Container, Row, Table} from "reactstrap";
 import {FaRegStar, FaStar, FaStarHalfAlt} from "react-icons/fa";
 import ReactTooltip from 'react-tooltip';
 
@@ -40,7 +40,6 @@ class DatasetViewLayout extends React.Component {
     }
 
 
-
     render() {
         const metaDataInfo = [];
         let overallRatingMain = <span/>;
@@ -53,7 +52,7 @@ class DatasetViewLayout extends React.Component {
             if (this.props.dataSet.language) metaDataInfo["language"] = this.props.dataSet.language;
             if (this.props.dataSet.contactPoint) metaDataInfo["contactPoint"] = this.props.dataSet.contactPoint;
             if (this.props.dataSet.temporal) metaDataInfo["temporal"] = this.props.dataSet.temporal;
-            if (this.props.dataSet.spatial) metaDataInfo["spatial"] = this.props.dataSet.spatial;
+            // if (this.props.dataSet.spatial) metaDataInfo["spatial"] = this.props.dataSet.spatial.geometry;
             if (this.props.dataSet.accrualPeriodicity) metaDataInfo["accrualPeriodicity"] = this.props.dataSet.accrualPeriodicity;
             if (this.props.dataSet.landingPage) metaDataInfo["landingPage"] = this.props.dataSet.landingPage;
             if (this.props.dataSet.overallRating)
@@ -73,7 +72,9 @@ class DatasetViewLayout extends React.Component {
                         <h5>Description:</h5>
                         <p>{this.props.dataSet == null ? '' : this.getDescription()}</p>
 
-                        <h5>Distribution(s):<Button color="link" onClick={this.toggle}>{this.state.isOpenDistributions ? 'collapse' : 'expand'}</Button></h5>
+                        <h5>Distribution(s):<Button color="link"
+                                                    onClick={this.toggle}>{this.state.isOpenDistributions ? 'collapse' : 'expand'}</Button>
+                        </h5>
                         <Collapse isOpen={this.state.isOpenDistributions}>
                             <div>
                                 {
@@ -88,29 +89,33 @@ class DatasetViewLayout extends React.Component {
                                 this.props.dataSet !== null && this.props.dataSet.distributions ?
                                     this.props.dataSet.distributions.map((distribution, idx) => {
                                         return <div key={idx}>
-                                            <Table bordered style={{tableLayout: 'fixed', width: '100%', wordWrap: 'break-word'}}>
+                                            <Table bordered style={{
+                                                tableLayout: 'fixed',
+                                                width: '100%',
+                                                wordWrap: 'break-word'
+                                            }}>
                                                 <tbody>
-                                                    <tr>
-                                                        <td>
-                                                            <div className="container">
-                                                              <div className="row">
+                                                <tr>
+                                                    <td>
+                                                        <div className="container">
+                                                            <div className="row">
                                                                 <div className="col-5">
                                                                     <div>Issued: {distribution.issued}</div>
                                                                     <div>Modified: {distribution.modified}</div>
                                                                     <div>License: {distribution.license && distribution.license.uri}</div>
                                                                     <div>Rights: {distribution.rights}</div>
                                                                 </div>
-                                                                <div className="col-5">                                                       
+                                                                <div className="col-5">
                                                                     <div>AccessUrl: {distribution.accessUrl}</div>
                                                                     <div>MediaType: {distribution.mediaType}</div>
                                                                     <div>ByteSize: {distribution.byteSize}</div>
                                                                     DownloadUrl: <Badge>{distribution.fileType}</Badge>&nbsp;
                                                                     <a href={distribution.url}>{distribution.url}</a>
                                                                 </div>
-                                                             </div>
-                                                            </div>     
-                                                        </td>
-                                                    </tr>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
                                                 </tbody>
                                             </Table>
                                         </div>

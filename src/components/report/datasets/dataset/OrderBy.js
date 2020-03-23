@@ -17,7 +17,7 @@ import {
     Row
 } from "reactstrap";
 import {FaSearchLocation} from 'react-icons/fa'
-import { withTranslation } from 'react-i18next';
+import {withTranslation} from 'react-i18next';
 
 class OrderBy extends React.Component {
 
@@ -61,10 +61,10 @@ class OrderBy extends React.Component {
                 selectedOrderByIndex: 1,
                 latitude: {
                     editedValue: this.state.latitude.editedValue,
-                    selectedValue:  this.state.latitude.editedValue
+                    selectedValue: this.state.latitude.editedValue
                 },
                 longitude: {
-                    editedValue:  this.state.longitude.editedValue,
+                    editedValue: this.state.longitude.editedValue,
                     selectedValue: this.state.longitude.editedValue
                 },
             }, () => this.props.orderByChanged(
@@ -139,7 +139,7 @@ class OrderBy extends React.Component {
     };
 
     render() {
-        const { t } = this.props;
+        const {t} = this.props;
         const modal = this.state.showLocationMenu ? <Modal size="lg"
                                                            centered={true} autoFocus={true}
                                                            isOpen={this.state.showLocationMenu}

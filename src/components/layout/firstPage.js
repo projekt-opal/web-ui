@@ -36,10 +36,12 @@ class FirstPage extends React.Component {
     };
 
     onUpdateSearchKey = (searchKey) => {
-        this.setState({searchDTO: {
+        this.setState({
+            searchDTO: {
                 ...this.state.searchDTO,
                 searchKey: searchKey
-            }})
+            }
+        })
     };
 
     onSearchInChanged = (searchDomain) => {
@@ -236,8 +238,8 @@ class FirstPage extends React.Component {
         const searchDTO = JSON.parse(JSON.stringify(this.state.searchDTO));
         searchDTO.orderBy = orderByValue;
         this.setState({
-                searchDTO: searchDTO
-            }, () => this.refreshDataSets())
+            searchDTO: searchDTO
+        }, () => this.refreshDataSets())
     };
 
     handleWindowSizeChange = () => {

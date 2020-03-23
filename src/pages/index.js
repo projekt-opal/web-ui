@@ -4,7 +4,7 @@ import FirstPage from "../components/layout/firstPage";
 
 const Home = () => (
     <Layout>
-        <FirstPage />
+        <FirstPage/>
     </Layout>
 );
 
