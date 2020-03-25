@@ -24,6 +24,7 @@ class SearchBar extends React.Component {
     };
 
     searchClicked = () => {
+        this.props.clearFilters();
         this.props.onFetchingDataSets();
         this.props.onGettingNumberOfDataSets();
         this.props.onFetchFilters();

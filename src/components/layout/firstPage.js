@@ -257,6 +257,17 @@ class FirstPage extends React.Component {
         this.setState({searchDTO: searchDTO}, this.refreshDataSets);
     };
 
+    clearFilters = () => {
+        const searchDTO = JSON.parse(JSON.stringify(this.state.searchDTO));
+        searchDTO.filters.forEach(filter => {
+            filter.values.forEach(v => v.selected = {
+                permanent: false,
+                temporary: false
+            })
+        });
+        this.setState({searchDTO: searchDTO}, this.refreshDataSets);
+    };
+
     render() {
         return (
             <Container fluid>
@@ -270,6 +281,7 @@ class FirstPage extends React.Component {
                         onUpdateSearchKey={(searchKey) => this.onUpdateSearchKey(searchKey)}
                         selectedSearchIn={this.state.searchDTO.searchIn}
                         onFetchFilters={() => this.fetchFiltersList()}
+                        clearFilters={this.clearFilters}
                     />
                 </Row>
                 <br/>
