@@ -21,7 +21,7 @@ export default withRedux(initStore)(class MyApp extends App {
                     <title>OPAL</title>
                     <meta name="viewport" content="initial-scale=1.0, width=device-width"/>
                     <link rel="stylesheet"
-                          href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"/>
+                          href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"/>
                     <link rel="icon" type="image/png" href="/static/img/opal-favicon-32x32.png" sizes="32x32"/>
                     <link href="/static/react-bootstrap-table2.min.css" rel="stylesheet"/>
                 </Head>
