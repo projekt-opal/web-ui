@@ -1,9 +1,9 @@
 import React from 'react';
-import {Button, Card, CardBody, CardFooter, CardHeader, CardSubtitle, CardText, CardTitle} from "reactstrap";
+import {Button, Card, CardBody, CardHeader, CardSubtitle, CardText, CardTitle} from "reactstrap";
 import ModalDatasetView from './ModalDatasetView';
 import Link from 'next/link';
 
-import {FaExpandArrowsAlt, FaExternalLinkAlt, FaRegStar, FaStar, FaStarHalfAlt} from "react-icons/fa";
+import {FaExpandArrowsAlt, FaExternalLinkAlt} from "react-icons/fa";
 
 // private String uri;
 // private String title;
@@ -110,7 +110,7 @@ class LongView extends React.Component {
                     <CardBody>
                         <CardSubtitle> {description}
                             {
-                                this.props.dataSet.description.length > 100 &&
+                                (this.props.dataSet.description && this.props.dataSet.description.length > 100) &&
                                 <Button color="link" onClick={this.oneLineDescriptionClicked}>
                                     {this.state.isOneLineDescription ? 'more' : 'less'}
                                 </Button>
