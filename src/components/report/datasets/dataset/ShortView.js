@@ -84,7 +84,7 @@ class ShortView extends React.Component {
                 <CardBody>
                     <CardSubtitle> {description}
                         {
-                            this.props.dataSet.description.length > 100 &&
+                            (this.props.dataSet.description && this.props.dataSet.description.length > 100) &&
                             <Button color="link" onClick={this.oneLineDescriptionClicked}>
                                 {this.state.isOneLineDescription ? 'more' : 'less'}
                             </Button>
