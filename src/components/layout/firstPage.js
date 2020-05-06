@@ -89,7 +89,7 @@ class FirstPage extends React.Component {
                             });
                             return f;
                         });
-                        console.log(filters);
+
                         this.setState(
                             {
                                 searchDTO: {
@@ -125,7 +125,7 @@ class FirstPage extends React.Component {
 
 
     appendSelectedValues = (selectedFilter) => {
-        console.log(selectedFilter);
+
         const filter = this.state.searchDTO.filters.find(f => f.filterGroupTitle === selectedFilter.filterGroupTitle);
         if (filter) {
             filter.values = filter.values.map(v => {
@@ -162,7 +162,6 @@ class FirstPage extends React.Component {
                     });
                 })
                 .catch(err => {
-                    console.log(err);
                     this.setState({
                         loadingDataSets: false,
                         loadingDataSetsError: true,
@@ -190,7 +189,6 @@ class FirstPage extends React.Component {
                 });
             })
             .catch(err => {
-                console.log(err);
                 this.setState({
                     loadingNumberOfDataSets: false,
                     loadingNumberOfDataSetsError: true,
@@ -219,7 +217,6 @@ class FirstPage extends React.Component {
                 });
             })
             .catch(err => {
-                console.log(err);
                 this.setState({
                     loadingDataSets: false,
                     loadingDataSetsError: true,
