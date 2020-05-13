@@ -193,7 +193,6 @@ class DatasetView extends React.Component {
                             });
                             return f;
                         });
-                        console.log(filters);
                         this.setState(
                             {
                                 searchDTO: {

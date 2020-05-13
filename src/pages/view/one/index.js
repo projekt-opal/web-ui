@@ -179,7 +179,6 @@ class ViewOne extends React.Component {
                             });
                             return f;
                         });
-                        console.log(filters);
                         const firstLoad = this.state.firstLoad;
                         this.setState(
                             {

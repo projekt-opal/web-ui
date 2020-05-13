@@ -4,7 +4,6 @@ import FiltersList from "../filter/FiltersList";
 import {FaRedo} from "react-icons/fa";
 
 const LoadingFiltersView = (props) => {
-    console.log(props.filters);
     return props.loadingFilters ? <Spinner color="primary"/> :
         props.loadingFiltersError ?
             <div>

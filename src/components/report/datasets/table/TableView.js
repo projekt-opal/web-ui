@@ -91,7 +91,6 @@ class TableView extends React.Component {
 
     render() {
         const isMobile = this.state.screenWidth > 1 && this.state.screenWidth <= 800;
-        console.log(this.props.filters);
         return (
             <Col md='12'>
                 <Row>

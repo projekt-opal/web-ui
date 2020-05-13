@@ -11,7 +11,6 @@ class FiltersList extends React.Component {
     };
 
     render() {
-        console.log(this.props.filters);
         const {t} = this.props;
         return (
             !this.props.filters ? '' :

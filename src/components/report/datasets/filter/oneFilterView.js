@@ -17,8 +17,6 @@ class OneFilterView extends React.Component {
     };
 
     render() {
-        console.log(this.props.filter);
-
         const {t} = this.props;
         const extendedFilter = this.props.filter;
         if(!extendedFilter) return null;
