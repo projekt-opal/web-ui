@@ -5,7 +5,10 @@ services:
     container_name: frontend
     ports:
       - 3000:3000
-    build: .
+    build:
+      context: .
+      args:
+        BACKEND_ADDRESS: ${BACKEND_ADDRESS}
     volumes:
       - modules:/usr/src/app/node_modules
       - next:/usr/src/app/.next
