@@ -5,7 +5,7 @@ import Cache from 'i18next-localstorage-cache';
 // the translations
 // (tip move them in a JSON file and import them)
 const resources = {
-  En: {
+  English: {
     translation: {
       "Home": "Home",
       "Catalogs": "Catalogs",
@@ -26,7 +26,7 @@ const resources = {
       "description": "Description",
     }
   },
-  De: {
+  Deutsch: {
     translation: {
       "Home": "Startseite",
       "Catalogs": "Kataloge",
