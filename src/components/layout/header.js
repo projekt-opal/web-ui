@@ -65,10 +65,8 @@ class Header extends React.Component {
                     {/*<Nav className="ml-auto" navbar>*/}
                     {/*    <NavItem> <Link href="/">En</Link> </NavItem>*/}
                     {/*</Nav>*/}
-                    <Dropdown nav isOpen={this.state.dropdownOpen} toggle={this.toggle}>
-                        <DropdownToggle nav caret>
-                            {this.state.lang}
-                        </DropdownToggle>
+                    <Dropdown  isOpen={this.state.dropdownOpen} toggle={this.toggle}>
+                        <DropdownToggle nav caret>{this.state.lang}</DropdownToggle>
                         <DropdownMenu>
                             <DropdownItem onClick={this.handleChangeLang}>En</DropdownItem>
                             <DropdownItem onClick={this.handleChangeLang}>De</DropdownItem>
