@@ -1,0 +1,16 @@
+/* links, in most cases they are buttons */
+button.btn-link, button.btn-link:hover {
+ color: #4FABE3;
+}
+
+/* normal buttons */
+button.btn-primary{
+ background-color: #4FABE3;
+ border: none;
+}
+
+/* eg in sort-by selection */
+button.dropdown-item.active{
+ background-color: #4FABE3;
+ border: none;
+}

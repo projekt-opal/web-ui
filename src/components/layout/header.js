@@ -10,6 +10,7 @@ import {
     Nav,
     Navbar,
     NavbarBrand,
+    NavLink,
     NavbarToggler,
     NavItem
 } from "reactstrap";
@@ -20,7 +21,7 @@ class Header extends React.Component {
     state = {
         isOpen: false,
         dropdownOpen: false,
-        lang: "En"
+        lang: "Deutsch"
     };
 
     componentDidMount = () => {
@@ -55,23 +56,20 @@ class Header extends React.Component {
                 <NavbarToggler onClick={this.toggleNavBar}/>
                 <Collapse isOpen={this.state.isOpen} navbar>
                     <Nav className="mr-auto" navbar>
-                        <NavItem> <Link href="/"><a>{t('Home')}</a></Link> </NavItem>
+                        <NavItem> <NavLink href="/"><a>{t('Home')}</a></NavLink> </NavItem>
                         {/*<NavItem> <Link href="/catalogs"><a>{t('Catalogs')}</a></Link> </NavItem>*/}
                         {/*<NavItem> <Link href="/publisher"><a>{t('Publisher')}</a></Link> </NavItem>*/}
-                        <NavItem> <a href="http://opaldata.cs.uni-paderborn.de:3030/">{t('SparQL endpoint')}</a>
-                        </NavItem>
-                        <NavItem> <Link href="/about"><a>{t('About US')}</a></Link> </NavItem>
+                        <NavItem> <NavLink href="http://opaldata.cs.uni-paderborn.de:3030/">{t('SparQL endpoint')}</NavLink> </NavItem>
+                        <NavItem> <NavLink href="/about"><a>{t('About US')}</a></NavLink> </NavItem>
                     </Nav>
                     {/*<Nav className="ml-auto" navbar>*/}
                     {/*    <NavItem> <Link href="/">En</Link> </NavItem>*/}
                     {/*</Nav>*/}
-                    <Dropdown nav isOpen={this.state.dropdownOpen} toggle={this.toggle}>
-                        <DropdownToggle nav caret>
-                            {this.state.lang}
-                        </DropdownToggle>
+                    <Dropdown  isOpen={this.state.dropdownOpen} toggle={this.toggle}>
+                        <DropdownToggle caret>{this.state.lang}</DropdownToggle>
                         <DropdownMenu>
-                            <DropdownItem onClick={this.handleChangeLang}>En</DropdownItem>
-                            <DropdownItem onClick={this.handleChangeLang}>De</DropdownItem>
+                            <DropdownItem onClick={this.handleChangeLang}>English</DropdownItem>
+                            <DropdownItem onClick={this.handleChangeLang}>Deutsch</DropdownItem>
                         </DropdownMenu>
                     </Dropdown>
                 </Collapse>

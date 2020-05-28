@@ -5,13 +5,13 @@ import Cache from 'i18next-localstorage-cache';
 // the translations
 // (tip move them in a JSON file and import them)
 const resources = {
-  En: {
+  English: {
     translation: {
       "Home": "Home",
       "Catalogs": "Catalogs",
       "Publisher": "Publisher",
       "SparQL endpoint": "SPARQL endpoint",
-      "About US": "About us",
+      "About US": "About OPAL",
       "Search": "Search",
       "Apply": "Apply",
       "Theme": "Category",
@@ -19,20 +19,20 @@ const resources = {
       "Type of date": "Type of date",
       "From": "From",
       "To": "To",
-      "relevance": "relevance",
-      "location": "location",
-      "title": "title",
-      "issueDate": "issue date",
-      "description": "description",
+      "relevance": "Relevance",
+      "location": "Location",
+      "title": "Title",
+      "issueDate": "Issue date",
+      "description": "Description",
     }
   },
-  De: {
+  Deutsch: {
     translation: {
       "Home": "Startseite",
       "Catalogs": "Kataloge",
       "Publisher": "Herausgeber",
       "SparQL endpoint": "SPARQL-Endpunkt",
-      "About US": "Über uns",
+      "About US": "Über OPAL",
       "Search": "Suche",
       "Apply": "Anwenden",
       "Theme": "Kategorie",
@@ -54,7 +54,7 @@ i18n
   .use(Cache)
   .init({
     resources,
-    lng: "En",
+    lng: "Deutsch",
 
     keySeparator: false, // we do not use keys in form messages.welcome
 

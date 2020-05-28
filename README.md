@@ -1,7 +1,9 @@
 # OPAL Web User Interface
 
 This component provides the main user interface.
-It mainly builds on [React](https://reactjs.org/) - A JavaScript library for building user interfaces.
+It mainly builds on [React](https://reactjs.org/) and [Next.js](https://nextjs.org/) - a JavaScript library and a framework for building user interfaces.
+
+The OPAL Web User Interface is used in the [OPAL demo component](https://github.com/projekt-opal/demo).
 
 
 ## Integrated: City App Demonstrator 
@@ -18,7 +20,20 @@ The functionality was added using an integrated table sorting [OrderBy].
 
 ![Location selection](doc/location.png)
 
+## Development
 
+The *OPAL web-ui* requires a running *[OPAL webservice](https://github.com/projekt-opal/web-service)*, which provides the data to display.
+You have to configure the webservice first.
+If you are not running the webservice on your machine (localhost), specify the location by editing the file [webservice/axios-dataSets.js](webservice/axios-dataSets.js) and replace the baseURL of the webservice.
+
+Afterwards you can use Node.js and npm commands to install packages, build and start the web-ui component. The required commands can be found in the [Dockerfile](Dockerfile). Available scripts are listed inside [package.json](package.json).
+For instance, use these commands to run the web-ui:
+
+```
+npm install
+npm run build
+npm run dev
+```
 
 ## Credits
 
