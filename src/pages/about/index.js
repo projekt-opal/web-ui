@@ -5,117 +5,43 @@ import {Container, Jumbotron} from "reactstrap";
 
 const Home = () => (
     <Layout>
-        <Jumbotron>
-            <h2>Goals of the OPAL project</h2>
-            Goals of the project Open Data Portal Germany (OPAL) are the conception and development of a holistic portal
-            for open data . In particular, open data from mCLOUD and MDM are integrated. Unlike the majority of existing
-            open data portals, OPAL will refine metadata and in 5-star linked open datatransform. The portal will thus
-            ensure that data records can be easily found and easily accessed for both people and software agents (e.g.
-            other data portals, data-driven applications, etc.). In addition, OPAL will also enable the search via
-            content-related (instead of just metadata) facets (such as automatically generated topics, location
-            information and time restrictions).
-            <hr />
-            <h2>Credits</h2>
-            Data Science Group (DICE) at Paderborn University
-            This work has been supported by the German Federal Ministry of Transport and Digital Infrastructure (BMVI) in the project Open Data Portal Germany (OPAL) (funding code 19F2028A).
+    <Container>
 
-        </Jumbotron>
-        <hr/>
-        <Container>
-            <div className="content markdown-page">
-                <h1>Contact information</h1>
-                <h2>
-                    <a className="header-link" href="https://dice-research.org/AxelCyrilleNgongaNgomo">
-                        Prof.Dr. Axel-Cyrille Ngonga Ngomo</a>
-                </h2>
-                <div className="key-val">
-                    <div className="key-row">
-                        <div className="key">Position</div>
-                        <div className="val">Head of DICE</div>
-                    </div>
-                    <div className="key-row">
-                        <div className="key">Phone</div>
-                        <div className="val"><a href="tel:+49 5251 603342">+49 5251 603342</a></div>
-                    </div>
-                    <div className="key-row">
-                        <div className="key">Fax</div>
-                        <div className="val"><a href="tel:+49-5251-603436">+49 5251 603436</a></div>
-                    </div>
-                    <div className="key-row">
-                        <div className="key">Email</div>
-                        <div className="val"><a href="mailto:axel.ngonga@upb.de">axel.ngonga@upb.de</a></div>
-                    </div>
-                    <div className="key-row">
-                        <div className="key">Office</div>
-                        <div className="val">TP6.3.106</div>
-                    </div>
-                    <div className="key-row">
-                        <div className="key">Office hours</div>
-                        <div className="val">Please contact Miss Auinger for an appointment</div>
-                    </div>
-                </div>
-                <h2><a className="header-link" href="https://dice-research.org/SimoneAuinger">Simone Auinger</a></h2>
-                <div className="key-val">
-                    <div className="key-row">
-                        <div className="key">Position</div>
-                        <div className="val">Secretary</div>
-                    </div>
-                    <div className="key-row">
-                        <div className="key">Phone</div>
-                        <div className="val"><a href="tel:+49 5251 601764">+49 5251 601764</a></div>
-                    </div>
-                    <div className="key-row">
-                        <div className="key">Email</div>
-                        <div className="val"><a href="mailto:mone@upb.de">mone@upb.de</a></div>
-                    </div>
-                    <div className="key-row">
-                        <div className="key">Office</div>
-                        <div className="val">TP6.3.107</div>
-                    </div>
-                    <div className="key-row">
-                        <div className="key">Office hours</div>
-                        <div className="val">9:00 - 11:00 (Mondays - Thursdays)</div>
-                    </div>
-                </div>
-                <h2>Dice in Social Media</h2>
-                <div className="key-val">
-                    <div className="key-row">
-                        <div className="key">Facebook</div>
-                        <div className="val"><a href="https://www.facebook.com/DiceUPB">facebook.com/DiceUPB</a></div>
-                    </div>
-                    <div className="key-row">
-                        <div className="key">Twitter</div>
-                        <div className="val"><a href="https://twitter.com/DiceResearch">@DiceResearch</a></div>
-                    </div>
-                    <div className="key-row">
-                        <div className="key">GitHub</div>
-                        <div className="val"><a href="https://github.com/dice-group">github.com/dice-group</a></div>
-                    </div>
-                    <div className="key-row">
-                        <div className="key">Youtube</div>
-                        <div className="val"><a href="https://www.youtube.com/channel/UCDshdIaiXqwZsQ4Gl_70OMA">Dice
-                            DataScienceGroup</a>
-                        </div>
-                    </div>
-                </div>
-                <h2>Addresses</h2>
-                <div className="key-val">
-                    <div className="key-row">
-                        <div className="key" style={{fontWeight: 'bold'}}>For Visitors</div>
-                        <div className="val">
-                            Technologiepark Paderborn <br/> Office: TP6.3.106 <br/>
-                            Technologiepark 6 <br/> 33100 Paderborn
-                        </div>
-                    </div>
-                    <div className="key-row">
-                        <div className="key" style={{fontWeight: 'bold'}}>Postal Address</div>
-                        <div className="val">Universität Paderborn <br/> Fakultät EIM-Informatik <br/> Warburger Str.
-                            100 <br/> 33098 Paderborn
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </Container>
+<br/>
+<h2>About OPAL</h2>
+
+<br/>
+<h4>Problem</h4>
+<p>
+In many areas of daily life, data is collected and made available. Examples include weather and climate data, information about road traffic or public transport. These data are increasingly being provided as open data in corresponding online portals, but are partly available in different formats and difficult to link. This makes it difficult for companies and authorities to search for suitable data records and also to use them, for example in the automotive and logistics sectors.
+</p>
+
+<h4>Project goal</h4>
+<p>
+The objectives of OPAL are the conception and development of a holistic portal for open data with an explicit focus on Germany. Procedures will be developed to allow users to find appropriate sets of records for a particular application. This is done via the search function of the portal as well as further demonstrators. For example, a social media wizard will provide users with appropriate open data for their requests.
+</p>
+
+<h4>Execution</h4>
+<p>
+In a first step, the requirements of user groups from research and industry are collected and analyzed. In a further step, a modular platform will be developed. A particular focus of OPAL is metadata refinement. Metadata records will be transferred to 5-Star Linked Open Data. The deployment as Linked Data allows users to combine data with additional data sources from other domains and therefore to generate an extended knowledge base. This results in improved findability of data for specific applications and sectors, e.g. the automotive and logistics industry.
+</p>
+
+<h4>Project resources</h4>
+<ul>
+<li><strong>Code</strong> repositories are listed at: <a href="https://github.com/projekt-opal/doc#repositories">https://github.com/projekt-opal/doc#repositories</a></li>
+<li><strong>Data</strong> is stored at: <a href="https://hobbitdata.informatik.uni-leipzig.de/OPAL/" rel="nofollow">https://hobbitdata.informatik.uni-leipzig.de/OPAL/</a></li>
+<li><strong>Deliverables</strong> are listed at the OPAL website, see: <a href="http://projekt-opal.de/en/results/deliverables/" rel="nofollow">http://projekt-opal.de/en/results/deliverables/</a></li>
+<li><strong>Demo</strong> is linked at the DICE website, see: <a href="https://dice-research.org/OPAL-Demo" rel="nofollow">https://dice-research.org/OPAL-Demo</a></li>
+<li><strong>Publications</strong> are listed at the DICE website, see: <a href="https://dice-research.org/OPAL" rel="nofollow">https://dice-research.org/OPAL</a></li>
+</ul>
+
+<h4>Credits</h4>
+<p><a href="https://dice-research.org/">Data Science Group (DICE)</a> at <a href="https://www.uni-paderborn.de/">Paderborn University</a></p>
+<p>
+This work has been supported by the German Federal Ministry of Transport and Digital Infrastructure (BMVI) in the project <a href="http://projekt-opal.de/">Open Data Portal Germany (OPAL)</a> (funding code 19F2028A).
+</p>
+
+    </Container>
     </Layout>
 );
 
