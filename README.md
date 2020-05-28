@@ -18,7 +18,15 @@ The functionality was added using an integrated table sorting [OrderBy].
 
 ![Location selection](doc/location.png)
 
+## Development
 
+The *web-ui* requires a running *[webservice](https://github.com/projekt-opal/web-service)*, which provides the data to display.
+To specify the location of the *webservice*, edit the file [webservice/axios-dataSets.js](webservice/axios-dataSets.js) and insert the baseURL of the *webservice*.
+
+Afterwards you can use Node.js and npm commands to install packages, build and start the component.
+The required commands can be found in the [Dockerfile](Dockerfile).
+
+Available scripts (e.g. the dev scripts can be executed using, ``npm run dev``) are listed inside [package.json](package.json).
 
 ## Credits
 
