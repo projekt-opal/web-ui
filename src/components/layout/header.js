@@ -10,6 +10,7 @@ import {
     Nav,
     Navbar,
     NavbarBrand,
+    NavLink,
     NavbarToggler,
     NavItem
 } from "reactstrap";
@@ -55,12 +56,11 @@ class Header extends React.Component {
                 <NavbarToggler onClick={this.toggleNavBar}/>
                 <Collapse isOpen={this.state.isOpen} navbar>
                     <Nav className="mr-auto" navbar>
-                        <NavItem> <Link href="/"><a>{t('Home')}</a></Link> </NavItem>
+                        <NavItem> <NavLink href="/"><a>{t('Home')}</a></NavLink> </NavItem>
                         {/*<NavItem> <Link href="/catalogs"><a>{t('Catalogs')}</a></Link> </NavItem>*/}
                         {/*<NavItem> <Link href="/publisher"><a>{t('Publisher')}</a></Link> </NavItem>*/}
-                        <NavItem> <a href="http://opaldata.cs.uni-paderborn.de:3030/">{t('SparQL endpoint')}</a>
-                        </NavItem>
-                        <NavItem> <Link href="/about"><a>{t('About US')}</a></Link> </NavItem>
+                        <NavItem> <NavLink href="http://opaldata.cs.uni-paderborn.de:3030/">{t('SparQL endpoint')}</NavLink> </NavItem>
+                        <NavItem> <NavLink href="/about"><a>{t('About US')}</a></NavLink> </NavItem>
                     </Nav>
                     {/*<Nav className="ml-auto" navbar>*/}
                     {/*    <NavItem> <Link href="/">En</Link> </NavItem>*/}
