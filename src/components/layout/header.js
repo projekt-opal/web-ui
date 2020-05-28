@@ -21,7 +21,7 @@ class Header extends React.Component {
     state = {
         isOpen: false,
         dropdownOpen: false,
-        lang: "En"
+        lang: "Deutsch"
     };
 
     componentDidMount = () => {
@@ -68,8 +68,8 @@ class Header extends React.Component {
                     <Dropdown  isOpen={this.state.dropdownOpen} toggle={this.toggle}>
                         <DropdownToggle nav caret>{this.state.lang}</DropdownToggle>
                         <DropdownMenu>
-                            <DropdownItem onClick={this.handleChangeLang}>En</DropdownItem>
-                            <DropdownItem onClick={this.handleChangeLang}>De</DropdownItem>
+                            <DropdownItem onClick={this.handleChangeLang}>English</DropdownItem>
+                            <DropdownItem onClick={this.handleChangeLang}>Deutsch</DropdownItem>
                         </DropdownMenu>
                     </Dropdown>
                 </Collapse>

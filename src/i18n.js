@@ -54,7 +54,7 @@ i18n
   .use(Cache)
   .init({
     resources,
-    lng: "De",
+    lng: "Deutsch",
 
     keySeparator: false, // we do not use keys in form messages.welcome
 
