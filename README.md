@@ -24,11 +24,16 @@ The functionality was added using an integrated table sorting [OrderBy].
 
 The *OPAL web-ui* requires a running *[OPAL webservice](https://github.com/projekt-opal/web-service)*, which provides the data to display.
 You have to configure the webservice first.
-To specify the location of the webservice, edit the file [webservice/axios-dataSets.js](webservice/axios-dataSets.js) and insert the baseURL of the webservice.  
-Afterwards you can use Node.js and npm commands to install packages, build and start the web-ui component.
-The required commands can be found in the [Dockerfile](Dockerfile).  
-Available scripts are listed inside [package.json](package.json).
-For instance, the dev script can be executed using, ``npm run dev``.
+If you are not running the webservice on your machine (localhost), specify the location by editing the file [webservice/axios-dataSets.js](webservice/axios-dataSets.js) and replace the baseURL of the webservice.
+
+Afterwards you can use Node.js and npm commands to install packages, build and start the web-ui component. The required commands can be found in the [Dockerfile](Dockerfile). Available scripts are listed inside [package.json](package.json).
+For instance, use these commands to run the web-ui:
+
+```
+npm install
+npm run build
+npm run dev
+```
 
 ## Credits
 
