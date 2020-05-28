@@ -1,7 +1,9 @@
 # OPAL Web User Interface
 
 This component provides the main user interface.
-It mainly builds on [React](https://reactjs.org/) - A JavaScript library for building user interfaces.
+It mainly builds on [React](https://reactjs.org/) and [Next.js](https://nextjs.org/) - a JavaScript library and a framework for building user interfaces.
+
+The OPAL Web User Interface is used in the [OPAL demo component](https://github.com/projekt-opal/demo).
 
 
 ## Integrated: City App Demonstrator 
