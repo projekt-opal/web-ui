@@ -66,7 +66,7 @@ class Header extends React.Component {
                     {/*    <NavItem> <Link href="/">En</Link> </NavItem>*/}
                     {/*</Nav>*/}
                     <Dropdown  isOpen={this.state.dropdownOpen} toggle={this.toggle}>
-                        <DropdownToggle nav caret>{this.state.lang}</DropdownToggle>
+                        <DropdownToggle caret>{this.state.lang}</DropdownToggle>
                         <DropdownMenu>
                             <DropdownItem onClick={this.handleChangeLang}>English</DropdownItem>
                             <DropdownItem onClick={this.handleChangeLang}>Deutsch</DropdownItem>
