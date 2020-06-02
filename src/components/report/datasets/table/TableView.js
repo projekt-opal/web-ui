@@ -127,7 +127,7 @@ class TableView extends React.Component {
                                             loadingNumberOfDataSets={this.props.loadingNumberOfDataSets}
                                             numberOfDataSets={this.props.numberOfDataSets}
                                             reloadNumberOfDataSets={this.reloadNumberOfDataSets}
-                                        />} </span>
+                                        />} datasets </span>
                                         <div style={{flexGrow: 1}}/>
                                         <Button style={{marginLeft: '2px'}} onClick={this.largeViewChanged}>
                                             {this.state.isLongView ? <FaThLarge/> : <FaThList/>}
