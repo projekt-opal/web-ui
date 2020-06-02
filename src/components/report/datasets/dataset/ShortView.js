@@ -1,6 +1,6 @@
 import React from 'react';
 import {Badge, Button, Input, Card, CardBody, CardHeader, CardSubtitle, CardTitle} from "reactstrap";
-import {FaExpandArrowsAlt, FaExternalLinkAlt, FaRegStar, FaStar, FaStarHalfAlt} from "react-icons/fa";
+import {FaExternalLinkAlt, FaRegStar, FaStar, FaStarHalfAlt} from "react-icons/fa";
 import ModalDatasetView from "./ModalDatasetView";
 import Link from 'next/link';
 
@@ -56,26 +56,15 @@ class ShortView extends React.Component {
                         uri={this.props.dataSet.uri}
                     />
                 }
-                <CardHeader>
+                <CardHeader style={{background: '#37AB9C'}}>
                     <div style={{display: 'flex', flexFlow: 'row wrap'}}>
-                        <CardTitle style={{display: 'inline', marginLeft: '0.5em', fontWeight: 'bold'}}>
-                            {title}
+                        <CardTitle style={{display: 'inline', fontWeight:'bold', cursor:'pointer', width:'95%'}} onClick={() => this.toggleModal()}>
+                            <span style={{color: '#fff'}}>{title}</span>
                         </CardTitle>
                         <div style={{flexGrow: '1'}}/>
                         {overallRatingStarts}
-                        <Button size="sm"
-                                style={{
-                                    background: 'transparent',
-                                    border: 'none',
-                                    color: 'gray',
-                                    marginLeft: '2px'
-                                }}
-                                onClick={() => this.toggleModal()}
-                        >
-                            <FaExpandArrowsAlt/>
-                        </Button>
                         <Link href={dataSetViewLink}>
-                            <a target="_blank" style={{textDecoration: "none", color: 'gray'}}>
+                            <a target="_blank" style={{textDecoration: "none", color: '#fff'}}>
                                 <FaExternalLinkAlt/>
                             </a>
                         </Link>
