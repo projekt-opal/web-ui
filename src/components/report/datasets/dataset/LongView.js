@@ -39,7 +39,7 @@ class LongView extends React.Component {
         const title = this.props.dataSet.title ? this.props.dataSet.title : "";
 
         let description = this.props.dataSet.description ? this.props.dataSet.description: "";
-        if (this.state.isOneLineDescription) description = description.substr(0, 100);
+        if (this.state.isOneLineDescription) description = description.substr(0, 250);
 
         const theme = this.props.dataSet.theme && this.props.dataSet.theme.length > 0 ? <><br /><span>Theme: </span>
                 <span style={{marginLeft: '2rem'}}>{this.props.dataSet.theme.join(', ')}</span>
@@ -99,9 +99,9 @@ class LongView extends React.Component {
                     <CardBody>
                         <CardSubtitle> {description}
                             {
-                                (this.props.dataSet.description && this.props.dataSet.description.length > 100) &&
-                                <Button color="link" onClick={this.oneLineDescriptionClicked}>
-                                    {this.state.isOneLineDescription ? 'more' : 'less'}
+                                (this.props.dataSet.description && this.props.dataSet.description.length > 250) &&
+                                <Button color="link" onClick={this.oneLineDescriptionClicked} style={{padding:'0px 4px'}}>
+                                    {this.state.isOneLineDescription ? 'show more' : 'show less'}
                                 </Button>
                             }
                         </CardSubtitle>

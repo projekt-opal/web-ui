@@ -27,7 +27,7 @@ class ShortView extends React.Component {
         const title = this.props.dataSet.title ? this.props.dataSet.title : "";
 
         let description = this.props.dataSet.description ? this.props.dataSet.description: "";
-        if (this.state.isOneLineDescription) description = description.substr(0, 100);
+        if (this.state.isOneLineDescription) description = description.substr(0, 150);
 
         // todo uncomment me when overall rating is available
         let overallRatingStarts = <span />;
@@ -73,7 +73,7 @@ class ShortView extends React.Component {
                 <CardBody>
                     <CardSubtitle> {description}
                         {
-                            (this.props.dataSet.description && this.props.dataSet.description.length > 100) &&
+                            (this.props.dataSet.description && this.props.dataSet.description.length > 150) &&
                             <Button color="link" onClick={this.oneLineDescriptionClicked}>
                                 {this.state.isOneLineDescription ? 'more' : 'less'}
                             </Button>
