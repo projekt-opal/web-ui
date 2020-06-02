@@ -23,7 +23,7 @@ The functionality was added using an integrated table sorting [OrderBy].
 
 ## Notes
 
-- Development notes are in the [wiki](https://github.com/projekt-opal/web-ui).
+- Development notes are in the [wiki](https://github.com/projekt-opal/web-ui/wiki).
 
 
 ## Credits
