@@ -139,6 +139,10 @@ class OrderBy extends React.Component {
     };
 
     render() {
+
+        // TODO deactivated sorting
+        return '';
+
         const {t} = this.props;
         const modal = this.state.showLocationMenu ? <Modal size="lg"
                                                            centered={true} autoFocus={true}

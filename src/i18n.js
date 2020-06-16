@@ -24,6 +24,7 @@ const resources = {
       "title": "Title",
       "issueDate": "Issue date",
       "description": "Description",
+      "datasets": "datasets",
     }
   },
   Deutsch: {
@@ -45,6 +46,7 @@ const resources = {
       "title": "Titel",
       "issueDate": "Erscheinungsdatum",
       "description": "Beschreibung",
+      "datasets": "Datensätze",
     }
   }
 };
