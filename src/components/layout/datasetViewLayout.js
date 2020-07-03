@@ -50,6 +50,24 @@ class DatasetViewLayout extends React.Component {
 
     }
 
+    getLanguage = () => {
+        if (this.props.dataSet.language) {
+            if (this.props.dataSet.language.includes("http://publications.europa.eu/resource/authority/language/")) {
+                let uri = this.props.dataSet.language;
+                uri = uri.replace("http://publications.europa.eu/resource/authority/language/", "").toLowerCase();
+                return uri;
+
+            }
+            else if (this.props.dataSet.language.includes("http://") && !this.props.dataSet.language.includes("http://publications.europa.eu/resource/authority/language/")) {
+                return this.props.dataSet.language;
+            }
+            else {
+                return this.props.dataSet.language.toLowerCase();
+            }
+
+        }
+    }
+
     render() {
         const metaDataInfo = [];
         let overallRatingMain = <span />;
@@ -60,7 +78,7 @@ class DatasetViewLayout extends React.Component {
             if (this.props.dataSet.keywords_de) metaDataInfo["keywords"] = this.props.dataSet.keywords.join(", ");
             if (this.props.dataSet.modified) metaDataInfo["modified"] = this.props.dataSet.modified;
             if (this.props.dataSet.identifier) metaDataInfo["identifier"] = this.props.dataSet.identifier;
-            if (this.props.dataSet.language) metaDataInfo["language"] = this.props.dataSet.language;
+            if (this.props.dataSet.language) metaDataInfo["language"] = this.getLanguage();
             if (this.props.dataSet.contactPoint) metaDataInfo["contactPoint"] = this.props.dataSet.contactPoint;
             if (this.props.dataSet.temporal) metaDataInfo["temporal"] = this.props.dataSet.temporal;
             // if (this.props.dataSet.spatial) metaDataInfo["spatial"] = this.props.dataSet.spatial.geometry;
@@ -122,7 +140,7 @@ class DatasetViewLayout extends React.Component {
                                                                         <div>Rights: {distribution.rights}</div>
                                                                         <div>AccessUrl: <a href={distribution.accessUrl}>{distribution.accessUrl}</a></div>
                                                                         <div>MediaType: {distribution.mediaType}</div>
-                                                                        <div>ByteSize: {distribution.byteSize}</div>
+                                                                        {distribution.byteSize === 0 ? '' : <div>ByteSize: {distribution.byteSize}</div>}
                                                                     DownloadUrl: <Badge>{distribution.fileType}</Badge>&nbsp;
                                                                     <a href={distribution.url}>{distribution.url}</a>
                                                                     </div>
