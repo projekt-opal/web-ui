@@ -68,6 +68,22 @@ class DatasetViewLayout extends React.Component {
         }
     }
 
+    getAsArray(obj){
+        let emptyTemporal = Object.values(obj).every(v => v === null);
+        let someIsNull = Object.values(obj).some(v => v === null);
+        if(emptyTemporal === false){
+            let arr = Object.keys(obj).map((key) => {
+                if(obj[key] != null) {
+                    return [key+": ", obj[key]+" "];
+                }
+            })
+            if(arr.length != 0){
+                return arr;
+            }
+        }
+        return null;   
+    }
+
     render() {
         const metaDataInfo = [];
         let overallRatingMain = <span />;
@@ -79,8 +95,20 @@ class DatasetViewLayout extends React.Component {
             if (this.props.dataSet.modified) metaDataInfo["modified"] = this.props.dataSet.modified;
             if (this.props.dataSet.identifier) metaDataInfo["identifier"] = this.props.dataSet.identifier;
             if (this.props.dataSet.language) metaDataInfo["language"] = this.getLanguage();
-            if (this.props.dataSet.contactPoint) metaDataInfo["contactPoint"] = this.props.dataSet.contactPoint;
-            if (this.props.dataSet.temporal) metaDataInfo["temporal"] = this.props.dataSet.temporal;
+            if (this.props.dataSet.contactPoint) {
+                let obj = this.props.dataSet.contactPoint;
+                let arr = this.getAsArray(obj);
+                if(arr != null){
+                    metaDataInfo["contactPoint"] = arr;
+                } 
+            }
+            if (this.props.dataSet.temporal) {
+                let obj = this.props.dataSet.temporal;
+                let arr = this.getAsArray(obj);
+                if(arr != null){
+                    metaDataInfo["temporal"] = arr;
+                }        
+            }
             // if (this.props.dataSet.spatial) metaDataInfo["spatial"] = this.props.dataSet.spatial.geometry;
             if (this.props.dataSet.accrualPeriodicity) metaDataInfo["accrualPeriodicity"] = this.props.dataSet.accrualPeriodicity;
             if (this.props.dataSet.landingPage) metaDataInfo["landingPage"] = this.getLandingPage();
