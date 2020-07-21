@@ -68,20 +68,20 @@ class DatasetViewLayout extends React.Component {
         }
     }
 
-    getAsArray(obj){
+    getAsArray(obj) {
         let emptyTemporal = Object.values(obj).every(v => v === null);
         let someIsNull = Object.values(obj).some(v => v === null);
-        if(emptyTemporal === false){
+        if (emptyTemporal === false) {
             let arr = Object.keys(obj).map((key) => {
-                if(obj[key] != null) {
-                    return [key+": ", obj[key]+" "];
+                if (obj[key] != null) {
+                    return [key + ": ", obj[key] + " "];
                 }
             })
-            if(arr.length != 0){
+            if (arr.length != 0) {
                 return arr;
             }
         }
-        return null;   
+        return null;
     }
 
     render() {
@@ -98,16 +98,16 @@ class DatasetViewLayout extends React.Component {
             if (this.props.dataSet.contactPoint) {
                 let obj = this.props.dataSet.contactPoint;
                 let arr = this.getAsArray(obj);
-                if(arr != null){
+                if (arr != null) {
                     metaDataInfo["contactPoint"] = arr;
-                } 
+                }
             }
             if (this.props.dataSet.temporal) {
                 let obj = this.props.dataSet.temporal;
                 let arr = this.getAsArray(obj);
-                if(arr != null){
+                if (arr != null) {
                     metaDataInfo["temporal"] = arr;
-                }        
+                }
             }
             // if (this.props.dataSet.spatial) metaDataInfo["spatial"] = this.props.dataSet.spatial.geometry;
             if (this.props.dataSet.accrualPeriodicity) metaDataInfo["accrualPeriodicity"] = this.props.dataSet.accrualPeriodicity;
@@ -152,30 +152,18 @@ class DatasetViewLayout extends React.Component {
                                                 wordWrap: 'break-word'
                                             }}>
                                                 <tbody>
-                                                    <tr>
-                                                        <td>
-                                                            <div className="container">
-                                                                <div className="row">
-                                                                    <div className="col-5">
-                                                                        <div>Title: {distribution.title}</div>
-                                                                        <div>Description: {distribution.description}</div>
-                                                                        <div>Issued: {distribution.issued}</div>
-                                                                        <div>Modified: {distribution.modified}</div>
-                                                                        <div>License: {distribution.license && distribution.license.uri}</div>
+                                                    <tr>{distribution.title != null ? <td><div>Title: {distribution.title}</div></td> : ''}</tr>
+                                                    <tr> {distribution.description != null ? <td><div>Description: {distribution.description}</div></td> : ''}</tr>
+                                                    <tr>{distribution.issued != null ? <td><div>Issued: {distribution.issued}</div></td> : ''}</tr>
+                                                    <tr>{distribution.modified != null ? <td><div>Modified: {distribution.modified}</div></td> : ''}</tr>
+                                                    <tr>{distribution.license != null ? <td><div>License: {distribution.license && distribution.license.uri}</div></td> : ''}</tr>
+                                                    <tr>{distribution.rights != null ? <td><div>Rights: {distribution.rights}</div></td> : ''}</tr>
+                                                    <tr>{distribution.accessUrl != null ? <td><div>Access Url: <a href={distribution.accessUrl}>{distribution.accessUrl}</a></div></td> : ''}</tr>
+                                                    <tr> {distribution.mediaType != null ? <td><div>Media Type: {distribution.mediaType}</div></td> : ''}</tr>
+                                                    <tr>{distribution.byteSize === 0 ? '' : <td><div>ByteSize: {distribution.byteSize}</div></td>}</tr>
+                                                    <tr>{distribution.downloadUrl != null ? <td><div>Download Url: <Badge>{distribution.fileType}</Badge>&nbsp;</div></td> : ''}</tr>
+                                                    <tr>{distribution.url != null ? <td><a href={distribution.url}>{distribution.url}</a></td> : ''}</tr>
 
-                                                                    </div>
-                                                                    <div className="col-5">
-                                                                        <div>Rights: {distribution.rights}</div>
-                                                                        <div>AccessUrl: <a href={distribution.accessUrl}>{distribution.accessUrl}</a></div>
-                                                                        <div>MediaType: {distribution.mediaType}</div>
-                                                                        {distribution.byteSize === 0 ? '' : <div>ByteSize: {distribution.byteSize}</div>}
-                                                                    DownloadUrl: <Badge>{distribution.fileType}</Badge>&nbsp;
-                                                                    <a href={distribution.url}>{distribution.url}</a>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
                                                 </tbody>
                                             </Table>
                                         </div>
@@ -184,7 +172,7 @@ class DatasetViewLayout extends React.Component {
                             }
                         </Collapse>
                     </Col>
-                </Row>
+                </Row >
                 <Row>
                     <Col md='12'>
                         <h5>Metadata Info:</h5>
@@ -194,7 +182,7 @@ class DatasetViewLayout extends React.Component {
                                     {
                                         Object.keys(metaDataInfo).map((key, idx) => {
                                             return <tr key={idx}>
-                                                <td>{key}</td>
+                                                <td>{key.charAt(0).toUpperCase().concat(key.substring(1, key.length))}</td>
                                                 <td>{metaDataInfo[key]}</td>
                                             </tr>
                                         })
@@ -205,7 +193,8 @@ class DatasetViewLayout extends React.Component {
                     </Col>
                 </Row>
                 <hr />
-                {this.props.dataSet.qualityMetrics &&
+                {
+                    this.props.dataSet.qualityMetrics &&
                     <Row>
                         <Col md='12'>
                             <h5>Quality Metrics:</h5>
@@ -236,7 +225,7 @@ class DatasetViewLayout extends React.Component {
                         </Col>
                     </Row>
                 }
-            </Container>
+            </Container >
         );
     }
 
