@@ -49,7 +49,7 @@ class SearchBar extends React.Component {
                     this.state.searchIn.map((domain) => (
                         <Button color="primary" size="sm" key={domain} style={{marginLeft: '5px'}}
                                 onClick={() => this.checkDomain(domain)}>
-                            {domain} {this.props.selectedSearchIn.includes(domain) && <Badge> selected </Badge>}
+                            {domain} {this.props.selectedSearchIn.includes(domain) && <Badge>{t('selected')}</Badge>}
                         </Button>
                     ))
                 }
@@ -57,7 +57,8 @@ class SearchBar extends React.Component {
             </>
         );
 
-        let searchDomains = <span style={{marginLeft: '5px', color: 'gray'}}>  Anywhere </span>;
+        let searchDomains = this.props.selectedSearchIn.length == 0 ? <span style={{marginLeft: '5px', marginTop: '5px', color: 'gray'}}>{t('Anywhere')}</span> : "";
+/* AW 2020-07-27 This seems to be rendundant for the most cases. Only missing, if the buttons are hidden.
         if (this.props.selectedSearchIn.length > 0)
             searchDomains = (<span style={{marginLeft: '5px', color: 'gray'}}>
                 {
@@ -70,11 +71,12 @@ class SearchBar extends React.Component {
                     )
                 }
             </span>);
+*/
 
         return (
             <Col md={{size: 12}}>
                 <InputGroup size="lg">
-                    <Input placeholder="Search ..." onChange={this.searchKeyChanged}
+                    <Input placeholder={t('Search')} onChange={this.searchKeyChanged}
                            onKeyPress={this.onSearchKeyPressed}
                            value={this.props.searchKey}/>
                     <InputGroupAddon addonType="prepend">
@@ -85,7 +87,7 @@ class SearchBar extends React.Component {
                 </InputGroup>
                 <InputGroup style={{marginTop: '5px'}}>
                     <Button color="link" size="sm" onClick={this.toggleMoreOptions}>
-                        <span>Search in : </span>
+                        <span>{t('Search in')}</span>
                         <FaAngleRight/>
                     </Button>
                     <Collapse isOpen={!this.state.collapse}>

@@ -3,6 +3,7 @@ import {Badge, Button, Input, Card, CardBody, CardHeader, CardSubtitle, CardTitl
 import {FaExternalLinkAlt, FaRegStar, FaStar, FaStarHalfAlt} from "react-icons/fa";
 import ModalDatasetView from "./ModalDatasetView";
 import Link from 'next/link';
+import {withTranslation} from 'react-i18next';
 import i18n from 'i18next';
 import {getTitle, getDescription} from '../../../../DataUtils';
 
@@ -25,6 +26,7 @@ class ShortView extends React.Component {
     };
 
     render() {
+        const {t} = this.props;
         const title = getTitle(this.props.dataSet, i18n.language);
 
         let description = getDescription(this.props.dataSet, i18n.language);
@@ -60,7 +62,7 @@ class ShortView extends React.Component {
                         {
                             (this.props.dataSet.description && this.props.dataSet.description.length > 150) &&
                             <Button color="link" onClick={this.oneLineDescriptionClicked}>
-                                {this.state.isOneLineDescription ? 'more' : 'less'}
+                                {this.state.isOneLineDescription ? t('show more') : t('show less')}
                             </Button>
                         }
                     </CardSubtitle>
@@ -70,4 +72,4 @@ class ShortView extends React.Component {
     }
 }
 
-export default ShortView;
+export default withTranslation()(ShortView);

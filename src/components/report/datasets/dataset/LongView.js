@@ -3,6 +3,7 @@ import {Button, Card, CardBody, CardHeader, CardSubtitle, CardText, CardTitle} f
 import ModalDatasetView from './ModalDatasetView';
 import Link from 'next/link';
 import {FaExternalLinkAlt} from "react-icons/fa";
+import {withTranslation} from 'react-i18next';
 import i18n from 'i18next';
 import {getTitle, getDescription} from '../../../../DataUtils';
 
@@ -29,6 +30,7 @@ class LongView extends React.Component {
     };
 
     render() {
+        const {t} = this.props;
         const title = getTitle(this.props.dataSet, i18n.language);
 
         let description = getDescription(this.props.dataSet, i18n.language);
@@ -78,7 +80,8 @@ class LongView extends React.Component {
                             {
                                 (this.props.dataSet.description && this.props.dataSet.description.length > 250) &&
                                 <Button color="link" onClick={this.oneLineDescriptionClicked} style={{padding:'0px 4px'}}>
-                                    {this.state.isOneLineDescription ? 'show more' : 'show less'}
+                                    {this.state.isOneLineDescription ? t('show more') : t('show less')}
+
                                 </Button>
                             }
                         </CardSubtitle>
@@ -96,4 +99,4 @@ class LongView extends React.Component {
     }
 }
 
-export default LongView;
+export default withTranslation()(LongView);

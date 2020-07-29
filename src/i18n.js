@@ -7,12 +7,21 @@ import Cache from 'i18next-localstorage-cache';
 const resources = {
   English: {
     translation: {
+      // Search bar
+      "Search": "Search",
+      "Search in": "Search in",
+      "Anywhere": "Anywhere",
+      "selected": "selected",
+
+      // Dataset long+short view
+      "show more": "show more",
+      "show less": "show less",
+
       "Home": "Home",
       "Catalogs": "Catalogs",
       "Publisher": "Publisher",
       "SparQL endpoint": "SPARQL endpoint",
       "About US": "About OPAL",
-      "Search": "Search",
       "Apply": "Apply",
       "Theme": "Category",
       "License": "License",
@@ -29,12 +38,21 @@ const resources = {
   },
   Deutsch: {
     translation: {
+      // Search bar
+      "Search": "Suche",
+      "Search in": "Suchbereich",
+      "Anywhere": "Überall",
+      "selected": "ausgewählt",
+
+      // Dataset long+short view
+      "show more": "mehr anzeigen",
+      "show less": "weniger anzeigen",
+
       "Home": "Startseite",
       "Catalogs": "Kataloge",
       "Publisher": "Herausgeber",
       "SparQL endpoint": "SPARQL-Endpunkt",
       "About US": "Über OPAL",
-      "Search": "Suche",
       "Apply": "Anwenden",
       "Theme": "Kategorie",
       "License": "Lizenz",
