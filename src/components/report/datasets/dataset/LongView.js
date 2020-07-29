@@ -2,16 +2,11 @@ import React from 'react';
 import {Button, Card, CardBody, CardHeader, CardSubtitle, CardText, CardTitle} from "reactstrap";
 import ModalDatasetView from './ModalDatasetView';
 import Link from 'next/link';
-
 import {FaExternalLinkAlt} from "react-icons/fa";
+import {withTranslation} from 'react-i18next';
+import i18n from 'i18next';
+import {getTitle, getDescription} from '../../../../DataUtils';
 
-// private String uri;
-// private String title;
-// private String description;
-// private String issueDate;
-// private List<String> theme;
-// private String publisherName;
-// private List<String> license;
 
 class LongView extends React.Component {
 
@@ -35,10 +30,10 @@ class LongView extends React.Component {
     };
 
     render() {
+        const {t} = this.props;
+        const title = getTitle(this.props.dataSet, i18n.language);
 
-        const title = this.props.dataSet.title ? this.props.dataSet.title : "";
-
-        let description = this.props.dataSet.description ? this.props.dataSet.description: "";
+        let description = getDescription(this.props.dataSet, i18n.language);
         if (this.state.isOneLineDescription) description = description.substr(0, 250);
 
         const theme = this.props.dataSet.theme && this.props.dataSet.theme.length > 0 ? <><br /><span>Theme: </span>
@@ -53,21 +48,6 @@ class LongView extends React.Component {
         const license = this.props.dataSet.license && this.props.dataSet.license.length > 0 ? <><br /><span>License: </span>
                 <span style={{marginLeft: '2rem'}}>{this.props.dataSet.license.join(', ')}</span></>
             : null;
-
-        // todo uncomment me when overall rating is available
-        let overallRatingStarts = <span />;
-        // let overallRating = this.props.dataSet.overallRating;
-        // const rating = [0, 0, 0, 0, 0];
-        // for (let i = 1; i <= overallRating; i++)
-        //     rating[i - 1] = 2;
-        // if (overallRating - Math.floor(overallRating) >= 0.5)
-        //     rating[Math.floor(overallRating)] = 1;
-        // let overallRatingStarts = (<span>
-        //     {
-        //         rating.map((r, idx) => r === 0 ? <FaRegStar key={idx}/> : r === 1 ? <FaStarHalfAlt key={idx}/> :
-        //             <FaStar key={idx}/>)
-        //     }
-        // </span>);
 
         const dataSetViewLink = "/view/datasetView?uri=" + this.props.dataSet.uri;
 
@@ -88,7 +68,6 @@ class LongView extends React.Component {
                                 <span style={{color: '#fff'}}>{title}</span>
                             </CardTitle>
                             <div style={{flexGrow: '1'}}/>
-                            {overallRatingStarts}
                             <Link href={dataSetViewLink}>
                                 <a target="_blank" style={{textDecoration: "none", color: '#fff'}}>
                                         <FaExternalLinkAlt/>
@@ -101,7 +80,8 @@ class LongView extends React.Component {
                             {
                                 (this.props.dataSet.description && this.props.dataSet.description.length > 250) &&
                                 <Button color="link" onClick={this.oneLineDescriptionClicked} style={{padding:'0px 4px'}}>
-                                    {this.state.isOneLineDescription ? 'show more' : 'show less'}
+                                    {this.state.isOneLineDescription ? t('show more') : t('show less')}
+
                                 </Button>
                             }
                         </CardSubtitle>
@@ -119,4 +99,4 @@ class LongView extends React.Component {
     }
 }
 
-export default LongView;
+export default withTranslation()(LongView);

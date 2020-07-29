@@ -3,6 +3,9 @@ import {Badge, Button, Input, Card, CardBody, CardHeader, CardSubtitle, CardTitl
 import {FaExternalLinkAlt, FaRegStar, FaStar, FaStarHalfAlt} from "react-icons/fa";
 import ModalDatasetView from "./ModalDatasetView";
 import Link from 'next/link';
+import {withTranslation} from 'react-i18next';
+import i18n from 'i18next';
+import {getTitle, getDescription} from '../../../../DataUtils';
 
 class ShortView extends React.Component {
 
@@ -23,26 +26,11 @@ class ShortView extends React.Component {
     };
 
     render() {
+        const {t} = this.props;
+        const title = getTitle(this.props.dataSet, i18n.language);
 
-        const title = this.props.dataSet.title ? this.props.dataSet.title : "";
-
-        let description = this.props.dataSet.description ? this.props.dataSet.description: "";
+        let description = getDescription(this.props.dataSet, i18n.language);
         if (this.state.isOneLineDescription) description = description.substr(0, 150);
-
-        // todo uncomment me when overall rating is available
-        let overallRatingStarts = <span />;
-        // let overallRating = this.props.dataSet.overallRating;
-        // const rating = [0, 0, 0, 0, 0];
-        // for (let i = 1; i <= overallRating; i++)
-        //     rating[i - 1] = 2;
-        // if (overallRating - Math.floor(overallRating) >= 0.5)
-        //     rating[Math.floor(overallRating)] = 1;
-        // let overallRatingStarts = (<span>
-        //     {
-        //         rating.map((r, idx) => r === 0 ? <FaRegStar key={idx}/> : r === 1 ? <FaStarHalfAlt key={idx}/> :
-        //             <FaStar key={idx}/>)
-        //     }
-        // </span>);
 
         const dataSetViewLink = "./view/datasetView?uri=" + this.props.dataSet.uri;
 
@@ -62,7 +50,6 @@ class ShortView extends React.Component {
                             <span style={{color: '#fff'}}>{title}</span>
                         </CardTitle>
                         <div style={{flexGrow: '1'}}/>
-                        {overallRatingStarts}
                         <Link href={dataSetViewLink}>
                             <a target="_blank" style={{textDecoration: "none", color: '#fff'}}>
                                 <FaExternalLinkAlt/>
@@ -75,7 +62,7 @@ class ShortView extends React.Component {
                         {
                             (this.props.dataSet.description && this.props.dataSet.description.length > 150) &&
                             <Button color="link" onClick={this.oneLineDescriptionClicked}>
-                                {this.state.isOneLineDescription ? 'more' : 'less'}
+                                {this.state.isOneLineDescription ? t('show more') : t('show less')}
                             </Button>
                         }
                     </CardSubtitle>
@@ -85,4 +72,4 @@ class ShortView extends React.Component {
     }
 }
 
-export default ShortView;
+export default withTranslation()(ShortView);
