@@ -12,6 +12,15 @@ class PublisherPage extends React.Component {
         filters: [],
         loadingFilters: true,
         loadingFiltersError: false,
+
+        searchDTO: {
+            searchKey: "",
+            searchIn: [],
+            orderBy: {
+                selectedOrderValue: "relevance"
+            },
+            filters: []
+        },
     };
 
     componentDidMount = () => {
@@ -24,15 +33,16 @@ class PublisherPage extends React.Component {
             loadingFilters: true,
             loadingFiltersError: false
         }, () => {
-            axios.get(`/filters/list?searchKey=${this.state.searchKey}&searchIn=${this.state.selectedSearchIn}`)
+            axios.post(`/filters/list`, this.state.searchDTO)
                 .then(response => {
-                    const filters = response.data.filter(i => i.title === "Publisher");
+                    const filters = response.data.filter(i => i.filterGroupTitle === "Publisher");
                     this.setState(
                         {
-                            filters: filters,
+                            filters: filters[0].values,
                             loadingFilters: false,
                             loadingFiltersError: false
-                        }, () => this.updateFilterValueCounts());
+                        });
+                        //,() => this.updateFilterValueCounts());
                 }
                 ).catch(error => {
                     this.setState({
@@ -79,19 +89,20 @@ class PublisherPage extends React.Component {
                   </thead>
                   <tbody>
                   { 
-                      this.state.filters[0].values.map((p, idx) => {
+                      this.state.filters.map((p, idx) => {
                           return (
                               <tr key={idx}>
                                   <td>{p.label}
                                     <span>
-                                        <Link href={"/view/one?uri=" + p.uri + "&label=" + p.label}>
+                                        {p.value}
+                                        <Link href={"/view/one?label="+p.value}>
                                             <a target="_blank" style={{textDecoration: 'none', color: 'gray'}}>
                                                     <FaExternalLinkAlt/>
                                             </a>
                                         </Link>
                                     </span>
                                   </td>
-                                  <td>{p.count}</td>
+                                  <td>{p.count.absolute}</td>
                               </tr>
                           );
                       }) 

@@ -58,7 +58,7 @@ class Header extends React.Component {
                     <Nav className="mr-auto" navbar>
                         <NavItem> <NavLink href="/"><a>{t('Home')}</a></NavLink> </NavItem>
                         {/*<NavItem> <Link href="/catalogs"><a>{t('Catalogs')}</a></Link> </NavItem>*/}
-                        {/*<NavItem> <Link href="/publisher"><a>{t('Publisher')}</a></Link> </NavItem>*/}
+                        <NavItem> <NavLink href="/publisher"><a>{t('Publisher')}</a></NavLink> </NavItem>
                         <NavItem> <NavLink href="http://opaldata.cs.uni-paderborn.de:3030/">{t('SparQL endpoint')}</NavLink> </NavItem>
                         <NavItem> <NavLink href="/about"><a>{t('About US')}</a></NavLink> </NavItem>
                     </Nav>
