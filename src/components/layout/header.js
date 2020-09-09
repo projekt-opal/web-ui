@@ -14,7 +14,7 @@ import {
     NavbarToggler,
     NavItem
 } from "reactstrap";
-import {withTranslation} from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 
 class Header extends React.Component {
 
@@ -25,8 +25,8 @@ class Header extends React.Component {
     };
 
     componentDidMount = () => {
-        const {i18n} = this.props;
-        this.setState({lang: i18n.language});
+        const { i18n } = this.props;
+        this.setState({ lang: i18n.language });
     };
 
     toggleNavBar = () => {
@@ -36,24 +36,24 @@ class Header extends React.Component {
     };
 
     handleChangeLang = (e) => {
-        this.setState({lang: e.currentTarget.textContent});
-        const {i18n} = this.props;
+        this.setState({ lang: e.currentTarget.textContent });
+        const { i18n } = this.props;
         i18n.changeLanguage(e.currentTarget.textContent);
     };
 
     toggle = () => {
-        this.setState({dropdownOpen: !this.state.dropdownOpen});
+        this.setState({ dropdownOpen: !this.state.dropdownOpen });
     };
 
     render() {
-        const {t} = this.props;
+        const { t } = this.props;
         return (
             // fixed-top
             <Navbar className="navbar navbar-expand-md navbar-dark bg-dark container-fluid">
                 <NavbarBrand href="/">
-                    <div className={CSS.logo}/>
+                    <div className={CSS.logo} />
                 </NavbarBrand>
-                <NavbarToggler onClick={this.toggleNavBar}/>
+                <NavbarToggler onClick={this.toggleNavBar} />
                 <Collapse isOpen={this.state.isOpen} navbar>
                     <Nav className="mr-auto" navbar>
                         <NavItem> <NavLink href="/"><a>{t('Home')}</a></NavLink> </NavItem>
@@ -61,11 +61,12 @@ class Header extends React.Component {
                         {/*<NavItem> <Link href="/publisher"><a>{t('Publisher')}</a></Link> </NavItem>*/}
                         <NavItem> <NavLink href="http://opaldata.cs.uni-paderborn.de:3030/">{t('SparQL endpoint')}</NavLink> </NavItem>
                         <NavItem> <NavLink href="/about"><a>{t('About US')}</a></NavLink> </NavItem>
+                        <NavItem> <NavLink href="https://github.com/projekt-opal/feedback/issues/new?template=feedback.md"><a>{t('feedback')}</a></NavLink> </NavItem>
                     </Nav>
                     {/*<Nav className="ml-auto" navbar>*/}
                     {/*    <NavItem> <Link href="/">En</Link> </NavItem>*/}
                     {/*</Nav>*/}
-                    <Dropdown  isOpen={this.state.dropdownOpen} toggle={this.toggle}>
+                    <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
                         <DropdownToggle caret>{this.state.lang}</DropdownToggle>
                         <DropdownMenu>
                             <DropdownItem onClick={this.handleChangeLang}>English</DropdownItem>

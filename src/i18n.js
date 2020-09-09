@@ -34,6 +34,7 @@ const resources = {
       "issueDate": "Issue date",
       "description": "Description",
       "datasets": "datasets",
+      "feedback": "Feedback"
     }
   },
   Deutsch: {
@@ -65,6 +66,7 @@ const resources = {
       "issueDate": "Erscheinungsdatum",
       "description": "Beschreibung",
       "datasets": "Datensätze",
+      "feedback": "Feedback"
     }
   }
 };
@@ -83,4 +85,4 @@ i18n
     }
   });
 
-  export default i18n;
+export default i18n;
