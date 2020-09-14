@@ -1,8 +1,10 @@
 import React from 'react';
-import { Container, Table, Spinner } from "reactstrap";
+import { Container, Table, Spinner, Button } from "reactstrap";
 import axios from "../../../webservice/axios-dataSets";
 import {FaExternalLinkAlt} from 'react-icons/fa';
 import Link from 'next/link';
+import {withTranslation} from 'react-i18next';
+import PublisherStats from "./PublisherStats"
 
 class PublisherPage extends React.Component {
 
@@ -75,7 +77,7 @@ class PublisherPage extends React.Component {
     };
 
     render() {
-
+      const {t} = this.props;
         return (
             <Container fluid>
                 <br />
@@ -94,12 +96,14 @@ class PublisherPage extends React.Component {
                               <tr key={idx}>
                                   <td>{p.label}
                                     <span>
-                                        {p.value}
+                                        <b>{p.value}</b>
                                         <Link href={"/view/one?label="+p.value}>
                                             <a target="_blank" style={{textDecoration: 'none', color: 'gray'}}>
                                                     <FaExternalLinkAlt/>
                                             </a>
                                         </Link>
+                                        <p></p>
+                                        <PublisherStats p={p}/>
                                     </span>
                                   </td>
                                   <td>{p.count.absolute}</td>
@@ -115,4 +119,4 @@ class PublisherPage extends React.Component {
         );
     }
 }
-export default PublisherPage;
+export default withTranslation()(PublisherPage);
