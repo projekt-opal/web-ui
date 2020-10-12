@@ -80,13 +80,14 @@ class PublisherPage extends React.Component {
       const {t} = this.props;
         return (
             <Container fluid>
+                <h1 className='mt-4'>{t('Top data publishers')}</h1>
                 <br />
                 {this.state.filters.length ?
-                <Table bordered>
+                <Table borderless striped>
                   <thead>
-                    <tr>
-                      <th>Provider name</th>
-                      <th>Number of datasets</th>
+                    <tr style={{background: 'rgb(55, 171, 156)'}}>
+                      <th style={{color: 'rgb(255, 255, 255)'}}>{t('Publisher')}</th>
+                      <th style={{color: 'rgb(255, 255, 255)'}}>{t('Number of datasets')}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -96,9 +97,10 @@ class PublisherPage extends React.Component {
                               <tr key={idx}>
                                   <td>{p.label}
                                     <span>
-                                        <b>{p.value}</b>
+                                        <b>{p.value}</b> &nbsp;
+
                                         <Link href={"/view/one?label="+p.value}>
-                                            <a target="_blank" style={{textDecoration: 'none', color: 'gray'}}>
+                                            <a target="_blank" style={{textDecoration: 'none', color: 'rgb(79, 171, 227)'}}>
                                                     <FaExternalLinkAlt/>
                                             </a>
                                         </Link>
