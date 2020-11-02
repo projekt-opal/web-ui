@@ -17,6 +17,10 @@ const resources = {
       "show more": "show more",
       "show less": "show less",
 
+      // Headers
+      "Top data publishers": "Top data publishers",
+
+      // Misc
       "Home": "Home",
       "Catalogs": "Catalogs",
       "Publisher": "Publisher",
@@ -34,6 +38,8 @@ const resources = {
       "issueDate": "Issue date",
       "description": "Description",
       "datasets": "datasets",
+      "feedback": "Feedback",
+      "Number of datasets": "Number of datasets"
     }
   },
   Deutsch: {
@@ -48,6 +54,10 @@ const resources = {
       "show more": "mehr anzeigen",
       "show less": "weniger anzeigen",
 
+      // Headers
+      "Top data publishers": "Top Daten Herausgeber",
+
+      // Misc
       "Home": "Startseite",
       "Catalogs": "Kataloge",
       "Publisher": "Herausgeber",
@@ -65,6 +75,8 @@ const resources = {
       "issueDate": "Erscheinungsdatum",
       "description": "Beschreibung",
       "datasets": "Datensätze",
+      "feedback": "Feedback",
+      "Number of datasets": "Anzahl Datensätze"
     }
   }
 };
@@ -83,4 +95,4 @@ i18n
     }
   });
 
-  export default i18n;
+export default i18n;

@@ -225,23 +225,15 @@ class ViewOne extends React.Component {
                 <Container fluid>
                     <Row>
                         <Col md='1'></Col>
-                        <Col md='10' className="border" style={{'top': '2rem'}}>
+                        <Col md='10' style={{'top': '2rem'}}>
                             <Row>
                                 <Col>
-                                    <h3 style={{marginTop: '.5rem', marginBottom: '0'}}>
-                                        Field Name: {this.props.query.label}</h3>
+                                    <h3 className='mt-2 mb-4'>{this.props.query.label}</h3>
                                 </Col>
                             </Row>
                         </Col>
                         <Col md='1'/>
                     </Row>
-                    <br/>
-                    <Row style={{position: 'relative', top: '2rem'}}>
-                        <Col md='1'/>
-                        <Col md='10'><h4>DataSets:</h4></Col>
-                        <Col md='1'/>
-                    </Row>
-
                     <Row>
                         <Col md={{size: 1}}/>
                         <Col md={{size: 10}} className="border" style={{marginTop: '2rem'}}>
