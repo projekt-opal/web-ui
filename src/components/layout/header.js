@@ -57,7 +57,7 @@ class Header extends React.Component {
                 <Collapse isOpen={this.state.isOpen} navbar>
                     <Nav className="mr-auto" navbar>
                         <NavItem> <NavLink href="/"><a>{t('Home')}</a></NavLink> </NavItem>
-                        {/*<NavItem> <Link href="/catalogs"><a>{t('Catalogs')}</a></Link> </NavItem>*/}
+                        <NavItem> <NavLink href="/catalogs"><a>{t('Catalogs')}</a></NavLink> </NavItem>
                         <NavItem> <NavLink href="/publisher"><a>{t('Publisher')}</a></NavLink> </NavItem>
                         <NavItem> <NavLink href="/about"><a>{t('About US')}</a></NavLink> </NavItem>
                     </Nav>
