@@ -5,7 +5,7 @@ import {FaExternalLinkAlt} from 'react-icons/fa';
 import Link from 'next/link';
 import {withTranslation} from 'react-i18next';
 
-class PublisherStats extends React.Component {
+class Stats extends React.Component {
 
     state = {
         isOneLineDescriptionCatalogs: true,
@@ -53,4 +53,4 @@ class PublisherStats extends React.Component {
         );
     }
 }
-export default withTranslation()(PublisherStats);
+export default withTranslation()(Stats);
