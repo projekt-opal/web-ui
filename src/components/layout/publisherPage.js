@@ -4,7 +4,7 @@ import axios from "../../../webservice/axios-dataSets";
 import {FaExternalLinkAlt} from 'react-icons/fa';
 import Link from 'next/link';
 import {withTranslation} from 'react-i18next';
-import PublisherStats from "./PublisherStats"
+import Stats from "./Stats"
 
 class PublisherPage extends React.Component {
 
@@ -105,7 +105,7 @@ class PublisherPage extends React.Component {
                                             </a>
                                         </Link>
                                         <p></p>
-                                        <PublisherStats p={p}/>
+                                        <Stats p={p}/>
                                     </span>
                                   </td>
                                   <td>{p.count.absolute}</td>
