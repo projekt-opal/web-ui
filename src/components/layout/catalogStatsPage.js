@@ -4,6 +4,7 @@ import axios from "../../../webservice/axios-dataSets";
 import {FaExternalLinkAlt} from 'react-icons/fa';
 import Link from 'next/link';
 import {withTranslation} from 'react-i18next';
+import i18n from 'i18next';
 import Stats from "./Stats"
 
 class CatalogStatsPage extends React.Component {
@@ -80,7 +81,7 @@ class CatalogStatsPage extends React.Component {
       const {t} = this.props;
         return (
             <Container fluid>
-                <h1 className='mt-4'>{t('Top source data portals')}</h1>
+                <h1 className='mt-4'>{t('Overview data portals')}</h1>
                 <br />
                 {this.state.filters.length ?
                 <Table borderless striped>
@@ -99,11 +100,11 @@ class CatalogStatsPage extends React.Component {
                                     <span>
                                         <b>{p.value}</b> &nbsp;
 
-                                        {/*<Link href={"/view/one?label="+p.value}>
+                                        {<Link href={"/view/one?label="+p.value}>
                                             <a target="_blank" style={{textDecoration: 'none', color: 'rgb(79, 171, 227)'}}>
                                                     <FaExternalLinkAlt/>
                                             </a>
-                                        </Link>*/}
+                                        </Link>}
                                         <p></p>
                                         <Stats p={p}/>
                                     </span>
