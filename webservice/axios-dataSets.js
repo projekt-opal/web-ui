@@ -1,7 +1,8 @@
 import axios from 'axios';
+import {WEBSERVICE_URL} from './webservice-url';
 
 const instance = axios.create({
-    baseURL: 'http://localhost:8081/'
+    baseURL: WEBSERVICE_URL
 });
 
 export default instance;

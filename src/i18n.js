@@ -16,6 +16,9 @@ const resources = {
       // Dataset long+short view
       "show more": "show more",
       "show less": "show less",
+//      "History": "History",
+//      "ChangesFound": "Found changes in dataset",
+//      "ChangesNotFound": "No changes in dataset",
 
       // Headers
       "Top data publishers": "Top data publishers",
@@ -53,6 +56,9 @@ const resources = {
       // Dataset long+short view
       "show more": "mehr anzeigen",
       "show less": "weniger anzeigen",
+//      "History": "Historie",
+//      "ChangesFound": "Änderungen im Datensatz gefunden",
+//      "ChangesNotFound": "Keine Änderungen im Datensatz gefunden",
 
       // Headers
       "Top data publishers": "Top Daten Herausgeber",

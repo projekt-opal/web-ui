@@ -2,11 +2,13 @@ import React from 'react';
 import { Badge, Button, Col, Collapse, Container, Row, Table } from "reactstrap";
 import { FaRegStar, FaStar, FaStarHalfAlt } from "react-icons/fa";
 import ReactTooltip from 'react-tooltip';
+import {WEBSERVICE_URL} from '../../../webservice/webservice-url';
 
 class DatasetViewLayout extends React.Component {
 
     state = {
         isOpenDistributions: false,
+        hasChanges: false,
     };
 
     toggle = () => {
@@ -68,6 +70,22 @@ class DatasetViewLayout extends React.Component {
         }
     }
 
+  setHasChanges = (obj) => {
+    const requestOptions = {
+        method: 'POST',
+        headers: new Headers({ 'Content-Type': 'application/x-www-form-urlencoded'}),
+        body: "uri=" + this.props.dataSet.uri
+    };
+    var changes = false;
+    fetch(WEBSERVICE_URL + "dataSets/hasChanges", requestOptions)
+      .then(res => res.json())
+      .then(
+        (result) => {
+            obj.state.hasChanges = result.hasChanges;
+        }
+      )
+  }
+
     getAsArray(obj) {
         let emptyTemporal = Object.values(obj).every(v => v === null);
         let someIsNull = Object.values(obj).some(v => v === null);
@@ -85,6 +103,9 @@ class DatasetViewLayout extends React.Component {
     }
 
     render() {
+
+        this.setHasChanges(this);
+
         const metaDataInfo = [];
         let overallRatingMain = <span />;
         if (this.props.dataSet) {
@@ -173,6 +194,12 @@ class DatasetViewLayout extends React.Component {
                         </Collapse>
                     </Col>
                 </Row >
+                <Row>
+                    <Col md='12'>
+                        <h5>History:</h5>
+                        <div><p>{this.state.hasChanges ? 'Found changes in dataset.' : 'No changes in dataset.'}</p></div>
+                    </Col>
+                </Row>
                 <Row>
                     <Col md='12'>
                         <h5>Metadata Info:</h5>
