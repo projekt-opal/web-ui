@@ -15,13 +15,16 @@ import {
     NavItem
 } from "reactstrap";
 import { withTranslation } from 'react-i18next';
+import axios from '../../../webservice/axios-dataSets';
 
 class Header extends React.Component {
 
     state = {
         isOpen: false,
         dropdownOpen: false,
-        lang: "Deutsch"
+        lang: "Deutsch",
+        geoUrlPrefix: null,
+        geoRedirect: null
     };
 
     componentDidMount = () => {
@@ -45,6 +48,28 @@ class Header extends React.Component {
         this.setState({ dropdownOpen: !this.state.dropdownOpen });
     };
 
+    getGeoUrl = () => {
+        if(this.state.geoUrlPrefix == null)
+            axios.get("/opalconfig?key=geo.url.prefix")
+                .then(response => {
+                    if (response.data != null) {
+                       this.setState({geoUrlPrefix: response.data})
+                    }
+                })
+                .catch(err => console.log(err));
+
+        if(this.state.geoRedirect == null)
+            axios.get("/opalconfig?key=geo.redirect")
+                .then(response => {
+                    if (response.data != null) {
+                       this.setState({geoRedirect: response.data})
+                    }
+                })
+                .catch(err => console.log(err));
+
+        return 'https://projekt-opal.github.io/hackathon/geo/' + '?key=' + 'urlPrefix' + '&value=' + this.state.geoUrlPrefix + '&redirect=' + this.state.geoRedirect;
+    };
+
     render() {
         const { t } = this.props;
         return (
@@ -59,6 +84,7 @@ class Header extends React.Component {
                         <NavItem> <NavLink href="/"><a>{t('Home')}</a></NavLink> </NavItem>
                         <NavItem> <NavLink href="/catalogs"><a>{t('Catalogs')}</a></NavLink> </NavItem>
                         <NavItem> <NavLink href="/publisher"><a>{t('Publisher')}</a></NavLink> </NavItem>
+                        <NavItem> <NavLink href={this.getGeoUrl()}><a>Geo</a></NavLink> </NavItem>
                         <NavItem> <NavLink href="/about"><a>{t('About US')}</a></NavLink> </NavItem>
                     </Nav>
                     <Nav className="mr-3" navbar>
