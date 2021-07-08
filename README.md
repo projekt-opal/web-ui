@@ -6,6 +6,12 @@ It mainly builds on [React](https://reactjs.org/) and [Next.js](https://nextjs.o
 The OPAL Web User Interface is part of the [OPAL demo component](https://github.com/projekt-opal/demo).
 It requires a running [OPAL webservice](https://github.com/projekt-opal/web-service), which provides the data to display.
 
+To set the addredd of the webservice different form http://localhost:8081/, create an `.env` file similar to:
+
+```
+BACKEND_ADDRESS=http://opal-webservices:8081/
+```
+
 ## Integrated: City App Demonstrator 
 
 For OPAL deliverable D7.3, a mobile app was integrated to the OPAL user interface. It supports users in identifying data at their current locations.

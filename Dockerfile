@@ -9,7 +9,7 @@ COPY . .
 #get the backend address
 ARG BACKEND_ADDRESS=http://localhost:8081/
 #set the backend address
-RUN sed -i 's@^    baseURL:.*@    baseURL:'\'"$BACKEND_ADDRESS"\''@' webservice/axios-dataSets.js
+RUN sed -i 's@^const WEBSERVICE_URL.*@const WEBSERVICE_URL = '\'"$BACKEND_ADDRESS"\'';@' webservice/webservice-url.js
 
 # Installing dependencies
 RUN npm install
