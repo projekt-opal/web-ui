@@ -102,7 +102,7 @@ class Header extends React.Component {
                         <NavItem> <NavLink href="/about"><a>{t('About US')}</a></NavLink> </NavItem>
                     </Nav>
                     <Nav className="mr-3" navbar>
-                        <NavItem> <NavLink href={this.getSparqlEndpoint()} target="_blank">{t('SparQL endpoint')}</NavLink> </NavItem>
+                        <NavItem style={{display: 'none'}}> <NavLink href={this.getSparqlEndpoint()} target="_blank">{t('SparQL endpoint')}</NavLink> </NavItem>
                         <NavItem> <NavLink href="https://github.com/projekt-opal/feedback/issues/new?template=feedback.md" target="_blank"><a>{t('feedback')}</a></NavLink> </NavItem>
                     </Nav>
                     {/*<Nav className="ml-auto" navbar>*/}
