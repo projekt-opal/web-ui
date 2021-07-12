@@ -18,7 +18,7 @@
     "next-images": "^1.4.0",
     "next-redux-wrapper": "4.0.1",
     "react": "^16.13.1",
-    "react-bootstrap-table-next": "^3.3.5",
+    "react-bootstrap-table-next": "^4.0.3",
     "react-dom": "^16.13.1",
     "react-i18next": "^11.7.0",
     "react-icons": "^3.10.0",
@@ -28,6 +28,7 @@
     "reactstrap": "^8.5.1",
     "redux": "^4.0.5",
     "redux-devtools-extension": "^2.13.8",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "underscore": "^1.13.1"
   }
 }
