@@ -198,8 +198,8 @@ class DatasetViewLayout extends React.Component {
                     <Col md='12'>
                         <h5>History:</h5>
                         <div><p>
-                        <a href={'/view/historyView?uri='+this.props.dataSet.uri}>Dataset changes</a>
-                        {this.state.hasChanges ? " (found)" : ""}
+                        <a href={'/view/historyView?uri='+this.props.dataSet.uri}>List dataset changes</a>
+                        {this.state.hasChanges ? " (added triples found)" : " (no added triples found)"}
                         </p></div>
                     </Col>
                 </Row>
