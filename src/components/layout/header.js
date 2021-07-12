@@ -24,7 +24,8 @@ class Header extends React.Component {
         dropdownOpen: false,
         lang: "Deutsch",
         geoUrlPrefix: null,
-        geoRedirect: null
+        geoRedirect: null,
+        sparqlEndpoint: null
     };
 
     componentDidMount = () => {
@@ -70,6 +71,19 @@ class Header extends React.Component {
         return 'https://projekt-opal.github.io/hackathon/geo/' + '?key=' + 'urlPrefix' + '&value=' + this.state.geoUrlPrefix + '&redirect=' + this.state.geoRedirect;
     };
 
+    getSparqlEndpoint = () => {
+        if(this.state.sparqlEndpoint == null)
+            axios.get("/opalconfig?key=SPARQL_ENDPOINT_LATEST")
+                .then(response => {
+                    if (response.data != null) {
+                       this.setState({sparqlEndpoint: response.data})
+                    }
+                })
+                .catch(err => console.log(err));
+
+        return this.state.sparqlEndpoint;
+    };
+
     render() {
         const { t } = this.props;
         return (
@@ -88,7 +102,7 @@ class Header extends React.Component {
                         <NavItem> <NavLink href="/about"><a>{t('About US')}</a></NavLink> </NavItem>
                     </Nav>
                     <Nav className="mr-3" navbar>
-                        <NavItem> <NavLink href="http://opaldata.cs.uni-paderborn.de:3030/" target="_blank">{t('SparQL endpoint')}</NavLink> </NavItem>
+                        <NavItem> <NavLink href={this.getSparqlEndpoint()} target="_blank">{t('SparQL endpoint')}</NavLink> </NavItem>
                         <NavItem> <NavLink href="https://github.com/projekt-opal/feedback/issues/new?template=feedback.md" target="_blank"><a>{t('feedback')}</a></NavLink> </NavItem>
                     </Nav>
                     {/*<Nav className="ml-auto" navbar>*/}
