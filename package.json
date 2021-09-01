@@ -14,7 +14,7 @@
     "i18next": "^19.6.3",
     "i18next-localstorage-cache": "^1.1.1",
     "jquery": "^3.5.1",
-    "next": "^10.0.3",
+    "next": "^11.1.1",
     "next-images": "^1.4.0",
     "next-redux-wrapper": "4.0.1",
     "react": "^16.13.1",
